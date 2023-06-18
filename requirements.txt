@@ -1,6 +1,11 @@
+urllib3
 requests
 beautifulsoup4
 PyQt5
+PyQt5-stubs
 pytest
 pytest-mock
 pytest-qt
+mypy
+aqt
+anki
