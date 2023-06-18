@@ -1,8 +1,8 @@
 {
   "deck": "",
-  "selectedDict": 0,
-  "selectedGroup": null,
+  "selectedDict": 1,
   "selectedApi": 0,
+  "selectedGroup": null,
   "credential": [
     {
       "username": "",
@@ -16,12 +16,12 @@
     }
   ],
   "definition": true,
-  "sentence": true,
   "image": true,
   "phrase": true,
+  "sentence": true,
   "AmEPhonetic": true,
   "BrEPhonetic": true,
+  "AmEPron": true,
   "BrEPron": false,
-  "AmEPron": false,
-  "noPron": true
+  "noPron": false
 }
