@@ -1,6 +1,7 @@
 import logging
 from math import ceil
 import requests
+import requests.utils
 from bs4 import BeautifulSoup
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter

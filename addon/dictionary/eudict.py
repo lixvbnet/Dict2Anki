@@ -1,6 +1,7 @@
 import time
 import logging
 import requests
+import requests.utils
 from math import ceil
 from bs4 import BeautifulSoup
 from urllib3.util.retry import Retry
