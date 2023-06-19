@@ -9,19 +9,19 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QListWidgetItem, QVBoxLayout, QPushButton
 from PyQt5.QtCore import pyqtSlot, QThread, Qt
 
-from .queryApi import apis
-from .UIForm import wordGroup, mainUI, icons_rc
-from .workers import LoginStateCheckWorker, VersionCheckWorker, RemoteWordFetchingWorker, QueryWorker, AudioDownloadWorker
-from .dictionary import dictionaries
-from .logger import Handler
-from .loginDialog import LoginDialog
-from .misc import Mask
-from .constants import BASIC_OPTION, EXTRA_OPTION, MODEL_NAME, RELEASE_URL
+from Dict2Anki.addon.queryApi import apis
+from Dict2Anki.addon.UIForm import wordGroup, mainUI, icons_rc
+from Dict2Anki.addon.workers import LoginStateCheckWorker, VersionCheckWorker, RemoteWordFetchingWorker, QueryWorker, AudioDownloadWorker
+from Dict2Anki.addon.dictionary import dictionaries
+from Dict2Anki.addon.logger import Handler
+from Dict2Anki.addon.loginDialog import LoginDialog
+from Dict2Anki.addon.misc import Mask
+from Dict2Anki.addon.constants import BASIC_OPTION, EXTRA_OPTION, MODEL_NAME, RELEASE_URL
 
 try:
     from aqt import mw
     from aqt.utils import askUser, showCritical, showInfo, tooltip, openLink
-    from .noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, addNoteToDeck, getWordsByDeck, getNotes
+    from Dict2Anki.addon.noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, addNoteToDeck, getWordsByDeck, getNotes
 except ImportError:
     from test.dummy_aqt import mw, askUser, showCritical, showInfo, tooltip, openLink
     from test.dummy_noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, addNoteToDeck, getWordsByDeck, getNotes

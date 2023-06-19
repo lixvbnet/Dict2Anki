@@ -1,4 +1,4 @@
-from .constants import MODEL_FIELDS, BASIC_OPTION, EXTRA_OPTION
+from Dict2Anki.addon.constants import MODEL_FIELDS, BASIC_OPTION, EXTRA_OPTION
 import logging
 
 logger = logging.getLogger('dict2Anki.noteManager')

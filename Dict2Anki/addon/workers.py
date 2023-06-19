@@ -3,9 +3,9 @@ import logging
 import requests
 from urllib3 import Retry
 from itertools import chain
-from .misc import ThreadPool
+from Dict2Anki.addon.misc import ThreadPool
 from requests.adapters import HTTPAdapter
-from .constants import VERSION, VERSION_CHECK_API
+from Dict2Anki.addon.constants import VERSION, VERSION_CHECK_API
 from PyQt5.QtCore import QObject, pyqtSignal, QThread
 
 

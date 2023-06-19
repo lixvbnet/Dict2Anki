@@ -1,5 +1,5 @@
-from test.dummy_aqt.dummy_addon import AddonManager
-from test.dummy_anki.dummy_collection import Collection
+from Dict2Anki.test.dummy_aqt.dummy_addon import AddonManager
+from Dict2Anki.test.dummy_anki.dummy_collection import Collection
 
 
 class mw:

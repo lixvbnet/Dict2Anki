@@ -1,6 +1,6 @@
 import os
 import logging
-from addon.queryApi.eudict import API
+from Dict2Anki.addon.queryApi.eudict import API
 import pytest
 logger = logging.getLogger(__name__)
 api = API()

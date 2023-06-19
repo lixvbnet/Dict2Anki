@@ -1,21 +1,21 @@
-import time
 import logging
+from math import ceil
 import requests
 import requests.utils
-from math import ceil
 from bs4 import BeautifulSoup
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
-from ..misc import AbstractDictionary
+from Dict2Anki.addon.misc import AbstractDictionary
 
-logger = logging.getLogger('dict2Anki.dictionary.eudict')
+logger = logging.getLogger('dict2Anki.dictionary.youdao')
 
 
-class Eudict(AbstractDictionary):
-    name = '欧陆词典'
-    loginUrl = 'https://dict.eudic.net/account/login'
+class Youdao(AbstractDictionary):
+    name = '有道词典'
+    loginUrl = 'http://account.youdao.com/login?service=dict&back_url=http://dict.youdao.com/wordbook/wordlist%3Fkeyfrom%3Dnull'
     timeout = 10
     headers = {
+        'Host': 'dict.youdao.com',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
     }
     retries = Retry(total=5, backoff_factor=1, status_forcelist=[500, 502, 503, 504])
@@ -24,17 +24,17 @@ class Eudict(AbstractDictionary):
     session.mount('https://', HTTPAdapter(max_retries=retries))
 
     def __init__(self):
-        self.groups = []
         self.indexSoup = None
+        self.groups = []
 
     def checkCookie(self, cookie: dict) -> bool:
         """
         cookie有效性检验
         :param cookie:
-        :return: Boolean cookie是否有效
+        :return: bool
         """
-        rsp = requests.get('https://my.eudic.net/studylist', cookies=cookie, headers=self.headers)
-        if 'dict.eudic.net/account/login' not in rsp.url:
+        rsp = requests.get('http://dict.youdao.com/login/acc/query/accountinfo', cookies=cookie, headers=self.headers)
+        if rsp.json().get('code', None) == 0:
             self.indexSoup = BeautifulSoup(rsp.text, features="html.parser")
             logger.info('Cookie有效')
             cookiesJar = requests.utils.cookiejar_from_dict(cookie, cookiejar=None, overwrite=True)
@@ -45,7 +45,7 @@ class Eudict(AbstractDictionary):
 
     @staticmethod
     def loginCheckCallbackFn(cookie, content):
-        if 'EudicWebSession' in cookie:
+        if 'DICT_SESS' in cookie:
             return True
         return False
 
@@ -54,13 +54,15 @@ class Eudict(AbstractDictionary):
         获取单词本分组
         :return: [(group_name,group_id)]
         """
-        elements = self.indexSoup.find_all('a', class_='media_heading_a new_cateitem_click')
-        groups = []
-        if elements:
-            groups = [(el.string, el['data-id']) for el in elements]
-
+        r = self.session.get(
+            url='http://dict.youdao.com/wordbook/webapi/books',
+            timeout=self.timeout,
+        )
+        groups = [(g['bookName'], g['bookId']) for g in r.json()['data']]
         logger.info(f'单词本分组:{groups}')
         self.groups = groups
+
+        return groups
 
     def getTotalPage(self, groupName: str, groupId: int) -> int:
         """
@@ -70,39 +72,40 @@ class Eudict(AbstractDictionary):
         :return:
         """
         try:
-            r = self.session.post(
-                url='https://my.eudic.net/StudyList/WordsDataSource',
+            r = self.session.get(
+                url='http://dict.youdao.com/wordbook/webapi/words',
                 timeout=self.timeout,
-                data={'categoryid': groupId}
+                params={'bookId': groupId, 'limit': 1, 'offset': 0}
             )
-            records = r.json()['recordsTotal']
-            totalPages = ceil(records / 100)
+            totalWords = r.json()['data']['total']
+            totalPages = ceil(totalWords / 15)  # 这里按网页默认每页取15个
+
+        except Exception as error:
+            logger.exception(f'网络异常{error}')
+
+        else:
             logger.info(f'该分组({groupName}-{groupId})下共有{totalPages}页')
             return totalPages
-        except Exception as error:
-            logger.exception(f'网络异常{error}')
-            return 0
 
-    def getWordsByPage(self, pageNo: int, groupName: str, groupId: int) -> [str]:
+    def getWordsByPage(self, pageNo: int, groupName: str, groupId: str) -> [str]:
+        """
+        获取分组下每一页的单词
+        :param pageNo: 页数
+        :param groupName: 分组名
+        :param groupId: 分组id
+        :return:
+        """
         wordList = []
-        data = {
-            'columns[2][data]': 'word',
-            'start': pageNo * 100,
-            'length': 100,
-            'categoryid': groupId,
-            '_': int(time.time()) * 1000,
-        }
         try:
-            logger.info(f'获取单词本(f{groupName}-{groupId})第:{pageNo + 1}页')
-            r = self.session.post(
-                url='https://my.eudic.net/StudyList/WordsDataSource',
+            logger.info(f'获取单词本(f{groupName}-{groupId})第:{pageNo}页')
+            r = self.session.get(
+                'http://dict.youdao.com/wordbook/webapi/words',
                 timeout=self.timeout,
-                data=data
+                params={'bookId': groupId, 'limit': 15, 'offset': pageNo * 15}
             )
-            wl = r.json()
-            wordList = list(set(word['uuid'] for word in wl['data']))
-        except Exception as error:
-            logger.exception(f'网络异常{error}')
+            wordList = [item['word'] for item in r.json()['data']['itemList']]
+        except Exception as e:
+            logger.exception(f'网络异常{e}')
         finally:
             logger.info(wordList)
             return wordList
