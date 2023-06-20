@@ -422,6 +422,74 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="utilitiesTab">
+      <attribute name="title">
+       <string>工具</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="dangerZoneGroupBox">
+         <property name="styleSheet">
+          <string notr="true">color: red</string>
+         </property>
+         <property name="title">
+          <string>Danger Zone</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="btnBackwardTemplate">
+            <property name="toolTip">
+             <string>Add or Delete Backward Template. (This would affect all cards in current deck)</string>
+            </property>
+            <property name="text">
+             <string>Add/Delete Backward Template</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="btnReset">
+            <property name="toolTip">
+             <string>Reset sync history. (Words only deleted in Anki would be added again in next sync)</string>
+            </property>
+            <property name="text">
+             <string>Reset Sync History</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="utilitiesGroupBox">
+         <property name="title">
+          <string>Utilities</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="btnDownloadMissingAssets">
+            <property name="toolTip">
+             <string>Check words in selected deck and download missing assets (images, audio files, etc.)</string>
+            </property>
+            <property name="text">
+             <string>Download Missing Assets</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="btnExportAudio">
+            <property name="toolTip">
+             <string>Export all words in selected deck into a single audio file. (macOS only)</string>
+            </property>
+            <property name="text">
+             <string>Export Audio (macOS only)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="logTab">
       <attribute name="title">
        <string>日志</string>
