@@ -1,0 +1,14 @@
+GET https://dict.youdao.com/wordbook/webapi/words?limit=15&offset=0
+
+{
+    "itemId": "3cd1c68a21a4bc8143bbeb3175ad77d5",
+    "bookId": "0",
+    "bookName": "无标签",
+    "word": "Atlantic",
+    "trans": "n. 大西洋 adj. 大西洋的",
+    "phonetic": "",
+    "modifiedTime": 1532988924000
+},
+
+
+Instead of using the default alphabetical order, we can sort by "modifiedTime".

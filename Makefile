@@ -1,3 +1,4 @@
+# for macOS (sorry Windows..)
 addons21 = ~/Library/Application\ Support/Anki2/addons21
 
 install:

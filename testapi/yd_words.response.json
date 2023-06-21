@@ -1,0 +1,144 @@
+{
+  "code": 0,
+  "msg": "SUCCESS",
+  "data": {
+    "total": 216,
+    "itemList": [
+      {
+        "itemId": "6ab2d3f0210a4926b8a3d9e77476b96a",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "Adam's apple",
+        "trans": "喉结",
+        "phonetic": "",
+        "modifiedTime": 1535242987000
+      },
+      {
+        "itemId": "3cd1c68a21a4bc8143bbeb3175ad77d5",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "Atlantic",
+        "trans": "n. 大西洋 adj. 大西洋的",
+        "phonetic": "",
+        "modifiedTime": 1532988924000
+      },
+      {
+        "itemId": "301df92d375cb8f852b5ba2dd4c22dd8",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "Eurasia",
+        "trans": "n. 欧亚大陆",
+        "phonetic": "",
+        "modifiedTime": 1532788349000
+      },
+      {
+        "itemId": "67699fce6b90ac21b995cb18cb01b9ba",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "Jamaica",
+        "trans": "n. 牙买加（拉丁美洲一个国家）",
+        "phonetic": "",
+        "modifiedTime": 1543288409000
+      },
+      {
+        "itemId": "6cc1b47d717cffb2e85c0f3bc996a6c8",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "accessory",
+        "trans": "n. 配件；附件； 从犯 \nadj. 副的；同谋的；附属的",
+        "phonetic": "[ək'ses(ə)rɪ]",
+        "modifiedTime": 1566129988000
+      },
+      {
+        "itemId": "96a1a02a8d88a8700878de2002e26b43",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "accordion",
+        "trans": "adj. 可折叠的 n. 手风琴",
+        "phonetic": "",
+        "modifiedTime": 1547513698000
+      },
+      {
+        "itemId": "184e7db24d6950900e4b61a756949f22",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "acronym",
+        "trans": "n. 首字母缩略词",
+        "phonetic": "",
+        "modifiedTime": 1549594881000
+      },
+      {
+        "itemId": "891d70838a6f0163275c5c7e19a4fabe",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "admonish",
+        "trans": "vt. 告诫；劝告",
+        "phonetic": "",
+        "modifiedTime": 1534725179000
+      },
+      {
+        "itemId": "612c2bd688a350bd50b541885addad89",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "admonition",
+        "trans": "n. 警告",
+        "phonetic": "",
+        "modifiedTime": 1534725186000
+      },
+      {
+        "itemId": "0b550f1436451bbe3612553c39a8c231",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "affidavit",
+        "trans": "n. 宣誓书",
+        "phonetic": "",
+        "modifiedTime": 1540146077000
+      },
+      {
+        "itemId": "b435c56f59e007d026da0d081556f9f3",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "airtrain",
+        "trans": "机场内捷运；气垫列车",
+        "phonetic": "",
+        "modifiedTime": 1543289012000
+      },
+      {
+        "itemId": "38a29eedba281603afc34ee0941870cf",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "aisle",
+        "trans": "n. 通道，走道；侧廊",
+        "phonetic": "[aɪl]",
+        "modifiedTime": 1566077785000
+      },
+      {
+        "itemId": "8f6e5b979ca5a2ffc6b9a2c7c8440bdd",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "albatross",
+        "trans": "n. [鸟] 信天翁；沉重负担",
+        "phonetic": "",
+        "modifiedTime": 1532973565000
+      },
+      {
+        "itemId": "66a84a62f8c6fbb6d68fe25b988769e2",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "ambient",
+        "trans": "adj. 周围的；外界的；环绕的 n. 周围环境",
+        "phonetic": "",
+        "modifiedTime": 1554400039000
+      },
+      {
+        "itemId": "1eee8b54188b187469fc93599637a065",
+        "bookId": "0",
+        "bookName": "无标签",
+        "word": "ampersand",
+        "trans": "n. &的记号名称（＆等于and）",
+        "phonetic": "",
+        "modifiedTime": 1533061827000
+      }
+    ]
+  }
+}
