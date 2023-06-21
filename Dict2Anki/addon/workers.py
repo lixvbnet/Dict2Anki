@@ -150,9 +150,9 @@ class AudioDownloadWorker(QObject):
                     for chunk in r.iter_content(chunk_size=1024):
                         if chunk:
                             f.write(chunk)
-                self.logger.info(f'{fileName} 下载完成')
+                self.logger.info(f'[OK] {fileName} 下载完成')
             except Exception as e:
-                self.logger.warning(f'下载{fileName}:{url}异常: {e}')
+                self.logger.warning(f'[ERROR] 下载{fileName}:{url}异常: {e}')
             finally:
                 self.tick.emit()
 

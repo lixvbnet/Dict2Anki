@@ -16,7 +16,7 @@ from Dict2Anki.addon.dictionary import dictionaries
 from Dict2Anki.addon.logger import Handler
 from Dict2Anki.addon.loginDialog import LoginDialog
 from Dict2Anki.addon.misc import Mask
-from Dict2Anki.addon.constants import BASIC_OPTION, EXTRA_OPTION, MODEL_NAME, RELEASE_URL
+from Dict2Anki.addon.constants import BASIC_OPTION, EXTRA_OPTION, WINDOW_TITLE, MODEL_NAME, RELEASE_URL
 
 try:
     from aqt import mw
@@ -60,10 +60,10 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.audioDownloadWorker = None
 
         self.setupUi(self)
-        self.setWindowTitle(MODEL_NAME)
+        self.setWindowTitle(WINDOW_TITLE)
         self.setupLogger()
         self.initCore()
-        self.checkUpdate()
+        # self.checkUpdate()    # 会导致卡顿
         # self.__dev() # 以备调试时使用
 
     def __dev(self):
