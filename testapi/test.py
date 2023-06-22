@@ -46,17 +46,11 @@ def youdao_get_words():
     return words
 
 
-def youdao_query_word(word):
-    print(f"================ Query word {word} ================")
-    result = API.query(word)
-    print(result)
-    return result
-
-
 def youdao_test():
     # words = youdao_get_words()
     # word = words[len(words)-1]   # here just query last word
     word = "abandon"
+    print(f"================ Query word {word} ================")
     result = API.query(word)
     print(json.dumps(result, ensure_ascii=False))
 

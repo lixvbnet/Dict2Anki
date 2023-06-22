@@ -341,7 +341,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         for word in needToDeleteWords:
             item = QListWidgetItem(word)
-            item.setCheckState(Qt.Checked)
+            # item.setCheckState(Qt.Checked)
+            item.setCheckState(Qt.Unchecked)    # Defaults to Unchecked (Avoid unintentional data loss)
             item.setIcon(delIcon)
             self.needDeleteWordListWidget.addItem(item)
 
