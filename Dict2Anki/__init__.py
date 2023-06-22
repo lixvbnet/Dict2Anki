@@ -12,16 +12,15 @@ try:
     qconnect(action.triggered, show_window)
     mw.form.menuTools.addAction(action)
 
-except ImportError:
-    try:
-        import os
-        from PyQt5.QtWidgets import QApplication
-        from addon.addonWindow import Windows
+except Exception as ex:
+    err = ex
+    # print(err)
+    import os
+    if os.environ.get('DEVDICT2ANKI'):
         import sys
-        if os.environ.get('DEVDICT2ANKI'):
-            app = QApplication(sys.argv)
-            window = Windows()
-            window.show()
-            sys.exit(app.exec())
-    except ImportError:
-        pass
+        from Dict2Anki.addon.addonWindow import Windows
+        from PyQt5.QtWidgets import QApplication
+        app = QApplication(sys.argv)
+        window = Windows()
+        window.show()
+        sys.exit(app.exec())
