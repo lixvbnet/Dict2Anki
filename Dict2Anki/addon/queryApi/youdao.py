@@ -41,6 +41,31 @@ class Parser:
         return ec if ec else web_trans
 
     @property
+    def phrase(self) -> list:
+        phrase = self._result.get('phrs', dict()).get('phrs', [])
+        return [
+            (
+                p.get('phr', dict()).get('headword', dict()).get('l', dict()).get('i', None),
+                p.get('phr', dict()).get('trs', [dict()])[0].get('tr', dict()).get('l', dict()).get('i', None)
+            )
+            for p in phrase if phrase
+        ][:3]
+
+    @property
+    def sentence(self) -> list:
+        try:
+            return [(s['sentence'], s['sentence-translation'],) for s in self._result['blng_sents_part']['sentence-pair']][:3]
+        except KeyError:
+            return []
+
+    @property
+    def image(self) -> str:
+        try:
+            return [i['image'] for i in self._result['pic_dict']['pic']][0]
+        except (KeyError, IndexError):
+            return None
+
+    @property
     def pronunciations(self) -> dict:
         url = 'http://dict.youdao.com/dictvoice?audio='
         pron = {
@@ -92,31 +117,6 @@ class Parser:
         return self.pronunciations['AmEUrl']
 
     @property
-    def sentence(self) -> list:
-        try:
-            return [(s['sentence'], s['sentence-translation'],) for s in self._result['blng_sents_part']['sentence-pair']]
-        except KeyError:
-            return []
-
-    @property
-    def image(self) -> str:
-        try:
-            return [i['image'] for i in self._result['pic_dict']['pic']][0]
-        except (KeyError, IndexError):
-            return None
-
-    @property
-    def phrase(self) -> list:
-        phrase = self._result.get('phrs', dict()).get('phrs', [])
-        return [
-            (
-                p.get('phr', dict()).get('headword', dict()).get('l', dict()).get('i', None),
-                p.get('phr', dict()).get('trs', [dict()])[0].get('tr', dict()).get('l', dict()).get('i', None)
-            )
-            for p in phrase if phrase
-        ]
-
-    @property
     def exam_type(self) -> list:
         try:
             exam_t = self._result['ec']['exam_type']
@@ -130,8 +130,8 @@ class Parser:
             'term': self.term,
             'definition': self.definition,
             'phrase': self.phrase,
-            'image': self.image,
             'sentence': self.sentence,
+            'image': self.image,
             'BrEPhonetic': self.BrEPhonetic,
             'AmEPhonetic': self.AmEPhonetic,
             'BrEPron': self.BrEPron,
