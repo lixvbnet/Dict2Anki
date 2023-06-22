@@ -102,17 +102,18 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         logFile = os.path.join(gettempdir(), 'dict2anki.log')
         logging.basicConfig(handlers=[logging.FileHandler(logFile, 'w', 'utf-8')], level=logging.DEBUG, format='[%(asctime)s][%(levelname)8s] -- %(message)s - (%(name)s)')
 
-        logTextBox = QPlainTextEdit(self)
-        logTextBox.setLineWrapMode(QPlainTextEdit.NoWrap)
-        layout = QVBoxLayout()
-        layout.addWidget(logTextBox)
-        self.logTab.setLayout(layout)
+        # logTextBox = QPlainTextEdit(self)
+        # logTextBox.setLineWrapMode(QPlainTextEdit.NoWrap)
+        # layout = QVBoxLayout()
+        # layout.addWidget(logTextBox)
+        # self.logTab.setLayout(layout)
         QtHandler = Handler(self)
         logger.addHandler(QtHandler)
-        QtHandler.newRecord.connect(logTextBox.appendPlainText)
+        # QtHandler.newRecord.connect(logTextBox.appendPlainText)
+        QtHandler.newRecord.connect(self.logTextBox.appendPlainText)
 
         # 日志Widget销毁时移除 Handlers
-        logTextBox.destroyed.connect(onDestroyed)
+        self.logTextBox.destroyed.connect(onDestroyed)
 
     def setupGUIByConfig(self):
         config = mw.addonManager.getConfig(__name__)

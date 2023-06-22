@@ -454,11 +454,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="logTab">
-      <attribute name="title">
-       <string>日志</string>
-      </attribute>
-     </widget>
     </widget>
    </item>
    <item>
@@ -468,6 +463,13 @@
      </property>
      <property name="textVisible">
       <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPlainTextEdit" name="logTextBox">
+     <property name="lineWrapMode">
+      <enum>QPlainTextEdit::NoWrap</enum>
      </property>
     </widget>
    </item>
