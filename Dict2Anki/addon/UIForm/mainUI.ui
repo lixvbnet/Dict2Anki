@@ -27,6 +27,16 @@
        <string>同步</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
+       <item row="4" column="3">
+        <widget class="QPushButton" name="btnSync">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Sync</string>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="0" colspan="4">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
@@ -109,23 +119,6 @@
          </item>
         </layout>
        </item>
-       <item row="4" column="0">
-        <widget class="QPushButton" name="pullRemoteWordsBtn">
-         <property name="text">
-          <string>Pull words</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="3">
-        <widget class="QPushButton" name="syncBtn">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Sync</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0" colspan="4">
         <layout class="QHBoxLayout" name="apiLayout">
          <item>
@@ -187,6 +180,13 @@
          </property>
          <property name="text">
           <string>Query</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="pullRemoteWordsBtn">
+         <property name="text">
+          <string>Pull words</string>
          </property>
         </widget>
        </item>

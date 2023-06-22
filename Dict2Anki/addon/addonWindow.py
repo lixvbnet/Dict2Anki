@@ -355,7 +355,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.deckComboBox.setEnabled(True)
         self.pullRemoteWordsBtn.setEnabled(True)
         self.queryBtn.setEnabled(self.newWordListWidget.count() > 0)
-        self.syncBtn.setEnabled(self.newWordListWidget.count() == 0 and self.needDeleteWordListWidget.count() > 0)
+        self.btnSync.setEnabled(self.newWordListWidget.count() == 0 and self.needDeleteWordListWidget.count() > 0)
         if self.needDeleteWordListWidget.count() == self.newWordListWidget.count() == 0:
             logger.info('无需同步')
             tooltip('无需同步')
@@ -367,7 +367,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         currentConfig = self.getAndSaveCurrentConfig()
         self.queryBtn.setEnabled(False)
         self.pullRemoteWordsBtn.setEnabled(False)
-        self.syncBtn.setEnabled(False)
+        self.btnSync.setEnabled(False)
 
         wordList = []
         selectedWords = self.newWordListWidget.selectedItems()
@@ -431,10 +431,10 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         self.pullRemoteWordsBtn.setEnabled(True)
         self.queryBtn.setEnabled(True)
-        self.syncBtn.setEnabled(True)
+        self.btnSync.setEnabled(True)
 
     @pyqtSlot()
-    def on_syncBtn_clicked(self):
+    def on_btnSync_clicked(self):
 
         failedGenerator = (self.newWordListWidget.item(row).data(Qt.UserRole) is None for row in range(self.newWordListWidget.count()))
         if any(failedGenerator):
@@ -475,7 +475,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         logger.info(f'发音下载任务:{audiosDownloadTasks}')
 
         if audiosDownloadTasks:
-            self.syncBtn.setEnabled(False)
+            self.btnSync.setEnabled(False)
             self.progressBar.setValue(0)
             self.progressBar.setMaximum(len(audiosDownloadTasks))
             if self.audioDownloadThread is not None:
