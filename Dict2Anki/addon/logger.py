@@ -9,7 +9,8 @@ class Handler(QObject, logging.Handler):
         super().__init__(parent)
         super(logging.Handler).__init__()
 
-        formatter = Formatter('[%(asctime)s][%(levelname)8s] -- %(message)s - (%(name)s)', '%d/%m/%Y %H:%M:%S')
+        # formatter = Formatter('[%(asctime)s][%(levelname)8s] -- %(message)s - (%(name)s)', '%d/%m/%Y %H:%M:%S')
+        formatter = Formatter('[%(name)s][%(levelname)s] %(message)s')
         self.setFormatter(formatter)
         self.setLevel(logging.DEBUG)
 
