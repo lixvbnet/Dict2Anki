@@ -1,0 +1,1017 @@
+{
+  "ee": {
+    "source": {
+      "name": "WordNet",
+      "url": "https://wordnet.princeton.edu"
+    },
+    "word": {
+      "trs": [
+        {
+          "pos": "n.",
+          "tr": [
+            {
+              "exam": {
+                "i": {
+                  "f": {
+                    "l": [
+                      {
+                        "i": "she danced with abandon"
+                      }
+                    ]
+                  }
+                }
+              },
+              "l": {
+                "i": "the trait of lacking restraint or control; reckless freedom from inhibition or worry"
+              },
+              "similar-words": [
+                {
+                  "similar": "wantonness"
+                },
+                {
+                  "similar": "unconstraint"
+                }
+              ]
+            },
+            {
+              "l": {
+                "i": "a feeling of extreme emotional intensity"
+              },
+              "similar-words": [
+                {
+                  "similar": "wildness"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "pos": "v.",
+          "tr": [
+            {
+              "exam": {
+                "i": {
+                  "f": {
+                    "l": [
+                      {
+                        "i": "We abandoned the old car in the empty parking lot"
+                      }
+                    ]
+                  }
+                }
+              },
+              "l": {
+                "i": "forsake, leave behind"
+              }
+            },
+            {
+              "exam": {
+                "i": {
+                  "f": {
+                    "l": [
+                      {
+                        "i": "He abandoned the thought of asking for her hand in marriage"
+                      }
+                    ]
+                  }
+                }
+              },
+              "l": {
+                "i": "stop maintaining or insisting on; of ideas or claims"
+              },
+              "similar-words": [
+                {
+                  "similar": "give up"
+                }
+              ]
+            },
+            {
+              "l": {
+                "i": "give up with the intent of never claiming again"
+              },
+              "similar-words": [
+                {
+                  "similar": "give up"
+                }
+              ]
+            },
+            {
+              "l": {
+                "i": "leave behind empty; move out of"
+              },
+              "similar-words": [
+                {
+                  "similar": "vacate"
+                },
+                {
+                  "similar": "empty"
+                }
+              ]
+            },
+            {
+              "l": {
+                "i": "leave someone who needs or counts on you; leave in the lurch"
+              },
+              "similar-words": [
+                {
+                  "similar": "forsake"
+                },
+                {
+                  "similar": "desolate"
+                },
+                {
+                  "similar": "desert"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "phone": "ə'bændən",
+      "speech": "abandon",
+      "return-phrase": {
+        "l": {
+          "i": "abandon"
+        }
+      }
+    }
+  },
+  "pic_dict": {
+    "pic": [
+      {
+        "image": "https://ydlunacommon-cdn.nosdn.127.net/8b2548cc5e386af3c8d6ac1df87fa42f.jpg?",
+        "host": "",
+        "url": "https://ydlunacommon-cdn.nosdn.127.net/8b2548cc5e386af3c8d6ac1df87fa42f.jpg?"
+      }
+    ]
+  },
+  "web_trans": {
+    "web-translation": [
+      {
+        "@same": "true",
+        "key": "abandon",
+        "key-speech": "abandon",
+        "trans": [
+          {
+            "summary": {
+              "line": [
+                "承租人<b>抛弃</b>租赁权承租人\" <b>抛弃</b>\"(<b>abandon</b>)租赁权，是指其已停止缴交租金并且以实际行动或口头表示不再继续居住该处。"
+              ]
+            },
+            "value": "抛弃",
+            "support": 2054,
+            "url": ""
+          },
+          {
+            "summary": {
+              "line": [
+                "纹完后还想纹一个,但问她纹什么,却回答不出来,商量了很久决定纹<b>放弃</b>(Abandon)的英文纹在小手臂,但字体想让人看起来没那么一目了然,就选择了藏文的字体.07.03.24."
+              ]
+            },
+            "value": "放弃",
+            "support": 1403,
+            "url": ""
+          },
+          {
+            "summary": {
+              "line": [
+                "1992年2月29日，正是俄罗斯天寒地冻的时令，一个刚刚出生但是天才就没有小腿的女婴，被单身母亲<b>遗弃</b>(Abandoned)在伊尔库茨克孤儿院门口。13个月以后，美国马里兰州的史蒂夫和贝丝朗夫妻来到俄罗斯这所孤儿院。"
+              ]
+            },
+            "value": "遗弃",
+            "support": 1202,
+            "url": ""
+          }
+        ]
+      },
+      {
+        "key": "abandon oneself to",
+        "key-speech": "abandon+oneself+to",
+        "trans": [
+          {
+            "value": "沉溺于"
+          },
+          {
+            "value": "沉湎于"
+          },
+          {
+            "value": "恣意"
+          },
+          {
+            "value": "放纵于"
+          }
+        ]
+      },
+      {
+        "key": "abandon rate",
+        "key-speech": "abandon+rate",
+        "trans": [
+          {
+            "value": "挂断率"
+          },
+          {
+            "value": "放弃率"
+          },
+          {
+            "value": "电话放弃率"
+          },
+          {
+            "value": "掉线率"
+          }
+        ]
+      },
+      {
+        "key": "abandon a claim",
+        "key-speech": "abandon+a+claim",
+        "trans": [
+          {
+            "value": "放弃索赔"
+          },
+          {
+            "value": "减少"
+          }
+        ]
+      },
+      {
+        "key": "abandon property",
+        "key-speech": "abandon+property",
+        "trans": [
+          {
+            "value": "废弃财产"
+          }
+        ]
+      },
+      {
+        "key": "abandon ship",
+        "key-speech": "abandon+ship",
+        "trans": [
+          {
+            "value": "弃船"
+          },
+          {
+            "value": "放弃船舰"
+          },
+          {
+            "value": "废弃之船"
+          },
+          {
+            "value": "委付"
+          }
+        ]
+      },
+      {
+        "key": "abandon option",
+        "key-speech": "abandon+option",
+        "trans": [
+          {
+            "value": "放弃期权"
+          },
+          {
+            "value": "详细翻译"
+          }
+        ]
+      },
+      {
+        "key": "With abandon",
+        "key-speech": "With+abandon",
+        "trans": [
+          {
+            "value": "尽情地"
+          },
+          {
+            "value": "放纵地"
+          },
+          {
+            "value": "放任地"
+          },
+          {
+            "value": "恣意地"
+          }
+        ]
+      },
+      {
+        "key": "abandon as unsalvageable",
+        "key-speech": "abandon+as+unsalvageable",
+        "trans": [
+          {
+            "value": "无法抢救而放弃"
+          }
+        ]
+      }
+    ]
+  },
+  "blng_sents_part": {
+    "sentence-count": 6,
+    "sentence-pair": [
+      {
+        "sentence": "Abandon hope all ye who enter here.",
+        "sentence-eng": "<b>Abandon</b> hope all ye who enter here.",
+        "sentence-translation": "汝等进入此地，须弃绝希望。",
+        "speech-size": "10kb",
+        "aligned-words": {
+          "src": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "8",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "9",
+                "@e": "13",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "25",
+                "@e": "30",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "31",
+                "@e": "35",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "3"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "3"
+              }
+            ]
+          },
+          "tran": {
+            "chars": [
+              {
+                "@s": "3",
+                "@e": "5",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "5",
+                "@e": "7",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "3"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "9",
+                "@e": "10",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "11",
+                "@e": "13",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "3"
+              }
+            ]
+          }
+        },
+        "source": "《柯林斯英汉双解大词典》",
+        "url": "https://《柯林斯英汉双解大词典》/",
+        "sentence-speech": "Abandon+hope+all+ye+who+enter+here.&le=eng"
+      },
+      {
+        "sentence": "The captain gave the order to abandon ship.",
+        "sentence-eng": "The captain gave the order to <b>abandon</b> ship.",
+        "sentence-translation": "船长下令弃船。",
+        "speech-size": "12kb",
+        "aligned-words": {
+          "src": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "12",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "13",
+                "@e": "30",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "31",
+                "@e": "38",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "39",
+                "@e": "43",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "3"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "3"
+              }
+            ]
+          },
+          "tran": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "3",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "3",
+                "@e": "5",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "5",
+                "@e": "6",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "6",
+                "@e": "7",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "3"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "3"
+              }
+            ]
+          }
+        },
+        "source": "《牛津词典》",
+        "url": "https://《牛津词典》/",
+        "sentence-speech": "The+captain+gave+the+order+to+abandon+ship.&le=eng"
+      },
+      {
+        "sentence": "Snow forced many drivers to abandon their vehicles.",
+        "sentence-eng": "Snow forced many drivers to <b>abandon</b> their vehicles.",
+        "sentence-translation": "大雪迫使许多驾驶者弃车步行。",
+        "speech-size": "14kb",
+        "aligned-words": {
+          "src": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "5",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "6",
+                "@e": "12",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "13",
+                "@e": "17",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "18",
+                "@e": "28",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "3"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "3"
+              },
+              {
+                "@s": "29",
+                "@e": "42",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "4"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "4"
+                    }
+                  ]
+                },
+                "@id": "4"
+              },
+              {
+                "@s": "43",
+                "@e": "51",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "5"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "5"
+                    }
+                  ]
+                },
+                "@id": "5"
+              }
+            ]
+          },
+          "tran": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "3",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "3",
+                "@e": "5",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "5",
+                "@e": "7",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "7",
+                "@e": "10",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "3"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "3"
+              },
+              {
+                "@s": "10",
+                "@e": "11",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "4"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "4"
+                    }
+                  ]
+                },
+                "@id": "4"
+              },
+              {
+                "@s": "11",
+                "@e": "14",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "5"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "5"
+                    }
+                  ]
+                },
+                "@id": "5"
+              }
+            ]
+          }
+        },
+        "source": "《牛津词典》",
+        "url": "https://《牛津词典》/",
+        "sentence-speech": "Snow+forced+many+drivers+to+abandon+their+vehicles.&le=eng"
+      }
+    ],
+    "more": "blng_sents",
+    "trs-classify": [
+      {
+        "proportion": "100%",
+        "tr": "全部"
+      },
+      {
+        "proportion": "43.6%",
+        "tr": "放弃"
+      },
+      {
+        "proportion": "28.2%",
+        "tr": "抛弃"
+      },
+      {
+        "proportion": "10.5%",
+        "tr": "弃"
+      },
+      {
+        "proportion": "5.7%",
+        "tr": "摒弃"
+      },
+      {
+        "proportion": "5.3%",
+        "tr": "舍弃"
+      },
+      {
+        "proportion": "3.2%",
+        "tr": "遗弃"
+      },
+      {
+        "proportion": "1.2%",
+        "tr": "丢弃"
+      },
+      {
+        "proportion": "0.9%",
+        "tr": "舍"
+      },
+      {
+        "proportion": "0.8%",
+        "tr": "离弃"
+      },
+      {
+        "proportion": "0.7%",
+        "tr": "废弃"
+      }
+    ]
+  },
+  "input": "abandon",
+  "meta": {
+    "input": "abandon",
+    "guessLanguage": "eng",
+    "isHasSimpleDict": "1",
+    "le": "en",
+    "lang": "eng",
+    "dicts": [
+      "ee",
+      "pic_dict",
+      "web_trans",
+      "blng_sents_part",
+      "meta",
+      "simple",
+      "phrs",
+      "ec"
+    ]
+  },
+  "le": "en",
+  "simple": {
+    "query": "abandon",
+    "word": [
+      {
+        "usphone": "əˈbændən",
+        "ukphone": "əˈbændən",
+        "ukspeech": "abandon&type=1",
+        "return-phrase": "abandon",
+        "usspeech": "abandon&type=2"
+      }
+    ]
+  },
+  "lang": "eng",
+  "phrs": {
+    "word": "abandon",
+    "phrs": [
+      {
+        "phr": {
+          "headword": {
+            "l": {
+              "i": "with abandon"
+            }
+          },
+          "trs": [
+            {
+              "tr": {
+                "l": {
+                  "i": "恣意地，放纵地"
+                }
+              }
+            }
+          ],
+          "source": ""
+        }
+      },
+      {
+        "phr": {
+          "headword": {
+            "l": {
+              "i": "abandon ship"
+            }
+          },
+          "trs": [
+            {
+              "tr": {
+                "l": {
+                  "i": "弃船"
+                }
+              }
+            }
+          ],
+          "source": ""
+        }
+      }
+    ]
+  },
+  "ec": {
+    "exam_type": [
+      "高中",
+      "CET4",
+      "CET6",
+      "考研",
+      "IELTS",
+      "TOEFL",
+      "GRE",
+      "SAT",
+      "商务英语"
+    ],
+    "source": {
+      "name": "有道词典",
+      "url": "https://dict.youdao.com"
+    },
+    "word": [
+      {
+        "usphone": "əˈbændən",
+        "ukphone": "əˈbændən",
+        "ukspeech": "abandon&type=1",
+        "trs": [
+          {
+            "tr": [
+              {
+                "l": {
+                  "i": [
+                    "v. 抛弃，遗弃；（因危险）离开，舍弃；中止，不再有；放弃（信念、信仰或看法）；陷入，沉湎于（某种情感）"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "tr": [
+              {
+                "l": {
+                  "i": [
+                    "n. 放任，放纵"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "return-phrase": {
+          "l": {
+            "i": "abandon"
+          }
+        },
+        "usspeech": "abandon&type=2"
+      }
+    ]
+  }
+}

@@ -1,9 +1,11 @@
+import json
 import logging
 import requests
 from urllib3 import Retry
 from urllib.parse import urlencode
 from requests.adapters import HTTPAdapter
 from Dict2Anki.addon.misc import AbstractQueryAPI
+
 logger = logging.getLogger('dict2Anki.queryApi.youdao')
 __all__ = ['API']
 
@@ -15,18 +17,23 @@ class Parser:
 
     @property
     def definition(self) -> list:
+        # print(json.dumps(self._result, ensure_ascii=False))
+
+        # 中文释义
         try:
             ec = [d['tr'][0]['l']['i'][0] for d in self._result['ec']['word'][0]['trs']][:3]
         except KeyError:
             ec = []
 
+        # 英英释义
         try:
-            ee = [ d['pos'] + d['tr'][0]['l']['i'] for d in self._result['ee']['word']['trs']]
+            ee = [d['pos'] + ' ' + d['tr'][0]['l']['i'] for d in self._result['ee']['word']['trs']][:3]
         except KeyError:
             ee = []
-        
+
         ec += ee
 
+        # Web trans
         try:
             web_trans = [w['value'] for w in self._result['web_trans']['web-translation'][0]['trans']][:3]
         except KeyError:
@@ -65,22 +72,22 @@ class Parser:
         return pron
 
     @property
-    def BrEPhonetic(self)->str:
+    def BrEPhonetic(self) -> str:
         """英式音标"""
         return self.pronunciations['BrEPhonetic']
 
     @property
-    def AmEPhonetic(self)->str:
+    def AmEPhonetic(self) -> str:
         """美式音标"""
         return self.pronunciations['AmEPhonetic']
 
     @property
-    def BrEPron(self)->str:
+    def BrEPron(self) -> str:
         """英式发音url"""
         return self.pronunciations['BrEUrl']
 
     @property
-    def AmEPron(self)->str:
+    def AmEPron(self) -> str:
         """美式发音url"""
         return self.pronunciations['AmEUrl']
 
@@ -92,7 +99,7 @@ class Parser:
             return []
 
     @property
-    def image(self)->str:
+    def image(self) -> str:
         try:
             return [i['image'] for i in self._result['pic_dict']['pic']][0]
         except (KeyError, IndexError):
@@ -110,6 +117,14 @@ class Parser:
         ]
 
     @property
+    def exam_type(self) -> list:
+        try:
+            exam_t = self._result['ec']['exam_type']
+        except KeyError as err:
+            exam_t = []
+        return exam_t
+
+    @property
     def result(self):
         return {
             'term': self.term,
@@ -120,7 +135,8 @@ class Parser:
             'BrEPhonetic': self.BrEPhonetic,
             'AmEPhonetic': self.AmEPhonetic,
             'BrEPron': self.BrEPron,
-            'AmEPron': self.AmEPron
+            'AmEPron': self.AmEPron,
+            'exam_type': self.exam_type,
         }
 
 

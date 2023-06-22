@@ -1,0 +1,49 @@
+{
+  "term": "abandon",
+  "definition": [
+    "v. 抛弃，遗弃；（因危险）离开，舍弃；中止，不再有；放弃（信念、信仰或看法）；陷入，沉湎于（某种情感）",
+    "n. 放任，放纵",
+    "n. the trait of lacking restraint or control; reckless freedom from inhibition or worry",
+    "v. forsake, leave behind"
+  ],
+  "phrase": [
+    [
+      "with abandon",
+      "恣意地，放纵地"
+    ],
+    [
+      "abandon ship",
+      "弃船"
+    ]
+  ],
+  "image": "https://ydlunacommon-cdn.nosdn.127.net/8b2548cc5e386af3c8d6ac1df87fa42f.jpg?",
+  "sentence": [
+    [
+      "Abandon hope all ye who enter here.",
+      "汝等进入此地，须弃绝希望。"
+    ],
+    [
+      "The captain gave the order to abandon ship.",
+      "船长下令弃船。"
+    ],
+    [
+      "Snow forced many drivers to abandon their vehicles.",
+      "大雪迫使许多驾驶者弃车步行。"
+    ]
+  ],
+  "BrEPhonetic": "əˈbændən",
+  "AmEPhonetic": "əˈbændən",
+  "BrEPron": "http://dict.youdao.com/dictvoice?audio=abandon&type=1",
+  "AmEPron": "http://dict.youdao.com/dictvoice?audio=abandon&type=2",
+  "exam_type": [
+    "高中",
+    "CET4",
+    "CET6",
+    "考研",
+    "IELTS",
+    "TOEFL",
+    "GRE",
+    "SAT",
+    "商务英语"
+  ]
+}

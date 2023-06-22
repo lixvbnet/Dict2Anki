@@ -1,0 +1,4 @@
+GET https://dict.youdao.com/jsonapi?q=xxx
+
+params = {"dicts": {"count": 99, "dicts": [["ec", "ee", "phrs", "pic_dict"], ["web_trans"], ["fanyi"], ["blng_sents_part"]]}}
+parser = Parser
