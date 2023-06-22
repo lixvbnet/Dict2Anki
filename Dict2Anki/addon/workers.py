@@ -1,5 +1,7 @@
 import json
 import logging
+import os
+
 import requests
 from urllib3 import Retry
 from itertools import chain
@@ -133,30 +135,50 @@ class AudioDownloadWorker(QObject):
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
 
-    def __init__(self, audios: [tuple]):
+    def __init__(self, target_dir, audios: [tuple]):
         super().__init__()
+        self.target_dir = target_dir
         self.audios = audios
 
     def run(self):
         currentThread = QThread.currentThread()
 
-        def __download(fileName, url):
+        def __download_with_retry(filename, url, retry=3):
+            success = False
+            for i in range(retry):
+                if __download(filename, url):
+                    success = True
+                    break
+                if currentThread.isInterruptionRequested():
+                    success = False
+                    break
+                self.logger.info(f"Retrying {i+1} time...")
+            if success:
+                self.tick.emit()
+            else:
+                self.logger.error(f"FAILED to download {fileName} after retrying {retry} times!")
+                self.logger.info("----------------------------------")
+
+        def __download(fileName, url) -> bool:
+            """Do NOT call this method directly. Use `__download_with_retry` instead."""
+            filepath = os.path.join(self.target_dir, fileName)
             try:
                 if currentThread.isInterruptionRequested():
-                    return
+                    return False
                 r = self.session.get(url, stream=True)
-                self.logger.info(f'Saving to {fileName}...')
-                with open(fileName, 'wb') as f:
+                self.logger.info(f'Downloading {fileName}...')
+                with open(filepath, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=1024):
                         if chunk:
                             f.write(chunk)
                 self.logger.info(f'[OK] {fileName} 下载完成')
+                self.logger.info("----------------------------------")
+                return True
             except Exception as e:
-                self.logger.warning(f'[ERROR] 下载{fileName}:{url}异常: {e}')
-            finally:
-                self.tick.emit()
+                self.logger.warning(f'下载{fileName}:{url}异常: {e}')
+                return False
 
         with ThreadPool(max_workers=3) as executor:
             for fileName, url in self.audios:
-                executor.submit(__download, fileName, url)
+                executor.submit(__download_with_retry, fileName, url, 3)
         self.done.emit()

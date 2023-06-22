@@ -480,9 +480,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                 added += 1
                 # 添加发音任务
                 if whichPron and wordItemData.get(whichPron):
-                    media_dir = mw.col.media.dir()
-                    fpath = os.path.join(media_dir, f"{whichPron}_{wordItemData['term']}.mp3")
-                    audiosDownloadTasks.append((fpath, wordItemData[whichPron],))
+                    audiosDownloadTasks.append((f"{whichPron}_{wordItemData['term']}.mp3", wordItemData[whichPron],))
         mw.reset()
 
         logger.info(f'发音下载任务:{audiosDownloadTasks}')
@@ -498,7 +496,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
             self.audioDownloadThread = QThread(self)
             self.audioDownloadThread.start()
-            self.audioDownloadWorker = AudioDownloadWorker(audiosDownloadTasks)
+            self.audioDownloadWorker = AudioDownloadWorker(mw.col.media.dir(), audiosDownloadTasks)
             self.audioDownloadWorker.moveToThread(self.audioDownloadThread)
             self.audioDownloadWorker.tick.connect(lambda: self.progressBar.setValue(self.progressBar.value() + 1))
             self.audioDownloadWorker.start.connect(self.audioDownloadWorker.run)
