@@ -479,8 +479,20 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                 addNoteToDeck(deck, model, currentConfig, wordItemData)
                 added += 1
                 # 添加发音任务
-                if whichPron and wordItemData.get(whichPron):
-                    audiosDownloadTasks.append((f"{whichPron}_{wordItemData['term']}.mp3", wordItemData[whichPron],))
+                if whichPron:
+                    word = wordItemData['term']
+                    has_pron = True
+                    if not wordItemData.get(whichPron):     # whichPron is missing
+                        newPron = 'AmEPron' if whichPron == 'BrEPron' else 'BrEPron'
+                        if not wordItemData.get(newPron):   # newPron is also missing
+                            has_pron = False
+                            logger.warning(f"No audio for word {word}!")
+                        else:                               # whichPron is missing, but newPron is present
+                            has_pron = True
+                            logger.warning(f"{whichPron} is missing for word {word}. Downloading {newPron} instead.")
+                            whichPron = newPron
+                    if has_pron:
+                        audiosDownloadTasks.append((f"{whichPron}_{wordItemData['term']}.mp3", wordItemData[whichPron],))
         mw.reset()
 
         logger.info(f'发音下载任务:{audiosDownloadTasks}')
