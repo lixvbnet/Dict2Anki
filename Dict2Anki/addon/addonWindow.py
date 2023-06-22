@@ -251,36 +251,20 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.cookieLineEdit.setText(cookie)
         self.getAndSaveCurrentConfig()
         self.selectedDict.checkCookie(json.loads(cookie))
-        self.selectedDict.getGroups()
+        groups = self.selectedDict.getGroups()
+        logger.info(f"{len(groups)} group(s): {groups}")
 
-        container = QDialog(self)
-        group = wordGroup.Ui_Dialog()
-        group.setupUi(container)
-
-        for groupName in [str(group_name) for group_name, _ in self.selectedDict.groups]:
-            item = QListWidgetItem()
-            item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-            item.setText(groupName)
-            item.setCheckState(Qt.Unchecked)
-            group.wordGroupListWidget.addItem(item)
-
-        # 恢复上次选择的单词本分组
-        if self.selectedGroups:
-            for groupName in self.selectedGroups[self.currentConfig['selectedDict']]:
-                items = group.wordGroupListWidget.findItems(groupName, Qt.MatchExactly)
-                for item in items:
-                    item.setCheckState(Qt.Checked)
-        else:
-            self.selectedGroups = [list()] * len(dictionaries)
-
-        def onAccepted():
+        def onAccepted(is_popup=True):
             """选择单词本弹窗确定事件"""
             # 清空 listWidget
             self.newWordListWidget.clear()
             self.needDeleteWordListWidget.clear()
             self.mainTab.setEnabled(False)
 
-            selectedGroups = [group.wordGroupListWidget.item(index).text() for index in range(group.wordGroupListWidget.count()) if
+            if not is_popup:
+                selectedGroups = self.selectedGroups[self.currentConfig['selectedDict']]
+            else:
+                selectedGroups = [group.wordGroupListWidget.item(index).text() for index in range(group.wordGroupListWidget.count()) if
                               group.wordGroupListWidget.item(index).checkState() == Qt.Checked]
             # 保存分组记录
             self.selectedGroups[self.currentConfig['selectedDict']] = selectedGroups
@@ -295,6 +279,33 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             self.progressBar.setMaximum(1)
             self.mainTab.setEnabled(True)
 
+        # Avoid popup when there's only 1 group
+        if len(groups) == 1:
+            logger.info(f"Only 1 group. Select automatically and avoid popup.")
+            group_name, group_index = groups[0]
+            self.selectedGroups = [list()] * len(dictionaries)
+            self.selectedGroups[self.currentConfig['selectedDict']] = [group_name]
+            onAccepted(is_popup=False)
+            return
+
+        # Otherwise, popup a dialog
+        container = QDialog(self)
+        group = wordGroup.Ui_Dialog()
+        group.setupUi(container)
+        for groupName in [str(group_name) for group_name, _ in self.selectedDict.groups]:
+            item = QListWidgetItem()
+            item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+            item.setText(groupName)
+            item.setCheckState(Qt.Unchecked)
+            group.wordGroupListWidget.addItem(item)
+        # 恢复上次选择的单词本分组
+        if self.selectedGroups:
+            for groupName in self.selectedGroups[self.currentConfig['selectedDict']]:
+                items = group.wordGroupListWidget.findItems(groupName, Qt.MatchExactly)
+                for item in items:
+                    item.setCheckState(Qt.Checked)
+        else:
+            self.selectedGroups = [list()] * len(dictionaries)
         group.buttonBox.accepted.connect(onAccepted)
         group.buttonBox.rejected.connect(onRejected)
         container.exec()
