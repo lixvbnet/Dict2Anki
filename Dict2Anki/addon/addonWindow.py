@@ -465,7 +465,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             # force delete the existing model
             model = getOrCreateModel(MODEL_NAME, force=True)
 
-        getOrCreateModelCardTemplate(model, 'default')
+        # create 'Normal' card template (card type)
+        getOrCreateModelCardTemplate(model, 'Normal')
         deck = getOrCreateDeck(self.deckComboBox.currentText(), model=model)
 
         logger.info('同步点击')
@@ -486,8 +487,6 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             wordItemData = wordItem.data(Qt.UserRole)
             if wordItemData:
                 logger.debug(f"wordItemData: {wordItemData}")
-                addNoteToDeck(deck, model, currentConfig, wordItemData)
-                added += 1
                 # 添加发音任务
                 if whichPron:
                     word = wordItemData['term']
@@ -503,6 +502,10 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                             whichPron = newPron
                     if has_pron:
                         audiosDownloadTasks.append((f"{whichPron}_{wordItemData['term']}.mp3", wordItemData[whichPron],))
+
+                # add note
+                addNoteToDeck(deck, model, currentConfig, wordItemData, whichPron)
+                added += 1
         mw.reset()
 
         logger.info(f'发音下载任务:{audiosDownloadTasks}')

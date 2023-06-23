@@ -47,6 +47,7 @@ def getOrCreateDeck(deckName, model):
 
 
 def getOrCreateModel(modelName, force=False):
+    """Create Note Model (Note Type)"""
     model = mw.col.models.byName(modelName)
     if model:
         if set([f['name'] for f in model['flds']]) == set(MODEL_FIELDS):
@@ -65,93 +66,171 @@ def getOrCreateModel(modelName, force=False):
 
 
 def getOrCreateModelCardTemplate(modelObject, cardTemplateName):
+    """Create Card Template (Card Type)"""
     logger.info(f'添加卡片类型:{cardTemplateName}')
     existingCardTemplate = modelObject['tmpls']
     if cardTemplateName in [t.get('name') for t in existingCardTemplate]:
         return
     cardTemplate = mw.col.models.newTemplate(cardTemplateName)
-    cardTemplate['qfmt'] = '''
+    cardTemplate['qfmt'] = '''\
         <table>
             <tr>
-                <td><h1 class="term">{{term}}</h1><br><div> 英 [{{BrEPhonetic}}] 美 [{{AmEPhonetic}}]</div></div></td>
-                <td><img {{image}} height="120px"></td>
+            <td>
+                <h1 class="term">{{term}}</h1>
+                <span>{{pronunciation}}</span>
+                <div class="pronounce">
+                    <span class="phonetic">UK[{{uk}}]</span>
+                    <span class="phonetic">US[{{us}}]</span>
+                </div>
+                <div class="definiton">Tap To View</div>
+            </td>
+            <td>
+                {{image}}
+            </td>
             </tr>
         </table>
-        <hr>
-        释义：
-        <div>Tap to View</div>
-        <hr>
-        短语：
-        <table>{{phraseFront}}</table>
-        <hr>
-        例句：
-        <table>{{sentenceFront}}</table>
-        {{BrEPron}}
-        {{AmEPron}}
+        <div class="divider"></div>
+        <table>
+            <tr><td class="phrase">{{phrase0}}</td><td>{{pplaceHolder0}}</td></tr>
+            <tr><td class="phrase">{{phrase1}}</td><td>{{pplaceHolder1}}</td></tr>
+            <tr><td class="phrase">{{phrase2}}</td><td>{{pplaceHolder2}}</td></tr>
+        </table>
+        <table>
+            <tr><td class="sentence">{{sentence0}}</td><td>{{splaceHolder0}}</td></tr>
+            <tr><td class="sentence">{{sentence1}}</td><td>{{splaceHolder1}}</td></tr>
+            <tr><td class="sentence">{{sentence2}}</td><td>{{splaceHolder2}}</td></tr>
+        </table>
     '''
-    cardTemplate['afmt'] = '''
+    cardTemplate['afmt'] = '''\
         <table>
             <tr>
-                <td><h1 class="term">{{term}}</h1><br><div> 英 [{{BrEPhonetic}}] 美 [{{AmEPhonetic}}]</div></div></td>
-                <td><img {{image}} height="120px"></td>
+            <td>
+            <h1 class="term">{{term}}</h1>
+                <span>{{pronunciation}}</span>
+                <div class="pronounce">
+                    <span class="phonetic">UK[{{uk}}]</span>
+                    <span class="phonetic">US[{{us}}]</span>
+                </div>
+                <div class="definiton">{{definition}}</div>
+            </td>
+            <td>
+                {{image}}
+            </td>
             </tr>
         </table>
-        <hr>
-        释义：
-        <div>{{definition}}</div>
-        <hr>
-        短语：
-        <table>{{phraseBack}}</table>
-        <hr>
-        例句：
-        <table>{{sentenceBack}}</table>
+        <div class="divider"></div>
+        <table>
+            <tr><td class="phrase">{{phrase0}}</td><td>{{phrase_explain0}}</td></tr>
+            <tr><td class="phrase">{{phrase1}}</td><td>{{phrase_explain1}}</td></tr>
+            <tr><td class="phrase">{{phrase2}}</td><td>{{phrase_explain2}}</td></tr>
+        </table>
+        <table>
+            <tr><td class="sentence">{{sentence0}}</td><td>{{sentence_explain0}}</td></tr>
+            <tr><td class="sentence">{{sentence1}}</td><td>{{sentence_explain1}}</td></tr>
+            <tr><td class="sentence">{{sentence2}}</td><td>{{sentence_explain2}}</td></tr>
+        </table>
     '''
     modelObject['css'] = '''
         .card {
-            font-family: arial;
-            font-size: 20px;
-            text-align: left;
-            color: black;
-            background-color: white;
+          font-family: arial;
+          font-size: 16px;
+          text-align: left;
+          color: #212121;
+          background-color: white;
+        }
+        .pronounce {
+          line-height: 30px;
+          font-size: 26px;
+          margin-bottom: 0;
+        }
+        .phonetic {
+          font-size: 16px;
+          font-family: "lucida sans unicode", arial, sans-serif;
+          color: #01848f;
         }
         .term {
-            font-size : 35px;
+          margin-bottom: -5px;
+        }
+        .divider {
+          margin: 1em 0 1em 0;
+          border-bottom: 2px solid #4caf50;
+        }
+        .phrase,
+        .sentence {
+          color: #01848f;
+          padding-right: 1em;
+        }
+        img {
+          max-height: 120px;
+        }
+        tr {
+          vertical-align: top;
         }
     '''
     mw.col.models.addTemplate(modelObject, cardTemplate)
     mw.col.models.add(modelObject)
 
 
-def addNoteToDeck(deckObject, modelObject, currentConfig: dict, oneQueryResult: dict):
-    if not oneQueryResult:
-        logger.warning(f'查询结果{oneQueryResult} 异常，忽略')
+def addNoteToDeck(deck, model, currentConfig: dict, word: dict, whichPron: str):
+    """
+    Add note
+    :param deck: deck
+    :param model: model
+    :param currentConfig: currentConfig
+    :param word: (dict) query result of a word
+    :return: None
+    """
+    if not word:
+        logger.warning(f'查询结果{word} 异常，忽略')
         return
-    modelObject['did'] = deckObject['id']
+    model['did'] = deck['id']
 
-    newNote = anki.notes.Note(mw.col, modelObject)
-    newNote['term'] = oneQueryResult['term']
-    for configName in BASIC_OPTION + EXTRA_OPTION:
-        logger.debug(f'字段:{configName}--结果:{oneQueryResult.get(configName)}')
-        if oneQueryResult.get(configName):
-            # 短语例句
-            if configName in ['sentence', 'phrase'] and currentConfig[configName]:
-                newNote[f'{configName}Front'] = '\n'.join(
-                    [f'<tr><td>{e.strip()}</td></tr>' for e, _ in oneQueryResult[configName]])
-                newNote[f'{configName}Back'] = '\n'.join(
-                    [f'<tr><td>{e.strip()}<br>{c.strip()}</td></tr>' for e, c in oneQueryResult[configName]])
-            # 图片
-            elif configName == 'image':
-                newNote[configName] = f'src="{oneQueryResult[configName]}"'
-            # 释义
-            elif configName == 'definition' and currentConfig[configName]:
-                newNote[configName] = ' '.join(oneQueryResult[configName])
-            # 发音
-            elif configName in EXTRA_OPTION[:2]:
-                newNote[configName] = f"[sound:{configName}_{oneQueryResult['term']}.mp3]"
-            # 其他
-            elif currentConfig[configName]:
-                newNote[configName] = oneQueryResult[configName]
+    # create new note
+    note = anki.notes.Note(mw.col, model)
+    note['term'] = word['term']
+    if word['definition_short']:    # TODO: using short definition here. Need to make it configurable!
+        note['definition'] = word['definition_short']
+    if word['BrEPhonetic']:
+        note['uk'] = word['BrEPhonetic']
+    if word['AmEPhonetic']:
+        note['us'] = word['AmEPhonetic']
+    if word[whichPron]:
+        note['pronunciation'] = f"[sound:{whichPron}_{word['term']}.mp3]"
+    if word['phrase']:
+        for i, phrase_tuple in enumerate(word['phrase']):
+            note[f'phrase{i}'], note[f'phrase_explain{i}'] = phrase_tuple
+            note[f'pplaceHolder{i}'] = "Tap To View"
 
-    mw.col.addNote(newNote)
+    if word['sentence']:
+        for i, sentence_tuple in enumerate(word['sentence']):
+            note[f'sentence{i}'], note[f'sentence_explain{i}'] = sentence_tuple
+            note[f'splaceHolder{i}'] = "Tap To View"
+
+    if word['image']:               # TODO: download the image and reference it locally instead
+        note['image'] = "<img src='{}' />".format(word['image'])
+
+    # for configName in BASIC_OPTION + EXTRA_OPTION:
+    #     logger.debug(f'字段:{configName}--结果:{term.get(configName)}')
+    #     if term.get(configName):
+    #         # 短语例句
+    #         if configName in ['sentence', 'phrase'] and currentConfig[configName]:
+    #             note[f'{configName}Front'] = '\n'.join(
+    #                 [f'<tr><td>{e.strip()}</td></tr>' for e, _ in term[configName]])
+    #             note[f'{configName}Back'] = '\n'.join(
+    #                 [f'<tr><td>{e.strip()}<br>{c.strip()}</td></tr>' for e, c in term[configName]])
+    #         # 图片
+    #         elif configName == 'image':
+    #             note[configName] = f'src="{term[configName]}"'
+    #         # 释义
+    #         elif configName == 'definition' and currentConfig[configName]:
+    #             note[configName] = ' '.join(term[configName])
+    #         # 发音
+    #         elif configName in EXTRA_OPTION[:2]:
+    #             note[configName] = f"[sound:{configName}_{term['term']}.mp3]"
+    #         # 其他
+    #         elif currentConfig[configName]:
+    #             note[configName] = term[configName]
+
+    mw.col.addNote(note)
     mw.col.reset()
-    logger.info(f"添加笔记{newNote['term']}")
+    logger.info(f"添加笔记{note['term']}")
