@@ -6,14 +6,20 @@
 ```python
 {
     'term': str,
+    'bookId': str,
+    'bookName': str,
+    'modifiedTime': int,
+    'definition_short': str,
     'definition': [str],
+    'definition_en': [str],
     'phrase': [(str,str)],
-    'image': str,
     'sentence': [(str,str)],
+    'image': str,
     'BrEPhonetic': str,
     'AmEPhonetic': str,
     'BrEPron': str,
-    'AmEPron': str
+    'AmEPron': str,
+    'exam_type': [str],
 }
 
 ```

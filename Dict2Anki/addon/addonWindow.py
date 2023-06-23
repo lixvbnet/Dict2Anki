@@ -15,7 +15,7 @@ from Dict2Anki.addon.workers import LoginStateCheckWorker, VersionCheckWorker, R
 from Dict2Anki.addon.dictionary import dictionaries
 from Dict2Anki.addon.logger import Handler
 from Dict2Anki.addon.loginDialog import LoginDialog
-from Dict2Anki.addon.misc import Mask
+from Dict2Anki.addon.misc import Mask, SimpleWord
 from Dict2Anki.addon.constants import BASIC_OPTION, EXTRA_OPTION, WINDOW_TITLE, MODEL_NAME, RELEASE_URL
 
 try:
@@ -44,7 +44,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         super(Windows, self).__init__(parent)
         self.selectedDict = None
         self.currentConfig = dict()
-        self.localWords = []
+        self.localWords: [str] = []
+        self.remoteWordsDict: {str: SimpleWord} = {}
         self.selectedGroups = []
 
         self.workerThread = QThread(self)
@@ -326,39 +327,41 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.pullWorker.start.emit()
 
     @pyqtSlot(list)
-    def insertWordToListWidget(self, words: list):
+    def insertWordToListWidget(self, words: [SimpleWord]):
         """一个分组获取完毕事件"""
         for word in words:
-            wordItem = QListWidgetItem(word, self.newWordListWidget)
+            self.remoteWordsDict[word.term] = word
+            wordItem = QListWidgetItem(word.term, self.newWordListWidget)
             wordItem.setData(Qt.UserRole, None)
         self.newWordListWidget.clearSelection()
 
     @pyqtSlot()
     def on_allPullWork_done(self):
         """全部分组获取完毕事件"""
-        localWordList = set(getWordsByDeck(self.deckComboBox.currentText()))
-        remoteWordList = set([self.newWordListWidget.item(row).text() for row in range(self.newWordListWidget.count())])
+        # termList: [str]
+        localTermList = set(getWordsByDeck(self.deckComboBox.currentText()))
+        remoteTermList = set([self.newWordListWidget.item(row).text() for row in range(self.newWordListWidget.count())])
 
-        newWords = remoteWordList - localWordList  # 新单词
-        needToDeleteWords = localWordList - remoteWordList  # 需要删除的单词
-        logger.info(f'本地: {localWordList}')
-        logger.info(f'远程: {remoteWordList}')
-        logger.info(f'待查: {newWords}')
-        logger.info(f'待删: {needToDeleteWords}')
+        newTerms = remoteTermList - localTermList  # 新单词
+        needToDeleteTerms = localTermList - remoteTermList  # 需要删除的单词
+        logger.info(f'本地: {localTermList}')
+        logger.info(f'远程: {remoteTermList}')
+        logger.info(f'待查: {newTerms}')
+        logger.info(f'待删: {needToDeleteTerms}')
         waitIcon = QIcon(':/icons/wait.png')
         delIcon = QIcon(':/icons/delete.png')
         self.newWordListWidget.clear()
         self.needDeleteWordListWidget.clear()
 
-        for word in needToDeleteWords:
-            item = QListWidgetItem(word)
+        for term in needToDeleteTerms:
+            item = QListWidgetItem(term)
             # item.setCheckState(Qt.Checked)
             item.setCheckState(Qt.Unchecked)    # Defaults to Unchecked (Avoid unintentional data loss)
             item.setIcon(delIcon)
             self.needDeleteWordListWidget.addItem(item)
 
-        for word in newWords:
-            item = QListWidgetItem(word)
+        for term in newTerms:
+            item = QListWidgetItem(term)
             item.setIcon(waitIcon)
             self.newWordListWidget.addItem(item)
         self.newWordListWidget.clearSelection()
@@ -382,27 +385,19 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.pullRemoteWordsBtn.setEnabled(False)
         self.btnSync.setEnabled(False)
 
-        wordList = []
-        selectedWords = self.newWordListWidget.selectedItems()
-        if selectedWords:
+        wordList: [(SimpleWord, int)] = []      # [(SimpleWord, row)]
+        selectedTerms = self.newWordListWidget.selectedItems()
+        if selectedTerms:
             # 如果选中单词则只查询选中的单词
-            for wordItem in selectedWords:
-                wordBundle = dict()
-                row = self.newWordListWidget.row(wordItem)
-                wordBundle['term'] = wordItem.text()
-                for configName in BASIC_OPTION + EXTRA_OPTION:
-                    wordBundle[configName] = currentConfig[configName]
-                    wordBundle['row'] = row
-                wordList.append(wordBundle)
+            for termItem in selectedTerms:
+                row = self.newWordListWidget.row(termItem)
+                word = self.remoteWordsDict[termItem.text()]
+                wordList.append((word, row))
         else:  # 没有选择则查询全部
             for row in range(self.newWordListWidget.count()):
-                wordBundle = dict()
-                wordItem = self.newWordListWidget.item(row)
-                wordBundle['term'] = wordItem.text()
-                for configName in BASIC_OPTION + EXTRA_OPTION:
-                    wordBundle[configName] = currentConfig[configName]
-                    wordBundle['row'] = row
-                wordList.append(wordBundle)
+                termItem = self.newWordListWidget.item(row)
+                word = self.remoteWordsDict[termItem.text()]
+                wordList.append((word, row))
 
         logger.info(f'待查询单词{wordList}')
         # 查询线程
@@ -476,6 +471,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             wordItem = self.newWordListWidget.item(row)
             wordItemData = wordItem.data(Qt.UserRole)
             if wordItemData:
+                logger.debug(f"wordItemData: {wordItemData}")
                 addNoteToDeck(deck, model, currentConfig, wordItemData)
                 added += 1
                 # 添加发音任务

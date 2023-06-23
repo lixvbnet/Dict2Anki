@@ -6,6 +6,28 @@ from abc import ABC, abstractmethod
 logger = logging.getLogger('dict2Anki.misc')
 
 
+class SimpleWord(ABC):
+    """A SimpleWord includes the term and a brief translation, as well as other metadata."""
+    def __init__(self, term: str, trans="", modifiedTime=0, bookId=0, bookName=""):
+        self.term = term
+        self.trans = trans
+        self.modifiedTime = modifiedTime
+        self.bookId = bookId
+        self.bookName = bookName
+
+    def toString(self):
+        return f'{self.term} {self.trans} modifiedTime={self.modifiedTime}, bookId={self.bookId}, bookName={self.bookName}'
+
+    def __str__(self) -> str:
+        # return f'{self.term} {self.trans} modifiedTime={self.modifiedTime}, bookId={self.bookId}, bookName={self.bookName}'
+        return self.term
+
+    def __repr__(self):
+        # return f'SimpleWord({self.__str__()})'
+        return self.term
+
+
+
 class AbstractDictionary(ABC):
 
     @staticmethod
@@ -26,14 +48,14 @@ class AbstractDictionary(ABC):
         pass
 
     @abstractmethod
-    def getWordsByPage(self, pageNo: int, groupName: str, groupId: str) -> [str]:
+    def getWordsByPage(self, pageNo: int, groupName: str, groupId: str) -> [SimpleWord]:
         pass
 
 
 class AbstractQueryAPI(ABC):
     @classmethod
     @abstractmethod
-    def query(cls, word) -> dict:
+    def query(cls, word: SimpleWord) -> dict:
         """
         查询
         :param word: 单词

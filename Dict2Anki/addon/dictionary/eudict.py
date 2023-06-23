@@ -6,7 +6,7 @@ from math import ceil
 from bs4 import BeautifulSoup
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
-from Dict2Anki.addon.misc import AbstractDictionary
+from Dict2Anki.addon.misc import AbstractDictionary, SimpleWord
 
 logger = logging.getLogger('dict2Anki.dictionary.eudict')
 
@@ -83,7 +83,7 @@ class Eudict(AbstractDictionary):
             logger.exception(f'网络异常{error}')
             return 0
 
-    def getWordsByPage(self, pageNo: int, groupName: str, groupId: int) -> [str]:
+    def getWordsByPage(self, pageNo: int, groupName: str, groupId: int) -> [SimpleWord]:
         wordList = []
         data = {
             'columns[2][data]': 'word',
@@ -100,7 +100,7 @@ class Eudict(AbstractDictionary):
                 data=data
             )
             wl = r.json()
-            wordList = list(set(word['uuid'] for word in wl['data']))
+            wordList = [SimpleWord(word['uuid']) for word in wl['data']]
         except Exception as error:
             logger.exception(f'网络异常{error}')
         finally:

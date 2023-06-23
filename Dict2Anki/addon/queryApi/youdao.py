@@ -4,41 +4,40 @@ import requests
 from urllib3 import Retry
 from urllib.parse import urlencode
 from requests.adapters import HTTPAdapter
-from Dict2Anki.addon.misc import AbstractQueryAPI
+from Dict2Anki.addon.misc import AbstractQueryAPI, SimpleWord
 
 logger = logging.getLogger('dict2Anki.queryApi.youdao')
 __all__ = ['API']
 
 
 class Parser:
-    def __init__(self, json_obj, term):
+    def __init__(self, json_obj, word: SimpleWord):
         self._result = json_obj
-        self.term = term
+        self.word = word
 
     @property
     def definition(self) -> list:
+        """中文释义"""
         # print(json.dumps(self._result, ensure_ascii=False))
-
-        # 中文释义
         try:
             ec = [d['tr'][0]['l']['i'][0] for d in self._result['ec']['word'][0]['trs']][:3]
         except KeyError:
             ec = []
-
-        # 英英释义
-        try:
-            ee = [d['pos'] + ' ' + d['tr'][0]['l']['i'] for d in self._result['ee']['word']['trs']][:3]
-        except KeyError:
-            ee = []
-
-        ec += ee
-
         # Web trans
         try:
             web_trans = [w['value'] for w in self._result['web_trans']['web-translation'][0]['trans']][:3]
         except KeyError:
             web_trans = []
         return ec if ec else web_trans
+
+    @property
+    def definition_en(self) -> list:
+        """英英释义"""
+        try:
+            ee = [d['pos'] + ' ' + d['tr'][0]['l']['i'] for d in self._result['ee']['word']['trs']][:3]
+        except KeyError:
+            ee = []
+        return ee
 
     @property
     def phrase(self) -> list:
@@ -127,8 +126,14 @@ class Parser:
     @property
     def result(self):
         return {
-            'term': self.term,
+            'term': self.word.term,
+            'bookId': self.word.bookId,
+            'bookName': self.word.bookName,
+            'modifiedTime': self.word.modifiedTime,
+            'definition_short': self.word.trans,
+
             'definition': self.definition,
+            'definition_en': self.definition_en,
             'phrase': self.phrase,
             'sentence': self.sentence,
             'image': self.image,
@@ -153,11 +158,11 @@ class API(AbstractQueryAPI):
     parser = Parser
 
     @classmethod
-    def query(cls, word) -> dict:
+    def query(cls, word: SimpleWord) -> dict:
         queryResult = None
         try:
-            rsp = cls.session.get(cls.url, params=urlencode(dict(cls.params, **{'q': word})), timeout=cls.timeout)
-            logger.debug(f'code:{rsp.status_code}- word:{word} text:{rsp.text}')
+            rsp = cls.session.get(cls.url, params=urlencode(dict(cls.params, **{'q': word.term})), timeout=cls.timeout)
+            logger.debug(f'code:{rsp.status_code}- term:{word.term} text:{rsp.text}')
             queryResult = cls.parser(rsp.json(), word).result
         except Exception as e:
             logger.exception(e)

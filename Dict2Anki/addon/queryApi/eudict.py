@@ -2,16 +2,16 @@ import logging
 import requests
 from urllib3 import Retry
 from requests.adapters import HTTPAdapter
-from Dict2Anki.addon.misc import AbstractQueryAPI
+from Dict2Anki.addon.misc import AbstractQueryAPI, SimpleWord
 from bs4 import BeautifulSoup
 logger = logging.getLogger('dict2Anki.queryApi.eudict')
 __all__ = ['API']
 
 
 class Parser:
-    def __init__(self, html, term):
+    def __init__(self, html, word: SimpleWord):
         self._soap = BeautifulSoup(html, 'html.parser')
-        self.term = term
+        self.word = word
 
     @staticmethod
     def __fix_url_without_http(url):
@@ -46,6 +46,11 @@ class Parser:
             ret.append(el.get_text(strip=True))
 
         return ret
+
+    @property
+    def definition_en(self) -> list:
+        # TODO
+        return []
 
     @property
     def pronunciations(self) -> dict:
@@ -156,8 +161,14 @@ class Parser:
     @property
     def result(self):
         return {
-            'term': self.term,
+            'term': self.word.term,
+            'bookId': self.word.bookId,
+            'bookName': self.word.bookName,
+            'modifiedTime': self.word.modifiedTime,
+            'definition_short': self.word.trans,
+
             'definition': self.definition,
+            'definition_en': self.definition_en,
             'phrase': self.phrase,
             'image': self.image,
             'sentence': self.sentence,
@@ -183,8 +194,8 @@ class API(AbstractQueryAPI):
     def query(cls, word) -> dict:
         queryResult = None
         try:
-            rsp = cls.session.get(cls.url.format(word), timeout=cls.timeout)
-            logger.debug(f'code:{rsp.status_code}- word:{word} text:{rsp.text[:100]}')
+            rsp = cls.session.get(cls.url.format(word.term), timeout=cls.timeout)
+            logger.debug(f'code:{rsp.status_code}- word:{word.term} text:{rsp.text[:100]}')
             queryResult = cls.parser(rsp.text, word).result
         except Exception as e:
             logger.exception(e)

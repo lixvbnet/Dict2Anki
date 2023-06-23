@@ -2,13 +2,14 @@
 import json
 import os
 from Dict2Anki.addon.dictionary.youdao import Youdao
+from Dict2Anki.addon.misc import SimpleWord
 from Dict2Anki.addon.queryApi.youdao import API
 
 
 BASE_DIR = "../Dict2Anki"
 
 
-def youdao_get_words():
+def youdao_get_words() -> [SimpleWord]:
     # 1. run `make install`
     # 2. open Anki, Dict2Anki, and login Youdao
     # 3. Anki will generate the `meta.json` file, which contains the user config, including cookie
@@ -47,16 +48,28 @@ def youdao_get_words():
 
 
 def youdao_test():
-    # words = youdao_get_words()
+    words = youdao_get_words()
     # word = words[len(words)-1]   # here just query last word
-    # word = "abandon"
-    word = "tacho"
+    word = None
+    for w in words:
+        if w.term == 'hype':
+            word = w
+
+    if word is None:
+        print(f"Error: word not found!")
+        return
+
     print(f"================ Query word {word} ================")
+    print(word.toString())
+    print('------------------------')
     result = API.query(word)
     print(json.dumps(result, ensure_ascii=False))
 
-    print("phrase:\t\t", result['phrase'])
-    print("sentence:\t", result['sentence'])
+    print(f"definition_short: \t {result['definition_short']}")
+    print(f"definition: \t\t {result['definition']} (size={len(result['definition'])})")
+    print(f"definition_en: \t\t {result['definition_en']} (size={len(result['definition_en'])})")
+    print(f"phrase: \t\t\t {result['phrase']} (size={len(result['phrase'])})")
+    print(f"sentence: \t\t\t {result['sentence']} (size={len(result['sentence'])})")
 
 
 print(os.getcwd())

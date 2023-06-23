@@ -5,7 +5,7 @@ import os
 import requests
 from urllib3 import Retry
 from itertools import chain
-from Dict2Anki.addon.misc import ThreadPool
+from Dict2Anki.addon.misc import ThreadPool, SimpleWord
 from requests.adapters import HTTPAdapter
 from Dict2Anki.addon.constants import VERSION, VERSION_CHECK_API
 from PyQt5.QtCore import QObject, pyqtSignal, QThread
@@ -96,7 +96,7 @@ class QueryWorker(QObject):
     allQueryDone = pyqtSignal()
     logger = logging.getLogger('dict2Anki.workers.QueryWorker')
 
-    def __init__(self, wordList: [dict], api):
+    def __init__(self, wordList: [(SimpleWord, int)], api):
         super().__init__()
         self.wordList = wordList
         self.api = api
@@ -104,7 +104,7 @@ class QueryWorker(QObject):
     def run(self):
         currentThread = QThread.currentThread()
 
-        def _query(word, row):
+        def _query(word: SimpleWord, row):
             if currentThread.isInterruptionRequested():
                 return
             queryResult = self.api.query(word)
@@ -119,8 +119,8 @@ class QueryWorker(QObject):
             return queryResult
 
         with ThreadPool(max_workers=3) as executor:
-            for word in self.wordList:
-                executor.submit(_query, word['term'], word['row'])
+            for (word, row) in self.wordList:
+                executor.submit(_query, word, row)
 
         self.allQueryDone.emit()
 
