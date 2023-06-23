@@ -450,7 +450,21 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                 return
 
         currentConfig = self.getAndSaveCurrentConfig()
-        model = getOrCreateModel(MODEL_NAME)
+
+        # create Note Type/Model
+        try:
+            model = getOrCreateModel(MODEL_NAME)
+        except RuntimeError as err:
+            logger.warning(err)
+            if not askUser(f"{err}\nDeleting it would delete ALL its cards and notes!!! Continue?"):
+                logger.info("Aborted")
+                return
+            if not askUser(f"[DANGEROUS ACTION!!!] Are you sure to delete model '{MODEL_NAME}' AND all its cards/notes???"):
+                logger.info("Aborted upon second reminder")
+                return
+            # force delete the existing model
+            model = getOrCreateModel(MODEL_NAME, force=True)
+
         getOrCreateModelCardTemplate(model, 'default')
         deck = getOrCreateDeck(self.deckComboBox.currentText(), model=model)
 

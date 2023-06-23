@@ -46,16 +46,18 @@ def getOrCreateDeck(deckName, model):
     return deck
 
 
-def getOrCreateModel(modelName):
+def getOrCreateModel(modelName, force=False):
     model = mw.col.models.byName(modelName)
     if model:
         if set([f['name'] for f in model['flds']]) == set(MODEL_FIELDS):
             return model
-        else:
-            logger.warning('模版字段异常，自动删除重建')
+        if force:   # Dangerous action!!!  It would delete model, AND all its cards/notes!
+            logger.warning(f"Force deleting model {modelName}")
             mw.col.models.rem(model)
+        else:
+            raise RuntimeError(f"Model '{modelName}' already exists but has different fields!")
 
-    logger.info(f'创建新模版:{modelName}')
+    logger.info(f'Creating model {modelName}')
     newModel = mw.col.models.new(modelName)
     for field in MODEL_FIELDS:
         mw.col.models.addField(newModel, mw.col.models.newField(field))
