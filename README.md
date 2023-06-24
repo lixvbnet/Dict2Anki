@@ -9,7 +9,8 @@ This is a fork of Dict2Anki.
 本fork所做的修改：
 
 * 默认不删除Anki卡片
-* 仍然使用旧版Note type，兼容以前同步的数据
+* 不重复添加单词 (Note)，避免数据覆盖
+* 使用Dict2Anki 4.x版本模版 (Note Type and Card Template)，兼容以前同步的数据
 * 添加重置按钮，用来重置插件（清空同步记录）
 * 添加其他工具：
   * Download Missing Assets
