@@ -2,7 +2,7 @@ VERSION = 'v6.2.0'
 RELEASE_URL = 'https://github.com/lixvbnet/Dict2Anki'
 VERSION_CHECK_API = 'https://api.github.com/repos/lixvbnet/Dict2Anki/releases/latest'
 WINDOW_TITLE = f'Dict2Anki {VERSION}'
-MODEL_NAME = f'Dict2Anki-fork'      # change this only when there's some breaking change
+MODEL_NAME = f'Dict2Anki-fork'      # do not change this unless there's some breaking change
 
 BASIC_OPTION = ['definition', 'sentence', 'phrase', 'image', 'BrEPhonetic', 'AmEPhonetic']  # 顺序和名称不可修改
 EXTRA_OPTION = ['BrEPron', 'AmEPron', 'noPron']  # 顺序和名称不可修改
@@ -23,21 +23,23 @@ MODEL_FIELDS = [
     'image', 'pronunciation',
 ]
 
+# Normal card template
+NORMAL_CARD_TEMPLATE_NAME = "Normal"
 NORMAL_CARD_TEMPLATE_QFMT = """\
 <table>
     <tr>
-    <td>
-        <h1 class="term">{{term}}</h1>
-        <span>{{pronunciation}}</span>
-        <div class="pronounce">
-            <span class="phonetic">UK[{{uk}}]</span>
-            <span class="phonetic">US[{{us}}]</span>
-        </div>
-        <div class="definition">Tap To View</div>
-    </td>
-    <td style="width: 33%;">
-        {{image}}
-    </td>
+        <td>
+            <h1 class="term">{{term}}</h1>
+            <span>{{pronunciation}}</span>
+            <div class="pronounce">
+                <span class="phonetic">UK[{{uk}}]</span>
+                <span class="phonetic">US[{{us}}]</span>
+            </div>
+            <div class="definition">Tap To View</div>
+        </td>
+        <td style="width: 33%;">
+            {{image}}
+        </td>
     </tr>
 </table>
 <div class="divider"></div>
@@ -52,22 +54,21 @@ NORMAL_CARD_TEMPLATE_QFMT = """\
     <tr><td class="sentence">{{sentence2}}</td><td>{{splaceHolder2}}</td></tr>
 </table>
 """
-
 NORMAL_CARD_TEMPLATE_AFMT = """\
 <table>
     <tr>
-    <td>
-    <h1 class="term">{{term}}</h1>
-        <span>{{pronunciation}}</span>
-        <div class="pronounce">
-            <span class="phonetic">UK[{{uk}}]</span>
-            <span class="phonetic">US[{{us}}]</span>
-        </div>
-        <div class="definiton">{{definition}}</div>
-    </td>
-    <td>
-        {{image}}
-    </td>
+        <td>
+        <h1 class="term">{{term}}</h1>
+            <span>{{pronunciation}}</span>
+            <div class="pronounce">
+                <span class="phonetic">UK[{{uk}}]</span>
+                <span class="phonetic">US[{{us}}]</span>
+            </div>
+            <div class="definition">{{definition}}</div>
+        </td>
+        <td style="width: 33%;">
+            {{image}}
+        </td>
     </tr>
 </table>
 <div class="divider"></div>
@@ -120,3 +121,35 @@ tr {
   vertical-align: top;
 }
 """
+
+# Backwards card template (using same AFMT and CSS with Normal card template)
+BACKWARDS_CARD_TEMPLATE_NAME = "Backwards"
+BACKWARDS_CARD_TEMPLATE_QFMT = """\
+<table>
+    <tr>
+        <td>
+        <h1 class="term"></h1>
+            <div class="pronounce">
+                <span class="phonetic">UK[Tap To View]</span>
+                <span class="phonetic">US[Tap To View]</span>
+            </div>
+            <div class="definition">{{definition}}</div>
+        </td>
+        <td style="width: 33%;">
+            {{image}}
+        </td>
+    </tr>
+</table>
+<div class="divider"></div>
+<table>
+    <tr><td class="phrase">{{pplaceHolder0}}</td><td>{{phrase_explain0}}</td></tr>
+    <tr><td class="phrase">{{pplaceHolder1}}</td><td>{{phrase_explain1}}</td></tr>
+    <tr><td class="phrase">{{pplaceHolder2}}</td><td>{{phrase_explain2}}</td></tr>
+</table>
+<table>
+    <tr><td class="sentence">{{splaceHolder0}}</td><td>{{sentence_explain0}}</td></tr>
+    <tr><td class="sentence">{{splaceHolder1}}</td><td>{{sentence_explain1}}</td></tr>
+    <tr><td class="sentence">{{splaceHolder2}}</td><td>{{sentence_explain2}}</td></tr>
+</table>
+"""
+BACKWARDS_CARD_TEMPLATE_AFMT = NORMAL_CARD_TEMPLATE_AFMT

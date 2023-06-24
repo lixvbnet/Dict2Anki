@@ -286,7 +286,6 @@ class Ui_Dialog(object):
         self.cookieLineEdit.setPlaceholderText(_translate("Dialog", "选填"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.settingTab), _translate("Dialog", "设置"))
         self.dangerZoneGroupBox.setTitle(_translate("Dialog", "Danger Zone"))
-        self.btnBackwardTemplate.setToolTip(_translate("Dialog", "Add or Delete Backward Template. (This would affect all cards in current deck)"))
         self.btnBackwardTemplate.setText(_translate("Dialog", "Add/Delete Backward Template"))
         self.utilitiesGroupBox.setTitle(_translate("Dialog", "Utilities"))
         self.btnDownloadMissingAssets.setToolTip(_translate("Dialog", "Check words in selected deck and download missing assets (images, audio files, etc.)"))

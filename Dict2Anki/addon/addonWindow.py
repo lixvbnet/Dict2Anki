@@ -21,7 +21,8 @@ from Dict2Anki.addon.constants import *
 try:
     from aqt import mw
     from aqt.utils import askUser, showCritical, showInfo, tooltip, openLink
-    from Dict2Anki.addon.noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, addNoteToDeck, getWordsByDeck, getNotes
+    from Dict2Anki.addon.noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, \
+    getOrCreateBackwardsCardTemplate, addNoteToDeck, getWordsByDeck, getNotes, deleteBackwardsCardTemplate
 except ImportError:
     from test.dummy_aqt import mw, askUser, showCritical, showInfo, tooltip, openLink
     from test.dummy_noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, addNoteToDeck, getWordsByDeck, getNotes
@@ -442,6 +443,47 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.btnSync.setEnabled(True)
 
     @pyqtSlot()
+    def on_btnDownloadMissingAssets_clicked(self):
+        tooltip("btnDownloadMissingAssets Clicked!")
+
+    @pyqtSlot()
+    def on_btnExportAudio_clicked(self):
+        tooltip("btnExportAudio Clicked!")
+
+    @pyqtSlot()
+    def on_btnBackwardTemplate_clicked(self):
+        """Add Or Delete Backwards Card Template (Card Type)"""
+        modelObject = mw.col.models.byName(MODEL_NAME)
+        if not modelObject:
+            showInfo(f"Model (Note Type) '{MODEL_NAME}' does not exist! Please Sync first!")
+            return
+
+        backwardsTemplate = None
+        for temp in modelObject['tmpls']:
+            if temp['name'] == BACKWARDS_CARD_TEMPLATE_NAME:
+                backwardsTemplate = temp
+                break
+
+        if backwardsTemplate:
+            if askUser("Are you sure to delete Backwards template?", defaultno=True):
+                try:
+                    deleteBackwardsCardTemplate(modelObject, backwardsTemplate)
+                    logger.info("Deleted Backwards template")
+                    tooltip("Deleted")
+                except AssertionError as err:
+                    logger.error(f"Failed to delete Backwards template: {err}")
+                    tooltip("Failed!")
+        else:
+            if askUser("Add Backwards template now?", defaultno=True):
+                try:
+                    getOrCreateBackwardsCardTemplate(modelObject, BACKWARDS_CARD_TEMPLATE_NAME)
+                    logger.info("Added Backward template")
+                    tooltip("Added")
+                except Exception as e:
+                    logger.error(e)
+                    tooltip("Failed!")
+
+    @pyqtSlot()
     def on_btnSync_clicked(self):
 
         failedGenerator = (self.newWordListWidget.item(row).data(Qt.UserRole) is None for row in range(self.newWordListWidget.count()))
@@ -456,17 +498,21 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             model = getOrCreateModel(MODEL_NAME)
         except RuntimeError as err:
             logger.warning(err)
-            if not askUser(f"{err}\nDeleting it would delete ALL its cards and notes!!! Continue?"):
+            if not askUser(f"{err}\nDeleting it would delete ALL its cards and notes!!! Continue?", defaultno=True):
                 logger.info("Aborted")
                 return
-            if not askUser(f"[DANGEROUS ACTION!!!] Are you sure to delete model '{MODEL_NAME}' AND all its cards/notes???"):
+            if not askUser(f"[DANGEROUS ACTION!!!] Are you sure to delete model '{MODEL_NAME}' AND all its cards/notes???", defaultno=True):
                 logger.info("Aborted upon second reminder")
                 return
             # force delete the existing model
             model = getOrCreateModel(MODEL_NAME, force=True)
 
         # create 'Normal' card template (card type)
-        getOrCreateModelCardTemplate(model, 'Normal')
+        getOrCreateModelCardTemplate(model, NORMAL_CARD_TEMPLATE_NAME)
+        # create 'Backwards' card template (card type)
+        # getOrCreateBackwardsCardTemplate(model, BACKWARDS_CARD_TEMPLATE_NAME)
+
+        # create deck
         deck = getOrCreateDeck(self.deckComboBox.currentText(), model=model)
 
         logger.info('同步点击')

@@ -67,9 +67,10 @@ def getOrCreateModel(modelName, force=False):
 
 def getOrCreateModelCardTemplate(modelObject, cardTemplateName):
     """Create Card Template (Card Type)"""
-    logger.info(f'添加卡片类型:{cardTemplateName}')
+    logger.info(f'添加卡片类型: {cardTemplateName}')
     existingCardTemplate = modelObject['tmpls']
     if cardTemplateName in [t.get('name') for t in existingCardTemplate]:
+        logger.info(f"[Skip] {cardTemplateName} already exists.")
         return
     cardTemplate = mw.col.models.newTemplate(cardTemplateName)
     cardTemplate['qfmt'] = NORMAL_CARD_TEMPLATE_QFMT
@@ -77,6 +78,26 @@ def getOrCreateModelCardTemplate(modelObject, cardTemplateName):
     modelObject['css'] = NORMAL_CARD_TEMPLATE_CSS
     mw.col.models.addTemplate(modelObject, cardTemplate)
     mw.col.models.add(modelObject)
+
+
+def getOrCreateBackwardsCardTemplate(modelObject, backwardsTemplateName):
+    """Create Backwards Card Template (Card Type) to existing Dict2Anki Note Type"""
+    logger.info(f'Add Backwards Template: {backwardsTemplateName}')
+    existingCardTemplate = modelObject['tmpls']
+    if backwardsTemplateName in [t.get('name') for t in existingCardTemplate]:
+        logger.info(f"[Skip] {backwardsTemplateName} already exists.")
+        return
+    cardTemplate = mw.col.models.newTemplate(backwardsTemplateName)
+    cardTemplate['qfmt'] = BACKWARDS_CARD_TEMPLATE_QFMT
+    cardTemplate['afmt'] = BACKWARDS_CARD_TEMPLATE_AFMT
+    mw.col.models.addTemplate(modelObject, cardTemplate)
+    mw.col.models.save(modelObject)
+
+
+def deleteBackwardsCardTemplate(modelObject, backwardsTemplateObject):
+    """Delete Backwards Card Template (Card Type) from existing Dict2Anki Note Type"""
+    mw.col.models.remove_template(modelObject, backwardsTemplateObject)
+    mw.col.models.save(modelObject)
 
 
 def addNoteToDeck(deck, model, currentConfig: dict, word: dict, imageFilename: str, whichPron: str, pronFilename: str):
