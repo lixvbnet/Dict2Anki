@@ -402,28 +402,22 @@
          <property name="title">
           <string>Danger Zone</string>
          </property>
-         <layout class="QFormLayout" name="formLayout_2">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="btnBackwardTemplate">
-            <property name="toolTip">
-             <string>Add or Delete Backward Template. (This would affect all cards in current deck)</string>
-            </property>
-            <property name="text">
-             <string>Add/Delete Backward Template</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="btnReset">
-            <property name="toolTip">
-             <string>Reset sync history. (Words only deleted in Anki would be added again in next sync)</string>
-            </property>
-            <property name="text">
-             <string>Reset Sync History</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QPushButton" name="btnBackwardTemplate">
+          <property name="geometry">
+           <rect>
+            <x>145</x>
+            <y>29</y>
+            <width>234</width>
+            <height>32</height>
+           </rect>
+          </property>
+          <property name="toolTip">
+           <string>Add or Delete Backward Template. (This would affect all cards in current deck)</string>
+          </property>
+          <property name="text">
+           <string>Add/Delete Backward Template</string>
+          </property>
+         </widget>
         </widget>
        </item>
        <item row="0" column="0">
