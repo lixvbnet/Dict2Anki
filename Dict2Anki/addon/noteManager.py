@@ -79,7 +79,7 @@ def getOrCreateModelCardTemplate(modelObject, cardTemplateName):
     mw.col.models.add(modelObject)
 
 
-def addNoteToDeck(deck, model, currentConfig: dict, word: dict, whichPron: str):
+def addNoteToDeck(deck, model, currentConfig: dict, word: dict, imageFilename: str, whichPron: str, pronFilename: str):
     """
     Add note
     :param deck: deck
@@ -96,14 +96,33 @@ def addNoteToDeck(deck, model, currentConfig: dict, word: dict, whichPron: str):
     # create new note
     note = anki.notes.Note(mw.col, model)
     note['term'] = word['term']
-    if word['definition_short']:    # TODO: using short definition here. Need to make it configurable!
-        note['definition'] = word['definition_short']
+    # TODO: preferring short definition here. Need to make it configurable!
+    include_definition_en = False   # TODO: make this configurable!
+    definitions = []
+    if word['definition_short']:    # str
+        definitions.append(word['definition_short'])
+    elif word['definition']:        # [str]
+        definitions.extend(word['definition'])
+
+    if include_definition_en:
+        definitions.extend(word['definition_en'])
+
+    if definitions:
+        note['definition'] = '\n'.join(definitions)
+    else:
+        logger.warning(f"NO DEFINITION FOR WORD {word['term']}!!!")
+
     if word['BrEPhonetic']:
         note['uk'] = word['BrEPhonetic']
     if word['AmEPhonetic']:
         note['us'] = word['AmEPhonetic']
+
+    if word['image']:
+        note['image'] = f'<div><img src="{imageFilename}" /></div>'
+
     if word[whichPron]:
-        note['pronunciation'] = f"[sound:{whichPron}_{word['term']}.mp3]"
+        note['pronunciation'] = f"[sound:{pronFilename}]"
+
     if word['phrase']:
         for i, phrase_tuple in enumerate(word['phrase']):
             note[f'phrase{i}'], note[f'phrase_explain{i}'] = phrase_tuple
@@ -113,9 +132,6 @@ def addNoteToDeck(deck, model, currentConfig: dict, word: dict, whichPron: str):
         for i, sentence_tuple in enumerate(word['sentence']):
             note[f'sentence{i}'], note[f'sentence_explain{i}'] = sentence_tuple
             note[f'splaceHolder{i}'] = "Tap To View"
-
-    if word['image']:               # TODO: download the image and reference it locally instead
-        note['image'] = "<img src='{}' />".format(word['image'])
 
     # for configName in BASIC_OPTION + EXTRA_OPTION:
     #     logger.debug(f'字段:{configName}--结果:{term.get(configName)}')

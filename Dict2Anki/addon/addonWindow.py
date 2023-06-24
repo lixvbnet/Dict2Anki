@@ -11,12 +11,12 @@ from PyQt5.QtCore import pyqtSlot, QThread, Qt
 
 from Dict2Anki.addon.queryApi import apis
 from Dict2Anki.addon.UIForm import wordGroup, mainUI, icons_rc
-from Dict2Anki.addon.workers import LoginStateCheckWorker, VersionCheckWorker, RemoteWordFetchingWorker, QueryWorker, AudioDownloadWorker
+from Dict2Anki.addon.workers import LoginStateCheckWorker, VersionCheckWorker, RemoteWordFetchingWorker, QueryWorker, AssetDownloadWorker
 from Dict2Anki.addon.dictionary import dictionaries
 from Dict2Anki.addon.logger import Handler
 from Dict2Anki.addon.loginDialog import LoginDialog
 from Dict2Anki.addon.misc import Mask, SimpleWord
-from Dict2Anki.addon.constants import BASIC_OPTION, EXTRA_OPTION, WINDOW_TITLE, MODEL_NAME, RELEASE_URL
+from Dict2Anki.addon.constants import *
 
 try:
     from aqt import mw
@@ -52,13 +52,13 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.workerThread.start()
         self.updateCheckThead = QThread(self)
         self.updateCheckThead.start()
-        self.audioDownloadThread = QThread(self)
+        self.assetDownloadThread = QThread(self)
 
         self.updateCheckWork = None
         self.loginWorker = None
         self.queryWorker = None
         self.pullWorker = None
-        self.audioDownloadWorker = None
+        self.assetDownloadWorker = None
 
         self.setupUi(self)
         self.setWindowTitle(WINDOW_TITLE)
@@ -86,8 +86,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             self.updateCheckThead.quit()
             self.updateCheckThead.wait()
 
-        if self.audioDownloadThread.isRunning():
-            self.audioDownloadThread.requestInterruption()
+        if self.assetDownloadThread.isRunning():
+            self.assetDownloadThread.requestInterruption()
             self.workerThread.quit()
             self.workerThread.wait()
 
@@ -344,10 +344,10 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         newTerms = remoteTermList - localTermList  # 新单词
         needToDeleteTerms = localTermList - remoteTermList  # 需要删除的单词
-        logger.info(f'本地: {localTermList}')
-        logger.info(f'远程: {remoteTermList}')
-        logger.info(f'待查: {newTerms}')
-        logger.info(f'待删: {needToDeleteTerms}')
+        logger.info(f'本地({len(localTermList)}): {localTermList}')
+        logger.info(f'远程({len(remoteTermList)}): {remoteTermList}')
+        logger.info(f'待查({len(newTerms)}): {newTerms}')
+        logger.info(f'待删({len(needToDeleteTerms)}): {needToDeleteTerms}')
         waitIcon = QIcon(':/icons/wait.png')
         delIcon = QIcon(':/icons/delete.png')
         self.newWordListWidget.clear()
@@ -470,6 +470,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         deck = getOrCreateDeck(self.deckComboBox.currentText(), model=model)
 
         logger.info('同步点击')
+        imagesDownloadTasks = []
         audiosDownloadTasks = []
         newWordCount = self.newWordListWidget.count()
 
@@ -486,11 +487,21 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             wordItem = self.newWordListWidget.item(row)
             wordItemData = wordItem.data(Qt.UserRole)
             if wordItemData:
-                logger.debug(f"wordItemData ({wordItemData['term']}): {wordItemData}")
-                # 添加发音任务
+                word = wordItemData['term']
+                logger.debug(f"wordItemData ({word}): {wordItemData}")
+
+                # Add image download task
+                imageFilename = None
+                if wordItemData['image']:
+                    imageFilename = f"{ASSET_FILENAME_PREFIX}-{word}.jpg"       # to be consistent with 4.x
+                    imagesDownloadTasks.append((imageFilename, wordItemData['image'],))
+                else:
+                    logger.debug(f"No image for word {word}")
+
+                # Add audio download task
                 whichPron = preferred_pron
+                pronFilename = None
                 if whichPron:
-                    word = wordItemData['term']
                     has_pron = True
                     if not wordItemData.get(whichPron):     # whichPron is missing
                         newPron = 'AmEPron' if whichPron == 'BrEPron' else 'BrEPron'
@@ -502,33 +513,36 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                             logger.warning(f"{whichPron} is missing for word {word}. Downloading {newPron} instead.")
                             whichPron = newPron
                     if has_pron:
-                        audiosDownloadTasks.append((f"{whichPron}_{wordItemData['term']}.mp3", wordItemData[whichPron],))
+                        # pronFilename = f"{whichPron}_{wordItemData['term']}.mp3"
+                        pronFilename = f"{ASSET_FILENAME_PREFIX}-{word}.mp3"    # to be consistent with 4.x
+                        audiosDownloadTasks.append((pronFilename, wordItemData[whichPron],))
 
                 # add note
-                addNoteToDeck(deck, model, currentConfig, wordItemData, whichPron)
+                addNoteToDeck(deck, model, currentConfig, wordItemData, imageFilename, whichPron, pronFilename)
                 added += 1
         mw.reset()
 
-        logger.info(f'发音下载任务:{audiosDownloadTasks}')
+        logger.info(f"Image download tasks: {imagesDownloadTasks}")
+        logger.info(f"Audio download tasks: {audiosDownloadTasks}")
 
-        if audiosDownloadTasks:
+        if imagesDownloadTasks or audiosDownloadTasks:
             self.btnSync.setEnabled(False)
             self.progressBar.setValue(0)
-            self.progressBar.setMaximum(len(audiosDownloadTasks))
-            if self.audioDownloadThread is not None:
-                self.audioDownloadThread.requestInterruption()
-                self.audioDownloadThread.quit()
-                self.audioDownloadThread.wait()
+            self.progressBar.setMaximum(len(imagesDownloadTasks) + len(audiosDownloadTasks))
+            if self.assetDownloadThread is not None:
+                self.assetDownloadThread.requestInterruption()
+                self.assetDownloadThread.quit()
+                self.assetDownloadThread.wait()
 
-            self.audioDownloadThread = QThread(self)
-            self.audioDownloadThread.start()
-            self.audioDownloadWorker = AudioDownloadWorker(mw.col.media.dir(), audiosDownloadTasks)
-            self.audioDownloadWorker.moveToThread(self.audioDownloadThread)
-            self.audioDownloadWorker.tick.connect(lambda: self.progressBar.setValue(self.progressBar.value() + 1))
-            self.audioDownloadWorker.start.connect(self.audioDownloadWorker.run)
-            self.audioDownloadWorker.done.connect(lambda: tooltip(f'发音下载完成'))
-            self.audioDownloadWorker.done.connect(self.audioDownloadThread.quit)
-            self.audioDownloadWorker.start.emit()
+            self.assetDownloadThread = QThread(self)
+            self.assetDownloadThread.start()
+            self.assetDownloadWorker = AssetDownloadWorker(mw.col.media.dir(), imagesDownloadTasks, audiosDownloadTasks)
+            self.assetDownloadWorker.moveToThread(self.assetDownloadThread)
+            self.assetDownloadWorker.tick.connect(lambda: self.progressBar.setValue(self.progressBar.value() + 1))
+            self.assetDownloadWorker.start.connect(self.assetDownloadWorker.run)
+            self.assetDownloadWorker.done.connect(lambda: tooltip(f'图片音频下载完成'))
+            self.assetDownloadWorker.done.connect(self.assetDownloadThread.quit)
+            self.assetDownloadWorker.start.emit()
 
         self.newWordListWidget.clear()
 

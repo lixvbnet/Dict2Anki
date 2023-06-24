@@ -125,7 +125,8 @@ class QueryWorker(QObject):
         self.allQueryDone.emit()
 
 
-class AudioDownloadWorker(QObject):
+class AssetDownloadWorker(QObject):
+    """Asset (Image and Audio) download worker"""
     start = pyqtSignal()
     tick = pyqtSignal()
     done = pyqtSignal()
@@ -135,10 +136,12 @@ class AudioDownloadWorker(QObject):
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
 
-    def __init__(self, target_dir, audios: [tuple]):
+    def __init__(self, target_dir, images: [tuple], audios: [tuple], max_retry=3):
         super().__init__()
         self.target_dir = target_dir
+        self.images = images
         self.audios = audios
+        self.max_retry = max_retry
 
     def run(self):
         currentThread = QThread.currentThread()
@@ -179,6 +182,10 @@ class AudioDownloadWorker(QObject):
                 return False
 
         with ThreadPool(max_workers=3) as executor:
+            # download images
+            for fileName, url in self.images:
+                executor.submit(__download_with_retry(fileName, url, self.max_retry))
+            # download audios
             for fileName, url in self.audios:
-                executor.submit(__download_with_retry, fileName, url, 3)
+                executor.submit(__download_with_retry, fileName, url, self.max_retry)
         self.done.emit()

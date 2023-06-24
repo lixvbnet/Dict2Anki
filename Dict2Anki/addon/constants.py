@@ -7,8 +7,13 @@ MODEL_NAME = f'Dict2Anki-fork'      # change this only when there's some breakin
 BASIC_OPTION = ['definition', 'sentence', 'phrase', 'image', 'BrEPhonetic', 'AmEPhonetic']  # 顺序和名称不可修改
 EXTRA_OPTION = ['BrEPron', 'AmEPron', 'noPron']  # 顺序和名称不可修改
 
-# MODEL_FIELDS = ['term', 'definition', 'sentenceFront', 'sentenceBack', 'phraseFront', 'phraseBack', 'image', 'BrEPhonetic', 'AmEPhonetic', 'BrEPron', 'AmEPron']  # 名称不可修改
-# continue to use old model (Dict2Anki 4.x)
+# MODEL_FIELDS = [
+#     'term', 'definition', 'sentenceFront', 'sentenceBack', 'phraseFront', 'phraseBack',
+#     'image', 'BrEPhonetic', 'AmEPhonetic', 'BrEPron', 'AmEPron'
+# ]  # 名称不可修改
+
+# continue to use old model (consistent with 4.x)
+ASSET_FILENAME_PREFIX = "MG"
 MODEL_FIELDS = [
     'term', 'definition', 'uk', 'us',
     'phrase0', 'phrase1', 'phrase2', 'phrase_explain0', 'phrase_explain1', 'phrase_explain2',

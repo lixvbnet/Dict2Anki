@@ -87,9 +87,10 @@ class Worker(Thread):
         while True:
             try:
                 f, args, kwargs = self._q.get()
-                result = f(*args, **kwargs)
-                if result:
-                    self.result_queue.put(result)
+                if f:
+                    result = f(*args, **kwargs)
+                    if result:
+                        self.result_queue.put(result)
             except Exception as e:
                 logger.exception(e)
             finally:
