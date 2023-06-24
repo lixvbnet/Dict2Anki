@@ -136,19 +136,20 @@ class AssetDownloadWorker(QObject):
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
 
-    def __init__(self, target_dir, images: [tuple], audios: [tuple], max_retry=3):
+    def __init__(self, target_dir, images: [tuple], audios: [tuple], overwrite=False, max_retry=3):
         super().__init__()
         self.target_dir = target_dir
         self.images = images
         self.audios = audios
+        self.overwrite = overwrite
         self.max_retry = max_retry
 
     def run(self):
         currentThread = QThread.currentThread()
 
-        def __download_with_retry(filename, url, retry=3):
+        def __download_with_retry(filename, url):
             success = False
-            for i in range(retry):
+            for i in range(self.max_retry):
                 if __download(filename, url):
                     success = True
                     break
@@ -159,7 +160,7 @@ class AssetDownloadWorker(QObject):
             if success:
                 self.tick.emit()
             else:
-                self.logger.error(f"FAILED to download {fileName} after retrying {retry} times!")
+                self.logger.error(f"FAILED to download {fileName} after retrying {self.max_retry} times!")
                 self.logger.info("----------------------------------")
 
         def __download(fileName, url) -> bool:
@@ -170,6 +171,14 @@ class AssetDownloadWorker(QObject):
                     return False
                 r = self.session.get(url, stream=True)
                 self.logger.info(f'Downloading {fileName}...')
+                # file already exists
+                if os.path.exists(filepath):
+                    if not self.overwrite:
+                        self.logger.info(f"[SKIP] {fileName} already exists")
+                        return True
+                    else:
+                        self.logger.warning(f"Overwriting file {fileName}")
+
                 with open(filepath, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=1024):
                         if chunk:
@@ -184,8 +193,8 @@ class AssetDownloadWorker(QObject):
         with ThreadPool(max_workers=3) as executor:
             # download images
             for fileName, url in self.images:
-                executor.submit(__download_with_retry(fileName, url, self.max_retry))
+                executor.submit(__download_with_retry(fileName, url))
             # download audios
             for fileName, url in self.audios:
-                executor.submit(__download_with_retry, fileName, url, self.max_retry)
+                executor.submit(__download_with_retry, fileName, url)
         self.done.emit()
