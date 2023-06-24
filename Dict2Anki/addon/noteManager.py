@@ -1,4 +1,4 @@
-from Dict2Anki.addon.constants import MODEL_FIELDS, BASIC_OPTION, EXTRA_OPTION
+from Dict2Anki.addon.constants import *
 import logging
 
 logger = logging.getLogger('dict2Anki.noteManager')
@@ -72,101 +72,9 @@ def getOrCreateModelCardTemplate(modelObject, cardTemplateName):
     if cardTemplateName in [t.get('name') for t in existingCardTemplate]:
         return
     cardTemplate = mw.col.models.newTemplate(cardTemplateName)
-    cardTemplate['qfmt'] = '''\
-        <table>
-            <tr>
-            <td>
-                <h1 class="term">{{term}}</h1>
-                <span>{{pronunciation}}</span>
-                <div class="pronounce">
-                    <span class="phonetic">UK[{{uk}}]</span>
-                    <span class="phonetic">US[{{us}}]</span>
-                </div>
-                <div class="definiton">Tap To View</div>
-            </td>
-            <td>
-                {{image}}
-            </td>
-            </tr>
-        </table>
-        <div class="divider"></div>
-        <table>
-            <tr><td class="phrase">{{phrase0}}</td><td>{{pplaceHolder0}}</td></tr>
-            <tr><td class="phrase">{{phrase1}}</td><td>{{pplaceHolder1}}</td></tr>
-            <tr><td class="phrase">{{phrase2}}</td><td>{{pplaceHolder2}}</td></tr>
-        </table>
-        <table>
-            <tr><td class="sentence">{{sentence0}}</td><td>{{splaceHolder0}}</td></tr>
-            <tr><td class="sentence">{{sentence1}}</td><td>{{splaceHolder1}}</td></tr>
-            <tr><td class="sentence">{{sentence2}}</td><td>{{splaceHolder2}}</td></tr>
-        </table>
-    '''
-    cardTemplate['afmt'] = '''\
-        <table>
-            <tr>
-            <td>
-            <h1 class="term">{{term}}</h1>
-                <span>{{pronunciation}}</span>
-                <div class="pronounce">
-                    <span class="phonetic">UK[{{uk}}]</span>
-                    <span class="phonetic">US[{{us}}]</span>
-                </div>
-                <div class="definiton">{{definition}}</div>
-            </td>
-            <td>
-                {{image}}
-            </td>
-            </tr>
-        </table>
-        <div class="divider"></div>
-        <table>
-            <tr><td class="phrase">{{phrase0}}</td><td>{{phrase_explain0}}</td></tr>
-            <tr><td class="phrase">{{phrase1}}</td><td>{{phrase_explain1}}</td></tr>
-            <tr><td class="phrase">{{phrase2}}</td><td>{{phrase_explain2}}</td></tr>
-        </table>
-        <table>
-            <tr><td class="sentence">{{sentence0}}</td><td>{{sentence_explain0}}</td></tr>
-            <tr><td class="sentence">{{sentence1}}</td><td>{{sentence_explain1}}</td></tr>
-            <tr><td class="sentence">{{sentence2}}</td><td>{{sentence_explain2}}</td></tr>
-        </table>
-    '''
-    modelObject['css'] = '''
-        .card {
-          font-family: arial;
-          font-size: 16px;
-          text-align: left;
-          color: #212121;
-          background-color: white;
-        }
-        .pronounce {
-          line-height: 30px;
-          font-size: 26px;
-          margin-bottom: 0;
-        }
-        .phonetic {
-          font-size: 16px;
-          font-family: "lucida sans unicode", arial, sans-serif;
-          color: #01848f;
-        }
-        .term {
-          margin-bottom: -5px;
-        }
-        .divider {
-          margin: 1em 0 1em 0;
-          border-bottom: 2px solid #4caf50;
-        }
-        .phrase,
-        .sentence {
-          color: #01848f;
-          padding-right: 1em;
-        }
-        img {
-          max-height: 120px;
-        }
-        tr {
-          vertical-align: top;
-        }
-    '''
+    cardTemplate['qfmt'] = NORMAL_CARD_TEMPLATE_QFMT
+    cardTemplate['afmt'] = NORMAL_CARD_TEMPLATE_AFMT
+    modelObject['css'] = NORMAL_CARD_TEMPLATE_CSS
     mw.col.models.addTemplate(modelObject, cardTemplate)
     mw.col.models.add(modelObject)
 

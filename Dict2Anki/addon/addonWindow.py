@@ -476,18 +476,19 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         # 判断是否需要下载发音
         if currentConfig['noPron']:
             logger.info('不下载发音')
-            whichPron = None
+            preferred_pron = None
         else:
-            whichPron = 'AmEPron' if self.AmEPronRadioButton.isChecked() else 'BrEPron'
-            logger.info(f'下载发音{whichPron}')
+            preferred_pron = 'AmEPron' if self.AmEPronRadioButton.isChecked() else 'BrEPron'
+            logger.info(f'Preferred Pronunciation: {preferred_pron}')
 
         added = 0
         for row in range(newWordCount):
             wordItem = self.newWordListWidget.item(row)
             wordItemData = wordItem.data(Qt.UserRole)
             if wordItemData:
-                logger.debug(f"wordItemData: {wordItemData}")
+                logger.debug(f"wordItemData ({wordItemData['term']}): {wordItemData}")
                 # 添加发音任务
+                whichPron = preferred_pron
                 if whichPron:
                     word = wordItemData['term']
                     has_pron = True
