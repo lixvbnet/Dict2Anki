@@ -130,7 +130,7 @@ def addNoteToDeck(deck, model, config: dict, word: dict, imageFilename: str, whi
         definitions.extend(word['definition_en'])       # [str]
 
     if definitions:
-        note['definition'] = '\n'.join(definitions)
+        note['definition'] = '<br>\n'.join(definitions)
     else:
         logger.warning(f"NO DEFINITION FOR WORD {word['term']}!!!")
 
