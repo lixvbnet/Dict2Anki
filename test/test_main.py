@@ -1,8 +1,8 @@
 import pytest
 from PyQt5.QtCore import Qt
 
-from Dict2Anki.addon.addonWindow import Windows
-from Dict2Anki.addon.constants import VERSION
+from .addon.addonWindow import Windows
+from .addon.constants import VERSION
 import json
 from PyQt5.QtWidgets import QApplication
 import sys

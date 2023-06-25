@@ -4,7 +4,7 @@ import requests
 from urllib3 import Retry
 from urllib.parse import urlencode
 from requests.adapters import HTTPAdapter
-from Dict2Anki.addon.misc import AbstractQueryAPI, SimpleWord
+from ..misc import AbstractQueryAPI, SimpleWord
 
 logger = logging.getLogger('dict2Anki.queryApi.youdao')
 __all__ = ['API']

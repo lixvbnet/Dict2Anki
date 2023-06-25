@@ -6,7 +6,7 @@ from math import ceil
 from bs4 import BeautifulSoup
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
-from Dict2Anki.addon.misc import AbstractDictionary, SimpleWord
+from ..misc import AbstractDictionary, SimpleWord
 
 logger = logging.getLogger('dict2Anki.dictionary.eudict')
 

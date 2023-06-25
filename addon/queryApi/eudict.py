@@ -2,7 +2,7 @@ import logging
 import requests
 from urllib3 import Retry
 from requests.adapters import HTTPAdapter
-from Dict2Anki.addon.misc import AbstractQueryAPI, SimpleWord
+from ..misc import AbstractQueryAPI, SimpleWord
 from bs4 import BeautifulSoup
 logger = logging.getLogger('dict2Anki.queryApi.eudict')
 __all__ = ['API']

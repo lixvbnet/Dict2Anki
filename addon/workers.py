@@ -5,9 +5,9 @@ import os
 import requests
 from urllib3 import Retry
 from itertools import chain
-from Dict2Anki.addon.misc import ThreadPool, SimpleWord
+from .misc import ThreadPool, SimpleWord
 from requests.adapters import HTTPAdapter
-from Dict2Anki.addon.constants import VERSION, VERSION_CHECK_API
+from .constants import VERSION, VERSION_CHECK_API
 from PyQt5.QtCore import QObject, pyqtSignal, QThread
 
 

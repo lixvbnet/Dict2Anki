@@ -4,13 +4,13 @@ from zipfile import ZipFile
 from bs4 import BeautifulSoup
 from requests.sessions import Session
 
-from Dict2Anki.addon.constants import WINDOW_TITLE
+from addon.constants import WINDOW_TITLE
 
 
 def create_zip():
     file_paths = []
-    exclude_dirs = ['test', '__pycache__', '.git', '.idea', '.pytest_cache', 'screenshots', 'venv']
-    exclude_files = ['README.md', '.gitignore', '.travis.yml', 'deploy.py', 'requirements.txt', '.DS_Store', 'meta.json']
+    exclude_dirs = ['build', 'test', 'test_addon', 'testapi', '__pycache__', '.git', '.idea', '.pytest_cache', 'screenshots', 'venv']
+    exclude_files = ['README.md', 'Makefile', '.gitignore', '.travis.yml', 'deploy.py', 'requirements.txt', '.DS_Store', 'meta.json']
     exclude_ext = ['.png', '.ui', '.qrc', '.log', '.zip', '.tpl']
     for dirname, sub_dirs, files in os.walk("."):
         for d in exclude_dirs:
@@ -40,14 +40,14 @@ def update(title, tags, desc):
 
     if not username:
         username = input("Anki username: ")
-    if not password:
-        password = input("Anki password: ")
     if not addon_id:
         addon_id = input("Anki addon ID: ")
 
-    # print("username:", username)
-    # print("password:", password)
+    print("username:", username)
     print("addon_id:", addon_id)
+
+    if not password:
+        password = input("Anki password: ")
 
     s = Session()
     URL = 'https://ankiweb.net/account/login'
@@ -75,9 +75,8 @@ def update(title, tags, desc):
 
 def main():
     create_zip()
-    pass
-    # with open('anki_addon_page.tpl', encoding='utf-8') as tpl:
-    #     return update('Dict2Anki（有道,欧陆词典单词本同步工具）', '有道 欧陆 导入 同步', tpl.read())
+    # with open('README.md', encoding='utf-8') as f:
+    #     return update('Dict2Anki（有道,欧陆词典单词本同步工具）', '有道 欧陆 导入 同步', f.read())
 
 
 if __name__ == '__main__':

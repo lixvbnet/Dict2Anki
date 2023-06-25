@@ -1,9 +1,9 @@
 # A simple manual test
 import json
 import os
-from Dict2Anki.addon.dictionary.youdao import Youdao
-from Dict2Anki.addon.misc import SimpleWord
-from Dict2Anki.addon.queryApi.youdao import API
+from .addon.dictionary.youdao import Youdao
+from .addon.misc import SimpleWord
+from .addon.queryApi.youdao import API
 
 
 BASE_DIR = "../Dict2Anki"

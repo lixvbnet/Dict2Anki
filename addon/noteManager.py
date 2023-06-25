@@ -1,4 +1,4 @@
-from Dict2Anki.addon.constants import *
+from .constants import *
 import logging
 
 logger = logging.getLogger('dict2Anki.noteManager')

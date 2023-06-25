@@ -9,19 +9,19 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QListWidgetItem, QVBoxLayout, QPushButton
 from PyQt5.QtCore import pyqtSlot, QThread, Qt
 
-from Dict2Anki.addon.queryApi import apis
-from Dict2Anki.addon.UIForm import wordGroup, mainUI, icons_rc
-from Dict2Anki.addon.workers import LoginStateCheckWorker, VersionCheckWorker, RemoteWordFetchingWorker, QueryWorker, AssetDownloadWorker
-from Dict2Anki.addon.dictionary import dictionaries
-from Dict2Anki.addon.logger import Handler
-from Dict2Anki.addon.loginDialog import LoginDialog
-from Dict2Anki.addon.misc import Mask, SimpleWord
-from Dict2Anki.addon.constants import *
+from .queryApi import apis
+from .UIForm import wordGroup, mainUI, icons_rc
+from .workers import LoginStateCheckWorker, VersionCheckWorker, RemoteWordFetchingWorker, QueryWorker, AssetDownloadWorker
+from .dictionary import dictionaries
+from .logger import Handler
+from .loginDialog import LoginDialog
+from .misc import Mask, SimpleWord
+from .constants import *
 
 try:
     from aqt import mw
     from aqt.utils import askUser, showCritical, showInfo, tooltip, openLink
-    from Dict2Anki.addon.noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, \
+    from .noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, \
     getOrCreateBackwardsCardTemplate, addNoteToDeck, getWordsByDeck, getNotes, deleteBackwardsCardTemplate
 except ImportError:
     from test.dummy_aqt import mw, askUser, showCritical, showInfo, tooltip, openLink

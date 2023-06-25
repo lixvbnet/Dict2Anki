@@ -2,7 +2,7 @@ import json
 import sys
 import logging
 from PyQt5.QtCore import QUrl, pyqtSignal
-from Dict2Anki.addon.UIForm import loginDialog
+from .UIForm import loginDialog
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile
 
