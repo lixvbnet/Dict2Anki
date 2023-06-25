@@ -1,8 +1,9 @@
-.idea
+.idea/
+build/
 meta.json
 .DS_Store
-__pycache__
-.pytest_cache
+__pycache__/
+.pytest_cache/
 *.log
 *.zip
 venv
