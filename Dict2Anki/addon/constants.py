@@ -2,7 +2,7 @@ VERSION = 'v6.2.0'
 RELEASE_URL = 'https://github.com/lixvbnet/Dict2Anki'
 VERSION_CHECK_API = 'https://api.github.com/repos/lixvbnet/Dict2Anki/releases/latest'
 WINDOW_TITLE = f'Dict2Anki {VERSION}'
-MODEL_NAME = f'Dict2Anki-fork'      # do not change this unless there's some breaking change
+MODEL_NAME = f'Dict2Anki-dev'      # will remove dev suffix when stable
 
 # BASIC_OPTION = ['definition', 'sentence', 'phrase', 'image', 'BrEPhonetic', 'AmEPhonetic']  # 顺序和名称不可修改
 # EXTRA_OPTION = ['BrEPron', 'AmEPron', 'noPron']  # 顺序和名称不可修改

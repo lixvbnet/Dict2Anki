@@ -18,7 +18,7 @@
   ],
 
   "briefDefinition": true,
-  "enDefinition": false,
+  "enDefinition": true,
   "noPron": false,
   "BrEPron": false,
   "AmEPron": true,

@@ -9,9 +9,6 @@ This is a fork of Dict2Anki.
 本fork所做的修改：
 
 * 继续使用Dict2Anki 4.x版本模版，兼容以前同步的数据
-* 添加反向背词模版
+* 添加一些工具
 
-
-
-当前fork源码：https://github.com/lixvbnet/Dict2Anki 
-
+> ⚠️ 部分工具仍处于开发阶段。
