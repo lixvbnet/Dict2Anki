@@ -8,7 +8,7 @@ This is a fork of Dict2Anki.
 
 本fork所做的修改：
 
-* 继续使用Dict2Anki 4.x版本模版，兼容以前同步的数据
+* 继续沿用Dict2Anki 4.x版本模版，兼容以前同步的数据
 * 添加一些工具
 
 > ⚠️ 部分工具仍处于开发阶段。

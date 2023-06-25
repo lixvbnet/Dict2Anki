@@ -47,7 +47,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.currentConfig = dict()
         self.localWords: [str] = []
         self.remoteWordsDict: {str: SimpleWord} = {}
-        self.selectedGroups = []
+        self.selectedGroups = [list()] * len(dictionaries)
 
         self.workerThread = QThread(self)
         self.workerThread.start()
@@ -126,7 +126,10 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.deckComboBox.setCurrentText(config['deck'])
         self.dictionaryComboBox.setCurrentIndex(config['selectedDict'])
         self.apiComboBox.setCurrentIndex(config['selectedApi'])
-        self.selectedGroups = config['selectedGroup']
+        if config['selectedGroup']:
+            self.selectedGroups = config['selectedGroup']
+        else:
+            self.selectedGroups = [list()] * len(dictionaries)
 
         # account settings
         selectedDictCredential = config['credential'][config['selectedDict']]
@@ -191,9 +194,15 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
     @staticmethod
     def _saveConfig(config):
+        # get the config currently stored in Anki
+        oldConfig = deepcopy(mw.addonManager.getConfig(__name__))
+
         _config = deepcopy(config)
-        _config['credential'] = [dict(username='', password='', cookie='')] * len(dictionaries)
-        _config['credential'][_config['selectedDict']] = dict(
+        selectedDict = _config['selectedDict']
+
+        # handle credential
+        _config['credential'] = oldConfig['credential']
+        _config['credential'][selectedDict] = dict(
             username=_config.pop('username'),
             password=str(_config.pop('password')),
             cookie=str(_config.pop('cookie'))
@@ -272,7 +281,10 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.getAndSaveCurrentConfig()
         self.selectedDict.checkCookie(json.loads(cookie))
         groups = self.selectedDict.getGroups()
-        logger.info(f"{len(groups)} group(s): {groups}")
+        if groups:
+            logger.info(f"{len(groups)} group(s): {groups}")
+        else:
+            logger.warning(f"group is None!")
 
         def onAccepted(is_popup=True):
             """选择单词本弹窗确定事件"""
@@ -303,8 +315,10 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         if len(groups) == 1:
             logger.info(f"Only 1 group. Select automatically and avoid popup.")
             group_name, group_index = groups[0]
-            self.selectedGroups = [list()] * len(dictionaries)
-            self.selectedGroups[self.currentConfig['selectedDict']] = [group_name]
+            selectedDict = self.currentConfig['selectedDict']
+            if not self.selectedGroups[selectedDict]:
+                self.selectedGroups[selectedDict] = list()
+            self.selectedGroups[selectedDict] = [group_name]
             onAccepted(is_popup=False)
             return
 
@@ -319,13 +333,13 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             item.setCheckState(Qt.Unchecked)
             group.wordGroupListWidget.addItem(item)
         # 恢复上次选择的单词本分组
-        if self.selectedGroups:
-            for groupName in self.selectedGroups[self.currentConfig['selectedDict']]:
-                items = group.wordGroupListWidget.findItems(groupName, Qt.MatchExactly)
-                for item in items:
-                    item.setCheckState(Qt.Checked)
-        else:
-            self.selectedGroups = [list()] * len(dictionaries)
+        selectedDict = self.currentConfig['selectedDict']
+        if not self.selectedGroups[selectedDict]:
+            self.selectedGroups[selectedDict] = list()
+        for groupName in self.selectedGroups[selectedDict]:
+            items = group.wordGroupListWidget.findItems(groupName, Qt.MatchExactly)
+            for item in items:
+                item.setCheckState(Qt.Checked)
         group.buttonBox.accepted.connect(onAccepted)
         group.buttonBox.rejected.connect(onRejected)
         container.exec()

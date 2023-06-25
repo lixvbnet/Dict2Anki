@@ -61,6 +61,7 @@ class Eudict(AbstractDictionary):
 
         logger.info(f'单词本分组:{groups}')
         self.groups = groups
+        return groups
 
     def getTotalPage(self, groupName: str, groupId: int) -> int:
         """

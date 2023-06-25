@@ -70,7 +70,7 @@ def getOrCreateModelCardTemplate(modelObject, cardTemplateName):
     logger.info(f'添加卡片类型: {cardTemplateName}')
     existingCardTemplate = modelObject['tmpls']
     if cardTemplateName in [t.get('name') for t in existingCardTemplate]:
-        logger.info(f"[Skip] {cardTemplateName} already exists.")
+        logger.info(f"[Skip] Card Type '{cardTemplateName}' already exists.")
         return
     cardTemplate = mw.col.models.newTemplate(cardTemplateName)
     cardTemplate['qfmt'] = NORMAL_CARD_TEMPLATE_QFMT
@@ -85,7 +85,7 @@ def getOrCreateBackwardsCardTemplate(modelObject, backwardsTemplateName):
     logger.info(f'Add Backwards Template: {backwardsTemplateName}')
     existingCardTemplate = modelObject['tmpls']
     if backwardsTemplateName in [t.get('name') for t in existingCardTemplate]:
-        logger.info(f"[Skip] {backwardsTemplateName} already exists.")
+        logger.info(f"[Skip] Card Type '{backwardsTemplateName}' already exists.")
         return
     cardTemplate = mw.col.models.newTemplate(backwardsTemplateName)
     cardTemplate['qfmt'] = BACKWARDS_CARD_TEMPLATE_QFMT
@@ -153,12 +153,12 @@ def addNoteToDeck(deck, model, config: dict, word: dict, imageFilename: str, whi
         note['pronunciation'] = f"[sound:{pronFilename}]"
 
     if word['phrase']:
-        for i, phrase_tuple in enumerate(word['phrase']):
+        for i, phrase_tuple in enumerate(word['phrase'][:3]):       # at most 3 phrases
             note[f'phrase{i}'], note[f'phrase_explain{i}'] = phrase_tuple
             note[f'pplaceHolder{i}'] = "Tap To View"
 
     if word['sentence']:
-        for i, sentence_tuple in enumerate(word['sentence']):
+        for i, sentence_tuple in enumerate(word['sentence'][:3]):   # at most 3 sentences
             note[f'sentence{i}'], note[f'sentence_explain{i}'] = sentence_tuple
             note[f'splaceHolder{i}'] = "Tap To View"
 
