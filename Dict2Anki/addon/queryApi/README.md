@@ -9,7 +9,7 @@
     'bookId': str,
     'bookName': str,
     'modifiedTime': int,
-    'definition_short': str,
+    'definition_brief': str,
     'definition': [str],
     'definition_en': [str],
     'phrase': [(str,str)],

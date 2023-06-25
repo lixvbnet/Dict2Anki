@@ -65,7 +65,7 @@ def youdao_test():
     result = API.query(word)
     print(json.dumps(result, ensure_ascii=False))
 
-    print(f"definition_short: \t {result['definition_short']}")
+    print(f"definition_brief: \t {result['definition_brief']}")
     print(f"definition: \t\t {result['definition']} (size={len(result['definition'])})")
     print(f"definition_en: \t\t {result['definition_en']} (size={len(result['definition_en'])})")
     print(f"phrase: \t\t\t {result['phrase']} (size={len(result['phrase'])})")

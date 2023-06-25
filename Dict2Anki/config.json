@@ -3,6 +3,7 @@
   "selectedDict": 0,
   "selectedApi": 0,
   "selectedGroup": null,
+
   "credential": [
     {
       "username": "",
@@ -15,13 +16,15 @@
       "cookie": ""
     }
   ],
-  "definition": true,
-  "image": true,
-  "phrase": true,
-  "sentence": true,
-  "AmEPhonetic": true,
-  "BrEPhonetic": true,
-  "AmEPron": true,
+
+  "briefDefinition": true,
+  "enDefinition": false,
+  "noPron": false,
   "BrEPron": false,
-  "noPron": false
+  "AmEPron": true,
+
+  "image": true,
+  "pronunciation": true,
+  "phrase": true,
+  "sentence": true
 }

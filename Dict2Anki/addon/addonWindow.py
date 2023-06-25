@@ -119,22 +119,33 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
     def setupGUIByConfig(self):
         config = mw.addonManager.getConfig(__name__)
+        # logger.info(f"config name: {__name__}")
+        # logger.info(f"config: {json.dumps(config)}")
+
+        # basic settings
         self.deckComboBox.setCurrentText(config['deck'])
         self.dictionaryComboBox.setCurrentIndex(config['selectedDict'])
         self.apiComboBox.setCurrentIndex(config['selectedApi'])
-        self.usernameLineEdit.setText(config['credential'][config['selectedDict']]['username'])
-        self.passwordLineEdit.setText(config['credential'][config['selectedDict']]['password'])
-        self.cookieLineEdit.setText(config['credential'][config['selectedDict']]['cookie'])
-        self.definitionCheckBox.setChecked(config['definition'])
-        self.imageCheckBox.setChecked(config['image'])
-        self.sentenceCheckBox.setChecked(config['sentence'])
-        self.phraseCheckBox.setChecked(config['phrase'])
-        self.AmEPhoneticCheckBox.setChecked(config['AmEPhonetic'])
-        self.BrEPhoneticCheckBox.setChecked(config['BrEPhonetic'])
+        self.selectedGroups = config['selectedGroup']
+
+        # account settings
+        selectedDictCredential = config['credential'][config['selectedDict']]
+        self.usernameLineEdit.setText(selectedDictCredential['username'])
+        self.passwordLineEdit.setText(selectedDictCredential['password'])
+        self.cookieLineEdit.setText(selectedDictCredential['cookie'])
+
+        # query settings
+        self.briefDefinitionCheckBox.setChecked(config['briefDefinition'])
+        self.enDefinitionCheckBox.setChecked(config['enDefinition'])
+        self.noPronRadioButton.setChecked(config['noPron'])
         self.BrEPronRadioButton.setChecked(config['BrEPron'])
         self.AmEPronRadioButton.setChecked(config['AmEPron'])
-        self.noPronRadioButton.setChecked(config['noPron'])
-        self.selectedGroups = config['selectedGroup']
+
+        # card settings
+        self.imageCheckBox.setChecked(config['image'])
+        self.pronunciationCheckBox.setChecked(config['pronunciation'])
+        self.phraseCheckBox.setChecked(config['phrase'])
+        self.sentenceCheckBox.setChecked(config['sentence'])
 
     def initCore(self):
         self.usernameLineEdit.hide()
@@ -149,22 +160,29 @@ class Windows(QDialog, mainUI.Ui_Dialog):
     def getAndSaveCurrentConfig(self) -> dict:
         """获取当前设置"""
         currentConfig = dict(
+            # basic settings
+            deck=self.deckComboBox.currentText(),
             selectedDict=self.dictionaryComboBox.currentIndex(),
             selectedApi=self.apiComboBox.currentIndex(),
             selectedGroup=self.selectedGroups,
-            deck=self.deckComboBox.currentText(),
+
+            # account settings
             username=self.usernameLineEdit.text(),
             password=Mask(self.passwordLineEdit.text()),
             cookie=Mask(self.cookieLineEdit.text()),
-            definition=self.definitionCheckBox.isChecked(),
-            sentence=self.sentenceCheckBox.isChecked(),
-            image=self.imageCheckBox.isChecked(),
-            phrase=self.phraseCheckBox.isChecked(),
-            AmEPhonetic=self.AmEPhoneticCheckBox.isChecked(),
-            BrEPhonetic=self.BrEPhoneticCheckBox.isChecked(),
+
+            # query settings
+            briefDefinition=self.briefDefinitionCheckBox.isChecked(),
+            enDefinition=self.enDefinitionCheckBox.isChecked(),
+            noPron=self.noPronRadioButton.isChecked(),
             BrEPron=self.BrEPronRadioButton.isChecked(),
             AmEPron=self.AmEPronRadioButton.isChecked(),
-            noPron=self.noPronRadioButton.isChecked(),
+
+            # note settings
+            image=self.imageCheckBox.isChecked(),
+            pronunciation=self.pronunciationCheckBox.isChecked(),
+            phrase=self.phraseCheckBox.isChecked(),
+            sentence=self.sentenceCheckBox.isChecked(),
         )
         logger.info(f'当前设置:{currentConfig}')
         self._saveConfig(currentConfig)
@@ -443,47 +461,6 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.btnSync.setEnabled(True)
 
     @pyqtSlot()
-    def on_btnDownloadMissingAssets_clicked(self):
-        tooltip("btnDownloadMissingAssets Clicked!")
-
-    @pyqtSlot()
-    def on_btnExportAudio_clicked(self):
-        tooltip("btnExportAudio Clicked!")
-
-    @pyqtSlot()
-    def on_btnBackwardTemplate_clicked(self):
-        """Add Or Delete Backwards Card Template (Card Type)"""
-        modelObject = mw.col.models.byName(MODEL_NAME)
-        if not modelObject:
-            showInfo(f"Model (Note Type) '{MODEL_NAME}' does not exist! Please Sync first!")
-            return
-
-        backwardsTemplate = None
-        for temp in modelObject['tmpls']:
-            if temp['name'] == BACKWARDS_CARD_TEMPLATE_NAME:
-                backwardsTemplate = temp
-                break
-
-        if backwardsTemplate:
-            if askUser("Are you sure to delete Backwards template?", defaultno=True):
-                try:
-                    deleteBackwardsCardTemplate(modelObject, backwardsTemplate)
-                    logger.info("Deleted Backwards template")
-                    tooltip("Deleted")
-                except AssertionError as err:
-                    logger.error(f"Failed to delete Backwards template: {err}")
-                    tooltip("Failed!")
-        else:
-            if askUser("Add Backwards template now?", defaultno=True):
-                try:
-                    getOrCreateBackwardsCardTemplate(modelObject, BACKWARDS_CARD_TEMPLATE_NAME)
-                    logger.info("Added Backward template")
-                    tooltip("Added")
-                except Exception as e:
-                    logger.error(e)
-                    tooltip("Failed!")
-
-    @pyqtSlot()
     def on_btnSync_clicked(self):
 
         failedGenerator = (self.newWordListWidget.item(row).data(Qt.UserRole) is None for row in range(self.newWordListWidget.count()))
@@ -614,3 +591,48 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         if not audiosDownloadTasks:
             tooltip(f'添加{added}个笔记\n删除{deleted}个笔记')
+
+    @pyqtSlot()
+    def on_btnDownloadMissingAssets_clicked(self):
+        tooltip("btnDownloadMissingAssets Clicked!")
+
+    @pyqtSlot()
+    def on_btnExportAudio_clicked(self):
+        tooltip("btnExportAudio Clicked!")
+
+    @pyqtSlot()
+    def on_btnBackwardTemplate_clicked(self):
+        """Add Or Delete Backwards Card Template (Card Type)"""
+        modelObject = mw.col.models.byName(MODEL_NAME)
+        if not modelObject:
+            showInfo(f"Model (Note Type) '{MODEL_NAME}' does not exist! Please Sync first!")
+            return
+
+        backwardsTemplate = None
+        for temp in modelObject['tmpls']:
+            if temp['name'] == BACKWARDS_CARD_TEMPLATE_NAME:
+                backwardsTemplate = temp
+                break
+
+        if backwardsTemplate:
+            if askUser("Are you sure to delete Backwards template?", defaultno=True):
+                try:
+                    deleteBackwardsCardTemplate(modelObject, backwardsTemplate)
+                    logger.info("Deleted Backwards template")
+                    tooltip("Deleted")
+                except AssertionError as err:
+                    logger.error(f"Failed to delete Backwards template: {err}")
+                    tooltip("Failed!")
+        else:
+            if askUser("Add Backwards template now?", defaultno=True):
+                try:
+                    getOrCreateBackwardsCardTemplate(modelObject, BACKWARDS_CARD_TEMPLATE_NAME)
+                    logger.info("Added Backward template")
+                    tooltip("Added")
+                except Exception as e:
+                    logger.error(e)
+                    tooltip("Failed!")
+
+    @pyqtSlot()
+    def on_btnCheckTemplates_clicked(self):
+        tooltip("btnCheckTemplates Clicked!")

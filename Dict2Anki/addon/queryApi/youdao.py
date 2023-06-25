@@ -130,7 +130,7 @@ class Parser:
             'bookId': self.word.bookId,
             'bookName': self.word.bookName,
             'modifiedTime': self.word.modifiedTime,
-            'definition_short': self.word.trans,
+            'definition_brief': self.word.trans,
 
             'definition': self.definition,
             'definition_en': self.definition_en,

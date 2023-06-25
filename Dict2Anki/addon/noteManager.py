@@ -100,12 +100,12 @@ def deleteBackwardsCardTemplate(modelObject, backwardsTemplateObject):
     mw.col.models.save(modelObject)
 
 
-def addNoteToDeck(deck, model, currentConfig: dict, word: dict, imageFilename: str, whichPron: str, pronFilename: str):
+def addNoteToDeck(deck, model, config: dict, word: dict, imageFilename: str, whichPron: str, pronFilename: str):
     """
     Add note
     :param deck: deck
     :param model: model
-    :param currentConfig: currentConfig
+    :param config: currentConfig
     :param word: (dict) query result of a word
     :return: None
     """
@@ -117,31 +117,39 @@ def addNoteToDeck(deck, model, currentConfig: dict, word: dict, imageFilename: s
     # create new note
     note = anki.notes.Note(mw.col, model)
     note['term'] = word['term']
-    # TODO: preferring short definition here. Need to make it configurable!
-    include_definition_en = False   # TODO: make this configurable!
-    definitions = []
-    if word['definition_short']:    # str
-        definitions.append(word['definition_short'])
-    elif word['definition']:        # [str]
-        definitions.extend(word['definition'])
 
-    if include_definition_en:
-        definitions.extend(word['definition_en'])
+    # definition
+    definitions = []
+    if config['briefDefinition'] and word['definition_brief']:   # prefer brief definition
+        definitions.append(word['definition_brief'])    # str
+
+    if (not definitions) and word['definition']:
+        definitions.extend(word['definition'])          # [str]
+
+    if config['enDefinition'] and word['definition_en']:
+        definitions.extend(word['definition_en'])       # [str]
 
     if definitions:
         note['definition'] = '\n'.join(definitions)
     else:
         logger.warning(f"NO DEFINITION FOR WORD {word['term']}!!!")
 
+    # phonetic
     if word['BrEPhonetic']:
         note['uk'] = word['BrEPhonetic']
     if word['AmEPhonetic']:
         note['us'] = word['AmEPhonetic']
 
+    # Optional fields:
+    # 1. Ignore "query settings"
+    # 2. Always add to note if it has a value
+    # 3. Toggle visibility by dynamically updating card template
+    # image
     if word['image']:
         note['image'] = f'<div><img src="{imageFilename}" /></div>'
 
-    if word[whichPron]:
+    # pronunciation
+    if whichPron and word[whichPron]:
         note['pronunciation'] = f"[sound:{pronFilename}]"
 
     if word['phrase']:

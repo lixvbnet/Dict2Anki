@@ -4,15 +4,15 @@ VERSION_CHECK_API = 'https://api.github.com/repos/lixvbnet/Dict2Anki/releases/la
 WINDOW_TITLE = f'Dict2Anki {VERSION}'
 MODEL_NAME = f'Dict2Anki-fork'      # do not change this unless there's some breaking change
 
-BASIC_OPTION = ['definition', 'sentence', 'phrase', 'image', 'BrEPhonetic', 'AmEPhonetic']  # 顺序和名称不可修改
-EXTRA_OPTION = ['BrEPron', 'AmEPron', 'noPron']  # 顺序和名称不可修改
+# BASIC_OPTION = ['definition', 'sentence', 'phrase', 'image', 'BrEPhonetic', 'AmEPhonetic']  # 顺序和名称不可修改
+# EXTRA_OPTION = ['BrEPron', 'AmEPron', 'noPron']  # 顺序和名称不可修改
 
 # MODEL_FIELDS = [
 #     'term', 'definition', 'sentenceFront', 'sentenceBack', 'phraseFront', 'phraseBack',
 #     'image', 'BrEPhonetic', 'AmEPhonetic', 'BrEPron', 'AmEPron'
 # ]  # 名称不可修改
 
-# continue to use old model (consistent with 4.x)
+# continue to use Dict2Anki 4.x model
 ASSET_FILENAME_PREFIX = "MG"
 MODEL_FIELDS = [
     'term', 'definition', 'uk', 'us',
