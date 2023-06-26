@@ -2,6 +2,7 @@ import logging
 import requests
 from urllib3 import Retry
 from requests.adapters import HTTPAdapter
+from ..constants import HEADERS
 from ..misc import AbstractQueryAPI, SimpleWord
 from bs4 import BeautifulSoup
 logger = logging.getLogger('dict2Anki.queryApi.eudict')
@@ -182,9 +183,9 @@ class Parser:
 class API(AbstractQueryAPI):
     name = '欧陆词典 API'
     timeout = 10
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
     retries = Retry(total=5, backoff_factor=1, status_forcelist=[500, 502, 503, 504])
     session = requests.Session()
+    session.headers = HEADERS
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
     url = 'https://dict.eudic.net/dicts/en/{}'

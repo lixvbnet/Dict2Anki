@@ -5,6 +5,7 @@ import requests.utils
 from bs4 import BeautifulSoup
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
+from ..constants import HEADERS
 from ..misc import AbstractDictionary, SimpleWord
 
 logger = logging.getLogger('dict2Anki.dictionary.youdao')
@@ -14,12 +15,9 @@ class Youdao(AbstractDictionary):
     name = '有道词典'
     loginUrl = 'http://account.youdao.com/login?service=dict&back_url=http://dict.youdao.com/wordbook/wordlist%3Fkeyfrom%3Dnull'
     timeout = 10
-    headers = {
-        'Host': 'dict.youdao.com',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
-    }
     retries = Retry(total=5, backoff_factor=1, status_forcelist=[500, 502, 503, 504])
     session = requests.Session()
+    session.headers = HEADERS
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
 
@@ -33,7 +31,7 @@ class Youdao(AbstractDictionary):
         :param cookie:
         :return: bool
         """
-        rsp = requests.get('http://dict.youdao.com/login/acc/query/accountinfo', cookies=cookie, headers=self.headers)
+        rsp = requests.get('http://dict.youdao.com/login/acc/query/accountinfo', cookies=cookie, headers=HEADERS)
         if rsp.json().get('code', None) == 0:
             self.indexSoup = BeautifulSoup(rsp.text, features="html.parser")
             logger.info('Cookie有效')

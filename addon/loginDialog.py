@@ -1,7 +1,7 @@
 import json
-import sys
 import logging
 from PyQt5.QtCore import QUrl, pyqtSignal
+from .constants import USER_AGENT
 from .UIForm import loginDialog
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile
@@ -54,10 +54,7 @@ class LoginWebEngineView(QWebEngineView):
         super().__init__(*args, **kwargs)
         # 绑定cookie被添加的信号槽
         self.profile = QWebEngineProfile.defaultProfile()
-        self.profile.setHttpUserAgent(
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)'
-            ' Chrome/69.0.3497.100 Safari/537.36'
-        )
+        self.profile.setHttpUserAgent(USER_AGENT)
         self.cookieStore = self.profile.cookieStore()
         self.cookieStore.cookieAdded.connect(self.onCookieAdd)
         self._cookies = {}
