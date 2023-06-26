@@ -1,0 +1,1551 @@
+{
+  "ee": {
+    "source": {
+      "name": "WordNet",
+      "url": "https://wordnet.princeton.edu"
+    },
+    "word": {
+      "trs": [
+        {
+          "pos": "n.",
+          "tr": [
+            {
+              "l": {
+                "i": "spongy confection made of gelatin and sugar and corn syrup and dusted with powdered sugar"
+              }
+            }
+          ]
+        }
+      ],
+      "phone": "'mɑ:ʃ,meləu",
+      "speech": "marshmallow",
+      "return-phrase": {
+        "l": {
+          "i": "marshmallow"
+        }
+      }
+    }
+  },
+  "pic_dict": {
+    "pic": [
+      {
+        "image": "https://ydlunacommon-cdn.nosdn.127.net/6205866c76e86eb7a7c208f4d7c05b03.jpg?",
+        "host": "",
+        "url": "https://ydlunacommon-cdn.nosdn.127.net/6205866c76e86eb7a7c208f4d7c05b03.jpg?"
+      },
+      {
+        "image": "https://ydlunacommon-cdn.nosdn.127.net/d69f672dd0b2a271468954fcd1eb6eac.jpg?",
+        "host": "",
+        "url": "https://ydlunacommon-cdn.nosdn.127.net/d69f672dd0b2a271468954fcd1eb6eac.jpg?"
+      },
+      {
+        "image": "https://ydlunacommon-cdn.nosdn.127.net/20768189f09bb43fcb280241dbea51dc.jpg?",
+        "host": "",
+        "url": "https://ydlunacommon-cdn.nosdn.127.net/20768189f09bb43fcb280241dbea51dc.jpg?"
+      },
+      {
+        "image": "https://ydlunacommon-cdn.nosdn.127.net/95b3dff14a8f951ee588ab2282d2131e.jpg?",
+        "host": "",
+        "url": "https://ydlunacommon-cdn.nosdn.127.net/95b3dff14a8f951ee588ab2282d2131e.jpg?"
+      }
+    ]
+  },
+  "web_trans": {
+    "web-translation": [
+      {
+        "@same": "true",
+        "key": "marshmallow",
+        "key-speech": "marshmallow",
+        "trans": [
+          {
+            "summary": {
+              "line": [
+                "）棉花软糖,果汁软糖；蜀葵糖剂；糖稀 <b>棉花糖</b>(Marshmallow) :<b>棉花糖</b>是一种生长在非洲的植物.几百年来,它一直被用来舒缓胃痛,胃溃疡,胃炎和痔疮."
+              ]
+            },
+            "value": "棉花糖",
+            "support": 5653,
+            "url": ""
+          },
+          {
+            "summary": {
+              "line": [
+                "<b>药蜀葵</b> (Marshmallow)是㆒种含㈲高㊩药疗效的 草本植物。如镇痛剂及润肤剂。"
+              ]
+            },
+            "value": "药蜀葵",
+            "support": 162,
+            "url": ""
+          },
+          {
+            "summary": {
+              "line": [
+                "TOMY Micro Pets-i(迷你电子宠物) <b>兔子</b> (Marshmallow),类热卖商品,出售该商品的淘宝掌柜潮流脉搏通过了淘宝网身份认证，淘宝网，是一个为广大淘宝网女装，服装、服饰、鞋，箱包网店提..."
+              ]
+            },
+            "value": "兔子",
+            "support": 96,
+            "url": ""
+          }
+        ]
+      },
+      {
+        "key": "Strawberry Marshmallow",
+        "key-speech": "Strawberry+Marshmallow",
+        "trans": [
+          {
+            "value": "草莓棉花糖"
+          },
+          {
+            "value": "棉花糖"
+          },
+          {
+            "value": "唱片名"
+          },
+          {
+            "value": "莓乱扔"
+          }
+        ]
+      },
+      {
+        "key": "Stanford Marshmallow Experiment",
+        "key-speech": "Stanford+Marshmallow+Experiment",
+        "trans": [
+          {
+            "value": "棉花糖实验"
+          },
+          {
+            "value": "斯坦福棉花糖实验"
+          }
+        ]
+      },
+      {
+        "key": "marshmallow cream cream",
+        "key-speech": "marshmallow+cream+cream",
+        "trans": [
+          {
+            "value": "绵花糖霜"
+          },
+          {
+            "value": "花糖霜"
+          },
+          {
+            "value": "详细翻译"
+          }
+        ]
+      },
+      {
+        "key": "Android Marshmallow",
+        "key-speech": "Android+Marshmallow",
+        "trans": [
+          {
+            "value": "安卓棉花软糖"
+          },
+          {
+            "value": "棉花糖"
+          },
+          {
+            "value": "安卓棉花糖"
+          }
+        ]
+      },
+      {
+        "key": "Marshmallow Extract",
+        "key-speech": "Marshmallow+Extract",
+        "trans": [
+          {
+            "value": "药蜀葵萃取"
+          },
+          {
+            "value": "药蜀葵萃取液"
+          },
+          {
+            "value": "蜀葵提取物"
+          },
+          {
+            "value": "药蜀葵提取物"
+          }
+        ]
+      },
+      {
+        "key": "Nelson Marshmallow Sofa",
+        "key-speech": "Nelson+Marshmallow+Sofa",
+        "trans": [
+          {
+            "value": "棉花糖沙发"
+          },
+          {
+            "value": "向日葵椅"
+          },
+          {
+            "value": "鼓椅子"
+          }
+        ]
+      },
+      {
+        "key": "One More Marshmallow",
+        "key-speech": "One+More+Marshmallow",
+        "trans": [
+          {
+            "value": "再来一颗棉花糖"
+          }
+        ]
+      },
+      {
+        "key": "Marshmallow Root",
+        "key-speech": "Marshmallow+Root",
+        "trans": [
+          {
+            "value": "蜀葵根"
+          },
+          {
+            "value": "药属葵根"
+          },
+          {
+            "value": "药蜀葵"
+          }
+        ]
+      },
+      {
+        "key": "cream marshmallow",
+        "key-speech": "cream+marshmallow",
+        "trans": [
+          {
+            "value": "奶油果汁软糖"
+          }
+        ]
+      }
+    ]
+  },
+  "blng_sents_part": {
+    "sentence-count": 6,
+    "sentence-pair": [
+      {
+        "sentence": "Each marshmallow cloud can hold a certain number of people.",
+        "sentence-eng": "Each <b>marshmallow</b> cloud can hold a certain number of people.",
+        "sentence-translation": "每个棉花糖云都能承载一定数量的人。",
+        "speech-size": "17kb",
+        "aligned-words": {
+          "src": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "5",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "6",
+                "@e": "17",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "18",
+                "@e": "23",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "24",
+                "@e": "27",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "3"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "3"
+              },
+              {
+                "@s": "28",
+                "@e": "32",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "4"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "4"
+                    }
+                  ]
+                },
+                "@id": "4"
+              },
+              {
+                "@s": "33",
+                "@e": "42",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "5"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "5"
+                    }
+                  ]
+                },
+                "@id": "5"
+              },
+              {
+                "@s": "43",
+                "@e": "49",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "6"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "6"
+                    }
+                  ]
+                },
+                "@id": "6"
+              },
+              {
+                "@s": "50",
+                "@e": "52",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "7"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "7"
+                    }
+                  ]
+                },
+                "@id": "7"
+              },
+              {
+                "@s": "53",
+                "@e": "59",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "8"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "8"
+                    }
+                  ]
+                },
+                "@id": "8"
+              }
+            ]
+          },
+          "tran": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "3",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "3",
+                "@e": "6",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "6",
+                "@e": "7",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "7",
+                "@e": "9",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "3"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "3"
+              },
+              {
+                "@s": "9",
+                "@e": "11",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "4"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "4"
+                    }
+                  ]
+                },
+                "@id": "4"
+              },
+              {
+                "@s": "11",
+                "@e": "13",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "5"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "5"
+                    }
+                  ]
+                },
+                "@id": "5"
+              },
+              {
+                "@s": "13",
+                "@e": "15",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "6"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "6"
+                    }
+                  ]
+                },
+                "@id": "6"
+              },
+              {
+                "@s": "15",
+                "@e": "16",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "7"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "7"
+                    }
+                  ]
+                },
+                "@id": "7"
+              },
+              {
+                "@s": "16",
+                "@e": "17",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "8"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "8"
+                    }
+                  ]
+                },
+                "@id": "8"
+              }
+            ]
+          }
+        },
+        "url": "youdao",
+        "sentence-speech": "Each+marshmallow+cloud+can+hold+a+certain+number+of+people.&le=eng"
+      },
+      {
+        "sentence": "They're a campfire thing: two graham crackers with some melted marshmallow and chocolate in between.",
+        "sentence-eng": "They're a campfire thing: two graham crackers with some melted <b>marshmallow</b> and chocolate in between.",
+        "sentence-translation": "它们是篝火的东西：两片全麦饼干中间夹着融化的棉花糖和巧克力。",
+        "speech-size": "29kb",
+        "aligned-words": {
+          "src": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "5",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "5",
+                "@e": "8",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "9",
+                "@e": "19",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "20",
+                "@e": "25",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "4"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "4"
+              },
+              {
+                "@s": "27",
+                "@e": "30",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "5"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "5"
+              },
+              {
+                "@s": "31",
+                "@e": "46",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "6"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "4"
+                    }
+                  ]
+                },
+                "@id": "6"
+              },
+              {
+                "@s": "47",
+                "@e": "51",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "8"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "5"
+                    }
+                  ]
+                },
+                "@id": "8"
+              },
+              {
+                "@s": "52",
+                "@e": "63",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "9"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "9"
+              },
+              {
+                "@s": "64",
+                "@e": "75",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "10"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "6"
+                    }
+                  ]
+                },
+                "@id": "10"
+              },
+              {
+                "@s": "76",
+                "@e": "79",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "11"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "7"
+                    }
+                  ]
+                },
+                "@id": "11"
+              },
+              {
+                "@s": "80",
+                "@e": "89",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "12"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "8"
+                    }
+                  ]
+                },
+                "@id": "12"
+              }
+            ]
+          },
+          "tran": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "3",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "3",
+                "@e": "4",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "4",
+                "@e": "6",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "6",
+                "@e": "9",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "4"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "3"
+              },
+              {
+                "@s": "10",
+                "@e": "11",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "5"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "4"
+                    }
+                  ]
+                },
+                "@id": "4"
+              },
+              {
+                "@s": "12",
+                "@e": "14",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "6"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "5"
+                    }
+                  ]
+                },
+                "@id": "5"
+              },
+              {
+                "@s": "19",
+                "@e": "20",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "8"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "6"
+                    }
+                  ]
+                },
+                "@id": "6"
+              },
+              {
+                "@s": "20",
+                "@e": "22",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "9"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "7"
+                    }
+                  ]
+                },
+                "@id": "7"
+              },
+              {
+                "@s": "23",
+                "@e": "26",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "10"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "8"
+                    }
+                  ]
+                },
+                "@id": "8"
+              },
+              {
+                "@s": "26",
+                "@e": "27",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "11"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "9"
+                    }
+                  ]
+                },
+                "@id": "9"
+              },
+              {
+                "@s": "27",
+                "@e": "30",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "12"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "10"
+                    }
+                  ]
+                },
+                "@id": "10"
+              }
+            ]
+          }
+        },
+        "url": "youdao",
+        "sentence-speech": "They%27re+a+campfire+thing%3A+two+graham+crackers+with+some+melted+marshmallow+and+chocolate+in+between.&le=eng"
+      },
+      {
+        "sentence": "Pretend that clouds are actually made of marshmallow clusters stuck together so that people can sit and ride on them.",
+        "sentence-eng": "Pretend that clouds are actually made of <b>marshmallow</b> clusters stuck together so that people can sit and ride on them.",
+        "sentence-translation": "假设云朵实际上是由棉花糖团粘在一起形成的，这样人们就可以坐在它们上面，骑着它们。",
+        "speech-size": "34kb",
+        "aligned-words": {
+          "src": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "13",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "14",
+                "@e": "20",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "21",
+                "@e": "24",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "25",
+                "@e": "33",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "3"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "3"
+              },
+              {
+                "@s": "34",
+                "@e": "41",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "4"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "4"
+                    }
+                  ]
+                },
+                "@id": "4"
+              },
+              {
+                "@s": "42",
+                "@e": "53",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "5"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "5"
+                    }
+                  ]
+                },
+                "@id": "5"
+              },
+              {
+                "@s": "54",
+                "@e": "62",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "6"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "6"
+                    }
+                  ]
+                },
+                "@id": "6"
+              },
+              {
+                "@s": "63",
+                "@e": "68",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "7"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "7"
+                    }
+                  ]
+                },
+                "@id": "7"
+              },
+              {
+                "@s": "69",
+                "@e": "77",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "8"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "8"
+                    }
+                  ]
+                },
+                "@id": "8"
+              },
+              {
+                "@s": "78",
+                "@e": "85",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "9"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "9"
+                    }
+                  ]
+                },
+                "@id": "9"
+              },
+              {
+                "@s": "86",
+                "@e": "92",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "10"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "10"
+                    }
+                  ]
+                },
+                "@id": "10"
+              },
+              {
+                "@s": "93",
+                "@e": "96",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "11"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "11"
+                    }
+                  ]
+                },
+                "@id": "11"
+              },
+              {
+                "@s": "97",
+                "@e": "100",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "12"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "12"
+                    }
+                  ]
+                },
+                "@id": "12"
+              },
+              {
+                "@s": "105",
+                "@e": "112",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "13"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "14"
+                    }
+                  ]
+                },
+                "@id": "13"
+              },
+              {
+                "@s": "113",
+                "@e": "117",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "14"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "13"
+                    }
+                  ]
+                },
+                "@id": "14"
+              }
+            ]
+          },
+          "tran": {
+            "chars": [
+              {
+                "@s": "1",
+                "@e": "3",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "0"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "0"
+                    }
+                  ]
+                },
+                "@id": "0"
+              },
+              {
+                "@s": "3",
+                "@e": "5",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "1"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "1"
+                    }
+                  ]
+                },
+                "@id": "1"
+              },
+              {
+                "@s": "5",
+                "@e": "8",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "3"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "2"
+                    }
+                  ]
+                },
+                "@id": "2"
+              },
+              {
+                "@s": "8",
+                "@e": "9",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "2"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "3"
+                    }
+                  ]
+                },
+                "@id": "3"
+              },
+              {
+                "@s": "9",
+                "@e": "10",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "4"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "4"
+                    }
+                  ]
+                },
+                "@id": "4"
+              },
+              {
+                "@s": "10",
+                "@e": "13",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "5"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "5"
+                    }
+                  ]
+                },
+                "@id": "5"
+              },
+              {
+                "@s": "13",
+                "@e": "14",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "6"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "6"
+                    }
+                  ]
+                },
+                "@id": "6"
+              },
+              {
+                "@s": "14",
+                "@e": "15",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "7"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "7"
+                    }
+                  ]
+                },
+                "@id": "7"
+              },
+              {
+                "@s": "16",
+                "@e": "18",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "8"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "8"
+                    }
+                  ]
+                },
+                "@id": "8"
+              },
+              {
+                "@s": "22",
+                "@e": "24",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "9"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "9"
+                    }
+                  ]
+                },
+                "@id": "9"
+              },
+              {
+                "@s": "24",
+                "@e": "26",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "10"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "10"
+                    }
+                  ]
+                },
+                "@id": "10"
+              },
+              {
+                "@s": "26",
+                "@e": "29",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "11"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "11"
+                    }
+                  ]
+                },
+                "@id": "11"
+              },
+              {
+                "@s": "29",
+                "@e": "31",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "12"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "12"
+                    }
+                  ]
+                },
+                "@id": "12"
+              },
+              {
+                "@s": "31",
+                "@e": "33",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "14"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "13"
+                    }
+                  ]
+                },
+                "@id": "13"
+              },
+              {
+                "@s": "36",
+                "@e": "37",
+                "aligns": {
+                  "sc": [
+                    {
+                      "@id": "13"
+                    }
+                  ],
+                  "tc": [
+                    {
+                      "@id": "14"
+                    }
+                  ]
+                },
+                "@id": "14"
+              }
+            ]
+          }
+        },
+        "url": "youdao",
+        "sentence-speech": "Pretend+that+clouds+are+actually+made+of+marshmallow+clusters+stuck+together+so+that+people+can+sit+and+ride+on+them.&le=eng"
+      }
+    ],
+    "more": "blng_sents",
+    "trs-classify": [
+      {
+        "proportion": "100%",
+        "tr": "全部"
+      },
+      {
+        "proportion": "100.0%",
+        "tr": "棉花糖"
+      }
+    ]
+  },
+  "input": "marshmallow",
+  "meta": {
+    "input": "marshmallow",
+    "guessLanguage": "eng",
+    "isHasSimpleDict": "1",
+    "le": "en",
+    "lang": "eng",
+    "dicts": [
+      "ee",
+      "pic_dict",
+      "web_trans",
+      "blng_sents_part",
+      "meta",
+      "simple",
+      "ec"
+    ]
+  },
+  "le": "en",
+  "simple": {
+    "query": "marshmallow",
+    "word": [
+      {
+        "usphone": "ˈmɑːrʃmeloʊ",
+        "ukphone": "ˌmɑːʃˈmæləʊ",
+        "ukspeech": "marshmallow&type=1",
+        "return-phrase": "marshmallow",
+        "usspeech": "marshmallow&type=2"
+      }
+    ]
+  },
+  "lang": "eng",
+  "ec": {
+    "source": {
+      "name": "有道词典",
+      "url": "https://dict.youdao.com"
+    },
+    "word": [
+      {
+        "usphone": "ˈmɑːrʃmeloʊ",
+        "ukphone": "ˌmɑːʃˈmæləʊ",
+        "ukspeech": "marshmallow&type=1",
+        "trs": [
+          {
+            "tr": [
+              {
+                "l": {
+                  "i": [
+                    "n. 棉花软糖；蜀葵糖浆，糖稀；药用蜀葵（一种生长在湿地、开粉红色花的植物）；<非正式>怯懦的人，不自信的人"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "wfs": [
+          {
+            "wf": {
+              "name": "复数",
+              "value": "marshmallows"
+            }
+          }
+        ],
+        "return-phrase": {
+          "l": {
+            "i": "marshmallow"
+          }
+        },
+        "usspeech": "marshmallow&type=2"
+      }
+    ]
+  }
+}
