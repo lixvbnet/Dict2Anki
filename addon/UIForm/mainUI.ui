@@ -454,6 +454,9 @@
    </item>
    <item>
     <widget class="QPlainTextEdit" name="logTextBox">
+     <property name="undoRedoEnabled">
+      <bool>false</bool>
+     </property>
      <property name="lineWrapMode">
       <enum>QPlainTextEdit::NoWrap</enum>
      </property>

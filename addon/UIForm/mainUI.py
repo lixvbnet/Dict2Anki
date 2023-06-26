@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/Users/lix/GoProjects/Dict2Anki/Dict2Anki/addon/UIForm/mainUI.ui'
+# Form implementation generated from reading ui file 'mainUI.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -244,6 +244,7 @@ class Ui_Dialog(object):
         self.progressBar.setObjectName("progressBar")
         self.main_layout.addWidget(self.progressBar)
         self.logTextBox = QtWidgets.QPlainTextEdit(Dialog)
+        self.logTextBox.setUndoRedoEnabled(False)
         self.logTextBox.setLineWrapMode(QtWidgets.QPlainTextEdit.NoWrap)
         self.logTextBox.setObjectName("logTextBox")
         self.main_layout.addWidget(self.logTextBox)
