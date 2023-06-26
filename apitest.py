@@ -1,12 +1,12 @@
 # A simple manual test
 import json
 import os
-from .addon.dictionary.youdao import Youdao
-from .addon.misc import SimpleWord
-from .addon.queryApi.youdao import API
+from addon.dictionary.youdao import Youdao
+from addon.misc import SimpleWord
+from addon.queryApi.youdao import API
 
 
-BASE_DIR = "../Dict2Anki"
+BASE_DIR = "."
 
 
 def youdao_get_words() -> [SimpleWord]:
@@ -52,7 +52,7 @@ def youdao_test():
     # word = words[len(words)-1]   # here just query last word
     word = None
     for w in words:
-        if w.term == 'hype':
+        if w.term == 'marshmallow':
             word = w
 
     if word is None:
@@ -68,6 +68,7 @@ def youdao_test():
     print(f"definition_brief: \t {result['definition_brief']}")
     print(f"definition: \t\t {result['definition']} (size={len(result['definition'])})")
     print(f"definition_en: \t\t {result['definition_en']} (size={len(result['definition_en'])})")
+    print(f"image: \t\t\t\t {result['image']}")
     print(f"phrase: \t\t\t {result['phrase']} (size={len(result['phrase'])})")
     print(f"sentence: \t\t\t {result['sentence']} (size={len(result['sentence'])})")
 
