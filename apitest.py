@@ -52,7 +52,7 @@ def youdao_test():
     # word = words[len(words)-1]   # here just query last word
     word = None
     for w in words:
-        if w.term == 'marshmallow':
+        if w.term == 'provably':
             word = w
 
     if word is None:

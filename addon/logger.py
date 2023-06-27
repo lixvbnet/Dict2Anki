@@ -1,22 +1,37 @@
 import logging
+from logging.handlers import BufferingHandler
+
 from PyQt5.QtCore import pyqtSignal, QObject
 
 
-class Handler(QObject, logging.Handler):
+class LogEventEmitter(QObject):
     newRecord = pyqtSignal(object)
 
     def __init__(self, parent):
         super().__init__(parent)
-        super(logging.Handler).__init__()
 
-        # formatter = Formatter('[%(asctime)s][%(levelname)8s] -- %(message)s - (%(name)s)', '%d/%m/%Y %H:%M:%S')
-        formatter = Formatter('[%(name)s][%(levelname)s] %(message)s')
+    def emit(self, obj):
+        self.newRecord.emit(obj)
+
+
+class MyBufferingHandler(BufferingHandler):
+    def __init__(self, parent, capacity=20):
+        """
+        :param capacity: number of messages (i.e. log records) we can hold in buffer.
+        """
+        self.eventEmitter = LogEventEmitter(parent)
+        super().__init__(capacity)
+        formatter = Formatter('[$name][$levelname] $message', style="$")
         self.setFormatter(formatter)
-        self.setLevel(logging.DEBUG)
 
-    def emit(self, record):
-        msg = self.format(record)
-        self.newRecord.emit(msg)
+    def flush(self):
+        if not self.buffer:
+            return
+        msgs = []
+        for record in self.buffer:
+            msgs.append(self.format(record))
+        self.eventEmitter.emit("\n".join(msgs))
+        super().flush()
 
 
 class Formatter(logging.Formatter):

@@ -13,7 +13,7 @@ from .queryApi import apis
 from .UIForm import wordGroup, mainUI, icons_rc
 from .workers import LoginStateCheckWorker, VersionCheckWorker, RemoteWordFetchingWorker, QueryWorker, AssetDownloadWorker
 from .dictionary import dictionaries
-from .logger import Handler
+from .logger import MyBufferingHandler
 from .loginDialog import LoginDialog
 from .misc import Mask, SimpleWord
 from .constants import *
@@ -97,23 +97,25 @@ class Windows(QDialog, mainUI.Ui_Dialog):
     def on_NewLogRecord(self, text):
         # append to log box, and scroll to bottom
         self.logTextBox.appendPlainText(text)
-        # self.logTextBox.verticalScrollBar().setValue(self.logTextBox.verticalScrollBar().maximum())
-        pass
+        self.logTextBox.verticalScrollBar().setValue(self.logTextBox.verticalScrollBar().maximum())
 
     def setupLogger(self):
         """初始化 Logger """
 
         def onDestroyed():
-            logger.removeHandler(QtHandler)
+            logger.removeHandler(self.logHandler)
 
         # 防止 debug 信息写入stdout/stderr 导致 Anki 崩溃
-        logFile = os.path.join(gettempdir(), 'dict2anki.log')
-        logging.basicConfig(handlers=[logging.FileHandler(logFile, 'w', 'utf-8')], level=logging.DEBUG, format='[%(asctime)s][%(levelname)8s] -- %(message)s - (%(name)s)')
+        # logFile = os.path.join(gettempdir(), 'dict2anki.log')
+        # logging.basicConfig(handlers=[logging.FileHandler(logFile, 'w', 'utf-8')], level=logging.DEBUG, format='[%(asctime)s][%(levelname)8s] -- %(message)s - (%(name)s)')
 
-        QtHandler = Handler(self)
-        logger.addHandler(QtHandler)
-        # QtHandler.newRecord.connect(self.logTextBox.appendPlainText)
-        QtHandler.newRecord.connect(self.on_NewLogRecord)
+        # Suppress logs by default, and set default level
+        logging.basicConfig(handlers=[logging.NullHandler()], level=logging.INFO)
+
+        # Add custom handler to dict2Anki logger as well as its descendent loggers
+        self.logHandler = MyBufferingHandler(self, capacity=LOG_BUFFER_CAPACITY)
+        logger.handlers = [self.logHandler]
+        self.logHandler.eventEmitter.newRecord.connect(self.on_NewLogRecord)
 
         # 日志Widget销毁时移除 Handlers
         self.logTextBox.destroyed.connect(onDestroyed)
@@ -410,6 +412,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             logger.info('无需同步')
             tooltip('无需同步')
         self.mainTab.setEnabled(True)
+        self.logHandler.flush()
 
     @pyqtSlot()
     def on_queryBtn_clicked(self):
@@ -474,6 +477,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.pullRemoteWordsBtn.setEnabled(True)
         self.queryBtn.setEnabled(True)
         self.btnSync.setEnabled(True)
+        self.logHandler.flush()
 
     @pyqtSlot()
     def on_btnSync_clicked(self):
@@ -534,7 +538,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                     imageFilename = f"{ASSET_FILENAME_PREFIX}-{word}.jpg"       # to be consistent with 4.x
                     imagesDownloadTasks.append((imageFilename, wordItemData['image'],))
                 else:
-                    logger.debug(f"No image for word {word}")
+                    logger.info(f"No image for word {word}")
 
                 # Add audio download task
                 whichPron = preferred_pron
@@ -606,6 +610,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         if not audiosDownloadTasks:
             tooltip(f'添加{added}个笔记\n删除{deleted}个笔记')
+        self.logHandler.flush()
 
     @pyqtSlot()
     def on_btnDownloadMissingAssets_clicked(self):

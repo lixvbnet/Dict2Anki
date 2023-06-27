@@ -9,6 +9,8 @@ HEADERS = {
     'User-Agent': USER_AGENT
 }
 
+LOG_BUFFER_CAPACITY = 20
+
 # BASIC_OPTION = ['definition', 'sentence', 'phrase', 'image', 'BrEPhonetic', 'AmEPhonetic']  # 顺序和名称不可修改
 # EXTRA_OPTION = ['BrEPron', 'AmEPron', 'noPron']  # 顺序和名称不可修改
 
