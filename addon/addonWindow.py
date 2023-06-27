@@ -49,6 +49,9 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.remoteWordsDict: {str: SimpleWord} = {}
         self.selectedGroups = [list()] * len(dictionaries)
 
+        self.querySuccessDict: {int: dict} = {}         # row -> queryResult
+        self.queryFailedDict: {int: bool} = {}          # row -> bool
+
         self.workerThread = QThread(self)
         self.workerThread.start()
         self.updateCheckThead = QThread(self)
@@ -417,6 +420,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
     @pyqtSlot()
     def on_queryBtn_clicked(self):
         logger.info('点击查询按钮')
+        self.querySuccessDict = {}
+        self.queryFailedDict = {}
         currentConfig = self.getAndSaveCurrentConfig()
         self.queryBtn.setEnabled(False)
         self.pullRemoteWordsBtn.setEnabled(False)
@@ -451,24 +456,26 @@ class Windows(QDialog, mainUI.Ui_Dialog):
     @pyqtSlot(int, dict)
     def on_thisRowDone(self, row, result):
         """该行单词查询完毕"""
-        doneIcon = QIcon(':/icons/done.png')
-        wordItem = self.newWordListWidget.item(row)
-        wordItem.setIcon(doneIcon)
-        wordItem.setData(Qt.UserRole, result)
+        self.querySuccessDict[row] = result
 
     @pyqtSlot(int)
     def on_thisRowFailed(self, row):
-        failedIcon = QIcon(':/icons/failed.png')
-        failedWordItem = self.newWordListWidget.item(row)
-        failedWordItem.setIcon(failedIcon)
+        self.queryFailedDict[row] = True
+
+    doneIcon = QIcon(':/icons/done.png')
+    failedIcon = QIcon(':/icons/failed.png')
 
     @pyqtSlot()
     def on_allQueryDone(self):
+        # update icons
         failed = []
-
-        for i in range(self.newWordListWidget.count()):
-            wordItem = self.newWordListWidget.item(i)
-            if not wordItem.data(Qt.UserRole):
+        for row in range(self.newWordListWidget.count()):
+            wordItem = self.newWordListWidget.item(row)
+            if row in self.querySuccessDict:
+                wordItem.setIcon(self.doneIcon)
+                wordItem.setData(Qt.UserRole, self.querySuccessDict[row])
+            else:
+                wordItem.setIcon(self.failedIcon)
                 failed.append(wordItem.text())
 
         if failed:
