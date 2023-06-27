@@ -94,6 +94,11 @@ class Parser:
         except (TypeError, KeyError):
             pass
 
+        # if no audio, then set a default one
+        if not (pron['AmEUrl'] or pron['BrEUrl']):
+            pron['AmEUrl'] = f"{url}{self.word.term}&type=2"
+            pron['BrEUrl'] = f"{url}{self.word.term}&type=1"
+
         return pron
 
     @property
