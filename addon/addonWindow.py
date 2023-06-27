@@ -97,7 +97,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
     def on_NewLogRecord(self, text):
         # append to log box, and scroll to bottom
         self.logTextBox.appendPlainText(text)
-        self.logTextBox.verticalScrollBar().setValue(self.logTextBox.verticalScrollBar().maximum())
+        # self.logTextBox.verticalScrollBar().setValue(self.logTextBox.verticalScrollBar().maximum())
+        pass
 
     def setupLogger(self):
         """初始化 Logger """
