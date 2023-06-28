@@ -52,6 +52,9 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.querySuccessDict: {int: dict} = {}         # row -> queryResult
         self.queryFailedDict: {int: bool} = {}          # row -> bool
 
+        self.added = 0
+        self.deleted = 0
+
         self.workerThread = QThread(self)
         self.workerThread.start()
         self.updateCheckThead = QThread(self)
@@ -488,7 +491,6 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
     @pyqtSlot()
     def on_btnSync_clicked(self):
-
         failedGenerator = (self.newWordListWidget.item(row).data(Qt.UserRole) is None for row in range(self.newWordListWidget.count()))
         if any(failedGenerator):
             if not askUser('存在未查询或失败的单词，确定要加入单词本吗？\n 你可以选择失败的单词点击 "查询按钮" 来重试。'):
@@ -531,7 +533,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             preferred_pron = 'AmEPron' if self.AmEPronRadioButton.isChecked() else 'BrEPron'
             logger.info(f'Preferred Pronunciation: {preferred_pron}')
 
-        added = 0
+        self.added = 0
         for row in range(newWordCount):
             wordItem = self.newWordListWidget.item(row)
             wordItemData = wordItem.data(Qt.UserRole)
@@ -568,7 +570,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
                 # add note
                 addNoteToDeck(deck, model, currentConfig, wordItemData, imageFilename, whichPron, pronFilename)
-                added += 1
+                self.added += 1
         mw.reset()
 
         logger.info(f"Image download tasks: {imagesDownloadTasks}")
@@ -589,8 +591,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             self.assetDownloadWorker.moveToThread(self.assetDownloadThread)
             self.assetDownloadWorker.tick.connect(lambda: self.progressBar.setValue(self.progressBar.value() + 1))
             self.assetDownloadWorker.start.connect(self.assetDownloadWorker.run)
-            self.assetDownloadWorker.done.connect(lambda: tooltip(f'图片音频下载完成'))
-            self.assetDownloadWorker.done.connect(self.assetDownloadThread.quit)
+            self.assetDownloadWorker.done.connect(self.on_assetsDownloadDone)
             self.assetDownloadWorker.start.emit()
 
         self.newWordListWidget.clear()
@@ -602,21 +603,33 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         ]
         needToDeleteWords = [i.text() for i in needToDeleteWordItems]
 
-        deleted = 0
+        self.deleted = 0
 
         if needToDeleteWords and askUser(f'确定要删除这些单词吗:{needToDeleteWords[:3]}...({len(needToDeleteWords)}个)', title='Dict2Anki', parent=self):
+            logger.info(f"需要删除({len(needToDeleteWords)}) - {needToDeleteWords}")
             needToDeleteWordNoteIds = getNotes(needToDeleteWords, currentConfig['deck'])
             mw.col.remNotes(needToDeleteWordNoteIds)
-            deleted += 1
+            self.deleted += len(needToDeleteWordNoteIds)
             mw.col.reset()
             mw.reset()
             for item in needToDeleteWordItems:
                 self.needDeleteWordListWidget.takeItem(self.needDeleteWordListWidget.row(item))
-            logger.info('删除完成')
+            logger.info(f'实际删除({self.deleted})')
         logger.info('完成')
 
-        if not audiosDownloadTasks:
-            tooltip(f'添加{added}个笔记\n删除{deleted}个笔记')
+        if not (imagesDownloadTasks or audiosDownloadTasks):
+            self.printSyncReport()
+        self.logHandler.flush()
+
+    def printSyncReport(self):
+        logger.info(f'Added: {self.added}, Deleted: {self.deleted}')
+
+    @pyqtSlot()
+    def on_assetsDownloadDone(self):
+        self.assetDownloadThread.quit()
+        tooltip(f'图片音频下载完成')
+        logger.info("图片音频下载完成")
+        self.printSyncReport()
         self.logHandler.flush()
 
     @pyqtSlot()
