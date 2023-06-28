@@ -69,6 +69,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         self.setupUi(self)
         self.setWindowTitle(WINDOW_TITLE)
+        self.logTextBox.setReadOnly(True)
+        self.logTextBox.setUndoRedoEnabled(False)
         self.setupLogger()
         self.initCore()
         # self.checkUpdate()    # 会导致卡顿
@@ -491,23 +493,32 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
     @pyqtSlot()
     def on_btnSync_clicked(self):
+        logger.info(f"Sync button clicked")
+        logger.info(f"Check query results")
+        self.logHandler.flush()
         failedGenerator = (self.newWordListWidget.item(row).data(Qt.UserRole) is None for row in range(self.newWordListWidget.count()))
         if any(failedGenerator):
             if not askUser('存在未查询或失败的单词，确定要加入单词本吗？\n 你可以选择失败的单词点击 "查询按钮" 来重试。'):
                 return
 
+        logger.info(f"Get and save current config")
+        self.logHandler.flush()
         currentConfig = self.getAndSaveCurrentConfig()
 
         # create Note Type/Model
+        logger.info(f"Create Note Type/Model")
+        self.logHandler.flush()
         try:
             model = getOrCreateModel(MODEL_NAME)
         except RuntimeError as err:
             logger.warning(err)
             if not askUser(f"{err}\nDeleting it would delete ALL its cards and notes!!! Continue?", defaultno=True):
                 logger.info("Aborted")
+                self.logHandler.flush()
                 return
             if not askUser(f"[DANGEROUS ACTION!!!] Are you sure to delete model '{MODEL_NAME}' AND all its cards/notes???", defaultno=True):
                 logger.info("Aborted upon second reminder")
+                self.logHandler.flush()
                 return
             # force delete the existing model
             model = getOrCreateModel(MODEL_NAME, force=True)
@@ -520,7 +531,6 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         # create deck
         deck = getOrCreateDeck(self.deckComboBox.currentText(), model=model)
 
-        logger.info('同步点击')
         imagesDownloadTasks = []
         audiosDownloadTasks = []
         newWordCount = self.newWordListWidget.count()
