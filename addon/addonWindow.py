@@ -118,6 +118,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         """初始化 Logger """
 
         def onDestroyed():
+            self.logHandler.timer_stopper()
             logger.removeHandler(self.logHandler)
 
         self.logHandler.eventEmitter.newRecord.connect(self.on_NewLogRecord)
@@ -475,7 +476,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             if row in self.querySuccessDict:
                 wordItem.setIcon(self.doneIcon)
                 wordItem.setData(Qt.UserRole, self.querySuccessDict[row])
-            else:
+            elif row in self.queryFailedDict:
                 wordItem.setIcon(self.failedIcon)
                 failed.append(wordItem.text())
 
