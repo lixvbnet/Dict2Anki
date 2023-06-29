@@ -13,7 +13,7 @@ from .queryApi import apis
 from .UIForm import wordGroup, mainUI, icons_rc
 from .workers import LoginStateCheckWorker, VersionCheckWorker, RemoteWordFetchingWorker, QueryWorker, AssetDownloadWorker
 from .dictionary import dictionaries
-from .logger import MyBufferingHandler
+from .logger import TimedBufferingHandler
 from .loginDialog import LoginDialog
 from .misc import Mask, SimpleWord
 from .constants import *
@@ -22,7 +22,7 @@ try:
     from aqt import mw
     from aqt.utils import askUser, showCritical, showInfo, tooltip, openLink
     from .noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, \
-    getOrCreateBackwardsCardTemplate, addNoteToDeck, getWordsByDeck, getNotes, deleteBackwardsCardTemplate
+    getOrCreateBackwardsCardTemplate, addNoteToDeck, getWordsByDeck, getNoteIDsOfWords, deleteBackwardsCardTemplate
 except ImportError:
     from test.dummy_aqt import mw, askUser, showCritical, showInfo, tooltip, openLink
     from test.dummy_noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, addNoteToDeck, getWordsByDeck, getNotes
@@ -71,7 +71,14 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.setWindowTitle(WINDOW_TITLE)
         self.logTextBox.setReadOnly(True)
         self.logTextBox.setUndoRedoEnabled(False)
+
+        # Suppress logs by default, and set default level
+        logging.basicConfig(handlers=[logging.NullHandler()], level=logging.INFO)
+        # Add custom handler to dict2Anki logger as well as its descendant loggers
+        self.logHandler = TimedBufferingHandler(self, capacity=LOG_BUFFER_CAPACITY, flush_interval=LOG_FLUSH_INTERVAL)
+        logger.handlers = [self.logHandler]
         self.setupLogger()
+
         self.initCore()
         # self.checkUpdate()    # 会导致卡顿
         # self.__dev() # 以备调试时使用
@@ -113,18 +120,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         def onDestroyed():
             logger.removeHandler(self.logHandler)
 
-        # 防止 debug 信息写入stdout/stderr 导致 Anki 崩溃
-        # logFile = os.path.join(gettempdir(), 'dict2anki.log')
-        # logging.basicConfig(handlers=[logging.FileHandler(logFile, 'w', 'utf-8')], level=logging.DEBUG, format='[%(asctime)s][%(levelname)8s] -- %(message)s - (%(name)s)')
-
-        # Suppress logs by default, and set default level
-        logging.basicConfig(handlers=[logging.NullHandler()], level=logging.INFO)
-
-        # Add custom handler to dict2Anki logger as well as its descendent loggers
-        self.logHandler = MyBufferingHandler(self, capacity=LOG_BUFFER_CAPACITY)
-        logger.handlers = [self.logHandler]
         self.logHandler.eventEmitter.newRecord.connect(self.on_NewLogRecord)
-
         # 日志Widget销毁时移除 Handlers
         self.logTextBox.destroyed.connect(onDestroyed)
 
@@ -617,7 +613,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         if needToDeleteWords and askUser(f'确定要删除这些单词吗:{needToDeleteWords[:3]}...({len(needToDeleteWords)}个)', title='Dict2Anki', parent=self):
             logger.info(f"需要删除({len(needToDeleteWords)}) - {needToDeleteWords}")
-            needToDeleteWordNoteIds = getNotes(needToDeleteWords, currentConfig['deck'])
+            needToDeleteWordNoteIds = getNoteIDsOfWords(needToDeleteWords, currentConfig['deck'])
             mw.col.remNotes(needToDeleteWordNoteIds)
             self.deleted += len(needToDeleteWordNoteIds)
             mw.col.reset()
@@ -644,7 +640,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
     @pyqtSlot()
     def on_btnDownloadMissingAssets_clicked(self):
-        tooltip("btnDownloadMissingAssets Clicked!")
+        # tooltip("btnDownloadMissingAssets Clicked!")
+        logger.info(f"btnDownloadMissingAssets Clicked!")
 
     @pyqtSlot()
     def on_btnExportAudio_clicked(self):

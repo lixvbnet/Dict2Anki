@@ -1,6 +1,9 @@
 # for macOS (sorry Windows..)
 addons21 = ~/Library/Application\ Support/Anki2/addons21
 
+.PHONY: install uninstall install_test_addon uninstall_test_addon clean build publish
+
+
 install:
 	@echo "Creating symbolic link..."
 	ln -sf $(PWD) $(addons21)/
@@ -17,3 +20,11 @@ install_test_addon:
 uninstall_test_addon:
 	@echo "Deleting symbolic link..."
 	rm -f $(addons21)/test_addon
+
+
+clean:
+	rm -rf build/
+
+build: clean
+	@echo "Building..."
+	python3 deploy.py build -d build/

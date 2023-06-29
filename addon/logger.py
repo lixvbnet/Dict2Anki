@@ -1,7 +1,23 @@
 import logging
 from logging.handlers import BufferingHandler
+import threading
 
 from PyQt5.QtCore import pyqtSignal, QObject
+
+
+def call_at_interval(interval, func, *args):
+    """utility function to start a thread and call a function every `interval` seconds."""
+    stopped = threading.Event()
+
+    # actual thread function
+    def loop():
+        while not stopped.wait(interval):  # the first call is in `interval` secs
+            func(*args)
+
+    t = threading.Thread(target=loop)
+    t.daemon = True
+    t.start()
+    return stopped.set, t
 
 
 class LogEventEmitter(QObject):
@@ -14,15 +30,18 @@ class LogEventEmitter(QObject):
         self.newRecord.emit(obj)
 
 
-class MyBufferingHandler(BufferingHandler):
-    def __init__(self, parent, capacity=20):
+class TimedBufferingHandler(BufferingHandler):
+    def __init__(self, parent, capacity=20, flush_interval=3):
         """
         :param capacity: number of messages (i.e. log records) we can hold in buffer.
+        :param flush_interval: flush logs every `flush_interval` seconds
         """
-        self.eventEmitter = LogEventEmitter(parent)
         super().__init__(capacity)
+        self.eventEmitter = LogEventEmitter(parent)
         formatter = Formatter('[$name][$levelname] $message', style="$")
         self.setFormatter(formatter)
+        # flush logs every `flush_interval` seconds
+        self.timer_stopper, self.timer_thread = call_at_interval(flush_interval, self.flush)
 
     def flush(self):
         if not self.buffer:
@@ -32,6 +51,10 @@ class MyBufferingHandler(BufferingHandler):
             msgs.append(self.format(record))
         self.eventEmitter.emit("\n".join(msgs))
         super().flush()
+
+    def close(self):
+        self.timer_stopper()
+        super().close()
 
 
 class Formatter(logging.Formatter):

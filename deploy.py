@@ -1,13 +1,15 @@
+import argparse
 import os
-from zipfile import ZipFile
-
 from bs4 import BeautifulSoup
 from requests.sessions import Session
-
+from zipfile import ZipFile
 from addon.constants import WINDOW_TITLE
 
+TARGET_DIR = '.'
+TARGET_FILENAME = f'{WINDOW_TITLE}.zip'
 
-def create_zip():
+
+def create_zip(target_dir=TARGET_DIR, target_filename=TARGET_FILENAME):
     file_paths = []
     exclude_dirs = ['build', 'test', 'test_addon', 'testapi', '__pycache__', '.git', '.idea', '.pytest_cache', 'screenshots', 'venv']
     exclude_files = ['README.md', 'Makefile', '.gitignore', '.travis.yml', 'deploy.py', 'requirements.txt', '.DS_Store', 'meta.json']
@@ -26,14 +28,17 @@ def create_zip():
         for filename in files:
             file_paths.append(os.path.join(dirname, filename))
 
-    filename = f'{WINDOW_TITLE}.zip'
-    with ZipFile(filename, 'w') as zf:
+    if not os.path.exists(target_dir):
+        os.mkdir(target_dir)
+    filepath = os.path.join(target_dir, target_filename)
+    with ZipFile(filepath, 'w') as zf:
         for file in file_paths:
             zf.write(file)
-    print(f"File [{filename}] saved.")
+    print(f"File [{filepath}] saved.")
 
 
-def update(title, tags, desc):
+def publish(zip_dir, zip_filename, title, tags, desc):
+    """TODO"""
     username = os.environ.get('ANKI_USERNAME')
     password = os.environ.get('ANKI_PASSWORD')
     addon_id = os.environ.get('ANKI_ADDON_ID')
@@ -57,7 +62,8 @@ def update(title, tags, desc):
     s.post(URL, data={'submit': 1, 'csrf_token': csrf_token, 'username': username, 'password': password})
 
     URL = 'https://ankiweb.net/shared/upload'
-    file = {'v21file': open(f'{WINDOW_TITLE}.zip', 'rb')}
+    filepath = os.path.join(zip_dir, zip_filename)
+    file = {'v21file': open(filepath, 'rb')}
     rsp = s.post(URL, files=file, data={
         'title': title,
         'tags': tags,
@@ -73,11 +79,25 @@ def update(title, tags, desc):
         return False
 
 
-def main():
-    create_zip()
-    # with open('README.md', encoding='utf-8') as f:
-    #     return update('Dict2Anki（有道,欧陆词典单词本同步工具）', '有道 欧陆 导入 同步', f.read())
-
-
 if __name__ == '__main__':
-    main()
+    OPERATIONS = ["build", "publish"]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("operation", type=str, choices=OPERATIONS, help="cluster name")
+    parser.add_argument("-d", "--dir", type=str, help="target directory")
+    args = parser.parse_args()
+
+    operation = args.operation
+    directory = args.dir
+    if not directory:
+        directory = TARGET_DIR
+
+    # print(operation, directory)
+    print(f"operation: {operation}")
+    print(f"directory: {directory}")
+
+    if operation == "build":
+        create_zip(target_dir=directory)
+    elif operation == "publish":
+        raise RuntimeError(f"Operation '{operation}' is not implemented yet")
+    else:
+        raise RuntimeError(f"Unsupported operation: {operation}")

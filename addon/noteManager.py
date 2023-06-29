@@ -24,7 +24,7 @@ def getWordsByDeck(deckName) -> [str]:
     return words
 
 
-def getNotes(wordList, deckName) -> list:
+def getNoteIDsOfWords(wordList, deckName) -> list:
     notes = []
     for word in wordList:
         note = mw.col.findNotes(f'deck:"{deckName}" term:"{word}"')

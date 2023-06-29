@@ -9,7 +9,8 @@ HEADERS = {
     'User-Agent': USER_AGENT
 }
 
-LOG_BUFFER_CAPACITY = 20
+LOG_BUFFER_CAPACITY = 20    # number of log items
+LOG_FLUSH_INTERVAL = 3      # seconds
 
 # BASIC_OPTION = ['definition', 'sentence', 'phrase', 'image', 'BrEPhonetic', 'AmEPhonetic']  # 顺序和名称不可修改
 # EXTRA_OPTION = ['BrEPron', 'AmEPron', 'noPron']  # 顺序和名称不可修改
