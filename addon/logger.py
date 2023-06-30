@@ -46,11 +46,15 @@ class TimedBufferingHandler(BufferingHandler):
     def flush(self):
         if not self.buffer:
             return
-        msgs = []
-        for record in self.buffer:
-            msgs.append(self.format(record))
-        self.eventEmitter.emit("\n".join(msgs))
-        super().flush()
+        try:
+            msgs = []
+            for record in self.buffer:
+                msgs.append(self.format(record))
+            if self.eventEmitter:
+                self.eventEmitter.emit("\n".join(msgs))
+            super().flush()
+        except RuntimeError or AttributeError:
+            pass
 
     def close(self):
         self.timer_stopper()

@@ -118,8 +118,9 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         """初始化 Logger """
 
         def onDestroyed():
-            self.logHandler.timer_stopper()
             logger.removeHandler(self.logHandler)
+            self.logHandler.eventEmitter = None
+            self.logHandler.close()
 
         self.logHandler.eventEmitter.newRecord.connect(self.on_NewLogRecord)
         # 日志Widget销毁时移除 Handlers
@@ -683,4 +684,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
     @pyqtSlot()
     def on_btnCheckTemplates_clicked(self):
-        tooltip("btnCheckTemplates Clicked!")
+        logger.info("btnCheckTemplates Clicked!")
+        model = mw.col.models.byName(MODEL_NAME)
+        if model:
+            logger.info(f"model: {json.dumps(model)}")
+
