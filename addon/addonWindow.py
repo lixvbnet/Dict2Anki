@@ -21,8 +21,7 @@ from .constants import *
 try:
     from aqt import mw
     from aqt.utils import askUser, showCritical, showInfo, tooltip, openLink
-    from .noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, \
-    getOrCreateBackwardsCardTemplate, addNoteToDeck, getWordsByDeck, getNoteIDsOfWords, deleteBackwardsCardTemplate
+    from .noteManager import *
 except ImportError:
     from test.dummy_aqt import mw, askUser, showCritical, showInfo, tooltip, openLink
     from test.dummy_noteManager import getOrCreateDeck, getDeckList, getOrCreateModel, getOrCreateModelCardTemplate, addNoteToDeck, getWordsByDeck, getNotes
@@ -522,7 +521,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             model = getOrCreateModel(MODEL_NAME, force=True)
 
         # create 'Normal' card template (card type)
-        getOrCreateModelCardTemplate(model, NORMAL_CARD_TEMPLATE_NAME)
+        getOrCreateNormalCardTemplate(model, NORMAL_CARD_TEMPLATE_NAME)
         # create 'Backwards' card template (card type)
         # getOrCreateBackwardsCardTemplate(model, BACKWARDS_CARD_TEMPLATE_NAME)
 
@@ -684,8 +683,30 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
     @pyqtSlot()
     def on_btnCheckTemplates_clicked(self):
-        logger.info("btnCheckTemplates Clicked!")
+        logger.info(f"Checking Card Templates for model f{MODEL_NAME}...")
         model = mw.col.models.byName(MODEL_NAME)
-        if model:
-            logger.info(f"model: {json.dumps(model)}")
+        if not model:
+            showInfo(f"Model (Note Type) '{MODEL_NAME}' does not exist! Please Sync first!")
+            return
 
+        logger.info(f"model: {json.dumps(model)}")
+        if not checkModelFields(model):
+            showInfo(f"Model fields have been changed! Please Sync again!")
+            return
+
+        if checkModelCardTemplates(model) and checkModelCardCSS(model):
+            logger.info(f"No changes detected.")
+            self.logHandler.flush()
+            tooltip(f"No changes detected.")
+            return
+
+        else:
+            if not askUser(f"Model card templates or CSS have been changed. Would you like to reset to default?", defaultno=True):
+                logger.info(f"Aborted")
+                self.logHandler.flush()
+                return
+            logger.info(f"Resetting card templates for model {MODEL_NAME}...")
+            resetModelCardTemplates(model)
+            logger.info(f"Done!")
+            self.logHandler.flush()
+            tooltip(f"Reset complete.")

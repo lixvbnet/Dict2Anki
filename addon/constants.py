@@ -92,7 +92,7 @@ NORMAL_CARD_TEMPLATE_AFMT = """\
 </table>
 """
 
-NORMAL_CARD_TEMPLATE_CSS = """\
+CARD_TEMPLATE_CSS = """\
 .card {
   font-family: arial;
   font-size: 16px;

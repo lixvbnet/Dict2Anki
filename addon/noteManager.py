@@ -50,7 +50,7 @@ def getOrCreateModel(modelName, force=False):
     """Create Note Model (Note Type)"""
     model = mw.col.models.byName(modelName)
     if model:
-        if set([f['name'] for f in model['flds']]) == set(MODEL_FIELDS):
+        if checkModelFields(model):
             return model
         if force:   # Dangerous action!!!  It would delete model, AND all its cards/notes!
             logger.warning(f"Force deleting model {modelName}")
@@ -65,8 +65,8 @@ def getOrCreateModel(modelName, force=False):
     return newModel
 
 
-def getOrCreateModelCardTemplate(modelObject, cardTemplateName):
-    """Create Card Template (Card Type)"""
+def getOrCreateNormalCardTemplate(modelObject, cardTemplateName):
+    """Create Normal Card Template (Card Type)"""
     logger.info(f'添加卡片类型: {cardTemplateName}')
     existingCardTemplate = modelObject['tmpls']
     if cardTemplateName in [t.get('name') for t in existingCardTemplate]:
@@ -75,7 +75,7 @@ def getOrCreateModelCardTemplate(modelObject, cardTemplateName):
     cardTemplate = mw.col.models.newTemplate(cardTemplateName)
     cardTemplate['qfmt'] = NORMAL_CARD_TEMPLATE_QFMT
     cardTemplate['afmt'] = NORMAL_CARD_TEMPLATE_AFMT
-    modelObject['css'] = NORMAL_CARD_TEMPLATE_CSS
+    modelObject['css'] = CARD_TEMPLATE_CSS
     mw.col.models.addTemplate(modelObject, cardTemplate)
     mw.col.models.add(modelObject)
 
@@ -97,6 +97,64 @@ def getOrCreateBackwardsCardTemplate(modelObject, backwardsTemplateName):
 def deleteBackwardsCardTemplate(modelObject, backwardsTemplateObject):
     """Delete Backwards Card Template (Card Type) from existing Dict2Anki Note Type"""
     mw.col.models.remove_template(modelObject, backwardsTemplateObject)
+    mw.col.models.save(modelObject)
+
+
+def checkModelFields(modelObject) -> bool:
+    """Check if model fields are as expected"""
+    current_fields = [f['name'] for f in modelObject['flds']]
+    expected_fields = MODEL_FIELDS
+    if set(current_fields) == set(expected_fields):
+        return True
+    else:
+        logger.warning(f"Model fields are not as expected")
+        logger.warning(f"current_fields: {current_fields}")
+        logger.warning(f"expected_fields: {expected_fields}")
+        return False
+
+
+def checkModelCardTemplates(modelObject) -> bool:
+    """Check if model card templates are as expected"""
+    for tmpl in modelObject['tmpls']:
+        tmpl_name = tmpl['name']
+        logger.info(f"Found card template '{tmpl_name}'")
+        if tmpl_name == NORMAL_CARD_TEMPLATE_NAME:
+            if tmpl['qfmt'] != NORMAL_CARD_TEMPLATE_QFMT or tmpl['afmt'] != NORMAL_CARD_TEMPLATE_AFMT:
+                logger.info(f"Changes detected in template '{tmpl_name}'")
+                return False
+        elif tmpl_name == BACKWARDS_CARD_TEMPLATE_NAME:
+            if tmpl['qfmt'] != BACKWARDS_CARD_TEMPLATE_QFMT or tmpl['afmt'] != BACKWARDS_CARD_TEMPLATE_AFMT:
+                logger.warning(f"Changes detected in template '{tmpl_name}'")
+                return False
+    return True
+
+
+def checkModelCardCSS(modelObject) -> bool:
+    """Check if model CSS are as expected"""
+    current_css = modelObject['css']
+    expected_css = CARD_TEMPLATE_CSS
+    if current_css == expected_css:
+        return True
+    else:
+        logger.warning(f"Changes detected in card CSS")
+        return False
+
+
+def resetModelCardTemplates(modelObject):
+    """Reset Card Templates to default"""
+    for tmpl in modelObject['tmpls']:
+        tmpl_name = tmpl['name']
+        if tmpl_name == NORMAL_CARD_TEMPLATE_NAME:
+            logger.info(f"Reset card template '{NORMAL_CARD_TEMPLATE_NAME}'")
+            tmpl['qfmt'] = NORMAL_CARD_TEMPLATE_QFMT
+            tmpl['afmt'] = NORMAL_CARD_TEMPLATE_AFMT
+        elif tmpl_name == BACKWARDS_CARD_TEMPLATE_NAME:
+            logger.info(f"Reset card template '{BACKWARDS_CARD_TEMPLATE_NAME}'")
+            tmpl['qfmt'] = BACKWARDS_CARD_TEMPLATE_QFMT
+            tmpl['afmt'] = BACKWARDS_CARD_TEMPLATE_AFMT
+    logger.info(f"Reset CSS")
+    modelObject['css'] = CARD_TEMPLATE_CSS
+    logger.info(f"Save changes")
     mw.col.models.save(modelObject)
 
 
@@ -161,28 +219,6 @@ def addNoteToDeck(deck, model, config: dict, word: dict, imageFilename: str, whi
         for i, sentence_tuple in enumerate(word['sentence'][:3]):   # at most 3 sentences
             note[f'sentence{i}'], note[f'sentence_explain{i}'] = sentence_tuple
             note[f'splaceHolder{i}'] = "Tap To View"
-
-    # for configName in BASIC_OPTION + EXTRA_OPTION:
-    #     logger.debug(f'字段:{configName}--结果:{term.get(configName)}')
-    #     if term.get(configName):
-    #         # 短语例句
-    #         if configName in ['sentence', 'phrase'] and currentConfig[configName]:
-    #             note[f'{configName}Front'] = '\n'.join(
-    #                 [f'<tr><td>{e.strip()}</td></tr>' for e, _ in term[configName]])
-    #             note[f'{configName}Back'] = '\n'.join(
-    #                 [f'<tr><td>{e.strip()}<br>{c.strip()}</td></tr>' for e, c in term[configName]])
-    #         # 图片
-    #         elif configName == 'image':
-    #             note[configName] = f'src="{term[configName]}"'
-    #         # 释义
-    #         elif configName == 'definition' and currentConfig[configName]:
-    #             note[configName] = ' '.join(term[configName])
-    #         # 发音
-    #         elif configName in EXTRA_OPTION[:2]:
-    #             note[configName] = f"[sound:{configName}_{term['term']}.mp3]"
-    #         # 其他
-    #         elif currentConfig[configName]:
-    #             note[configName] = term[configName]
 
     mw.col.addNote(note)
     mw.col.reset()
