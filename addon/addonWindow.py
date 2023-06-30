@@ -521,9 +521,9 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             model = getOrCreateModel(MODEL_NAME, force=True)
 
         # create 'Normal' card template (card type)
-        getOrCreateNormalCardTemplate(model, NORMAL_CARD_TEMPLATE_NAME)
+        getOrCreateNormalCardTemplate(model)
         # create 'Backwards' card template (card type)
-        # getOrCreateBackwardsCardTemplate(model, BACKWARDS_CARD_TEMPLATE_NAME)
+        # getOrCreateBackwardsCardTemplate(model)
 
         # create deck
         deck = getOrCreateDeck(self.deckComboBox.currentText(), model=model)
@@ -663,7 +663,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                 break
 
         if backwardsTemplate:
-            if askUser("Are you sure to delete Backwards template?", defaultno=True):
+            if askUser("Are you sure to DELETE Backwards template?", defaultno=True):
                 try:
                     deleteBackwardsCardTemplate(modelObject, backwardsTemplate)
                     logger.info("Deleted Backwards template")
@@ -674,12 +674,13 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         else:
             if askUser("Add Backwards template now?", defaultno=True):
                 try:
-                    getOrCreateBackwardsCardTemplate(modelObject, BACKWARDS_CARD_TEMPLATE_NAME)
+                    getOrCreateBackwardsCardTemplate(modelObject)
                     logger.info("Added Backward template")
                     tooltip("Added")
                 except Exception as e:
                     logger.error(e)
                     tooltip("Failed!")
+        self.logHandler.flush()
 
     @pyqtSlot()
     def on_btnCheckTemplates_clicked(self):
