@@ -159,7 +159,7 @@ def resetModelCardTemplates(modelObject):
     mw.col.models.save(modelObject)
 
 
-def addNoteToDeck(deck, model, config: dict, word: dict, imageFilename: str, whichPron: str, pronFilename: str):
+def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str):
     """
     Add note
     :param deck: deck
@@ -175,7 +175,8 @@ def addNoteToDeck(deck, model, config: dict, word: dict, imageFilename: str, whi
 
     # create new note
     note = anki.notes.Note(mw.col, model)
-    note['term'] = word['term']
+    term = word['term']
+    note['term'] = term
 
     # definition
     definitions = []
@@ -205,10 +206,12 @@ def addNoteToDeck(deck, model, config: dict, word: dict, imageFilename: str, whi
     # 3. Toggle visibility by dynamically updating card template
     # image
     if word['image']:
+        imageFilename = default_image_filename(term)
         note['image'] = f'<div><img src="{imageFilename}" /></div>'
 
     # pronunciation
     if whichPron and word[whichPron]:
+        pronFilename = default_audio_filename(term)
         note['pronunciation'] = f"[sound:{pronFilename}]"
 
     if word['phrase']:

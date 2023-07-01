@@ -279,7 +279,7 @@ class Ui_Dialog(object):
         self.passwordLabel.setText(_translate("Dialog", "密码"))
         self.cookieLabel.setText(_translate("Dialog", "Cookie"))
         self.cookieLineEdit.setPlaceholderText(_translate("Dialog", "选填"))
-        self.cardConfigGroupBox.setTitle(_translate("Dialog", "卡片设置"))
+        self.cardConfigGroupBox.setTitle(_translate("Dialog", "卡片设置（TODO）"))
         self.sentenceCheckBox.setText(_translate("Dialog", "例句"))
         self.imageCheckBox.setText(_translate("Dialog", "图片"))
         self.phraseCheckBox.setText(_translate("Dialog", "短语"))

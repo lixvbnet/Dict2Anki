@@ -488,6 +488,34 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.btnSync.setEnabled(True)
         self.logHandler.flush()
 
+    def get_preferred_pron(self, currentConfig):
+        if currentConfig['noPron']:
+            return 0
+        else:
+            return 2 if self.AmEPronRadioButton.isChecked() else 1
+
+    def get_asset_download_task(self, word: dict, preferred_pron: int):
+        image_task = None
+        term = word['term']
+        if word['image']:
+            imageFilename = default_image_filename(term)
+            image_task = (imageFilename, word['image'])
+        else:
+            logger.info(f"No image for word {term}")
+
+        pron_type, is_fallback = get_pronunciation(word, preferred_pron)
+        if pron_type == 0:
+            if is_fallback:
+                logger.warning(f"No audio for word {term}!")
+            return image_task, None, 0, False
+
+        if is_fallback:
+            logger.warning(f"{PRON_TYPES[preferred_pron]} is missing for word {term}. Downloading {PRON_TYPES[pron_type]} instead.")
+
+        pronFilename = default_audio_filename(term)
+        audio_task = (pronFilename, word[PRON_TYPES[pron_type]])
+        return image_task, audio_task, pron_type, is_fallback
+
     @pyqtSlot()
     def on_btnSync_clicked(self):
         logger.info(f"Sync button clicked")
@@ -533,50 +561,28 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         newWordCount = self.newWordListWidget.count()
 
         # 判断是否需要下载发音
-        if currentConfig['noPron']:
-            logger.info('不下载发音')
-            preferred_pron = None
+        preferred_pron = self.get_preferred_pron(currentConfig)
+        if preferred_pron == 0:
+            logger.info(f"不下载发音")
         else:
-            preferred_pron = 'AmEPron' if self.AmEPronRadioButton.isChecked() else 'BrEPron'
-            logger.info(f'Preferred Pronunciation: {preferred_pron}')
+            logger.info(f'Preferred Pronunciation: {PRON_TYPES[preferred_pron]}')
 
         self.added = 0
         for row in range(newWordCount):
             wordItem = self.newWordListWidget.item(row)
             wordItemData = wordItem.data(Qt.UserRole)
             if wordItemData:
-                word = wordItemData['term']
-                logger.debug(f"wordItemData ({word}): {wordItemData}")
-
-                # Add image download task
-                imageFilename = None
-                if wordItemData['image']:
-                    imageFilename = f"{ASSET_FILENAME_PREFIX}-{word}.jpg"       # to be consistent with 4.x
-                    imagesDownloadTasks.append((imageFilename, wordItemData['image'],))
-                else:
-                    logger.info(f"No image for word {word}")
-
-                # Add audio download task
-                whichPron = preferred_pron
-                pronFilename = None
-                if whichPron:
-                    has_pron = True
-                    if not wordItemData.get(whichPron):     # whichPron is missing
-                        newPron = 'AmEPron' if whichPron == 'BrEPron' else 'BrEPron'
-                        if not wordItemData.get(newPron):   # newPron is also missing
-                            has_pron = False
-                            logger.warning(f"No audio for word {word}!")
-                        else:                               # whichPron is missing, but newPron is present
-                            has_pron = True
-                            logger.warning(f"{whichPron} is missing for word {word}. Downloading {newPron} instead.")
-                            whichPron = newPron
-                    if has_pron:
-                        # pronFilename = f"{whichPron}_{wordItemData['term']}.mp3"
-                        pronFilename = f"{ASSET_FILENAME_PREFIX}-{word}.mp3"    # to be consistent with 4.x
-                        audiosDownloadTasks.append((pronFilename, wordItemData[whichPron],))
+                term = wordItemData['term']
+                logger.debug(f"wordItemData ({term}): {wordItemData}")
+                # Add asset download task (image and audio)
+                image_task, audio_task, pron_type, is_fallback = self.get_asset_download_task(wordItemData, preferred_pron)
+                if image_task:
+                    imagesDownloadTasks.append(image_task)
+                if audio_task:
+                    audiosDownloadTasks.append(audio_task)
 
                 # add note
-                addNoteToDeck(deck, model, currentConfig, wordItemData, imageFilename, whichPron, pronFilename)
+                addNoteToDeck(deck, model, currentConfig, wordItemData, PRON_TYPES[pron_type])
                 self.added += 1
         mw.reset()
 
@@ -643,6 +649,32 @@ class Windows(QDialog, mainUI.Ui_Dialog):
     def on_btnDownloadMissingAssets_clicked(self):
         # tooltip("btnDownloadMissingAssets Clicked!")
         logger.info(f"btnDownloadMissingAssets Clicked!")
+
+        # model = mw.col.models.by_name(MODEL_NAME)
+        # fields_map = mw.col.models.field_map(model)
+        # logger.info(f"fields_map: {fields_map}")
+
+        noteIds = mw.col.findNotes(f"note:{MODEL_NAME}")
+        logger.info(f"Found ({len(noteIds)}) notes of type '{MODEL_NAME}'")
+
+        noteId = noteIds[0]
+        note = mw.col.getNote(noteId)
+        # logger.info(f"note: {note.fields}")
+        # logger.info(f"keys: {note.keys()}")
+        # logger.info(f"values: {note.values()}")
+        logger.info(f"Note is actually a dict!  Get a field of the note: {note['definition']}")
+
+        # for i, f in enumerate(note.fields):
+        #     logger.info(f"[field {i}]: {f}")
+
+        self.logHandler.flush()
+
+        # model = mw.col.models.by_name(MODEL_NAME)
+        # notes = mw.col.db.list(f"select sfld from notes where mid = ?", model['id'])
+        # logger.info(f"notes({len(notes)}): {notes}")
+        #
+        # note = notes[0]
+        # logger.info(f"{type(note)}: ")
 
     @pyqtSlot()
     def on_btnExportAudio_clicked(self):
