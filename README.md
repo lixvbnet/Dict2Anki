@@ -2,7 +2,8 @@
 
 This is a fork of Dict2Anki.
 
-注：当前为Fork版本，根据我的个人喜好做了一些修改。原插件地址: https://ankiweb.net/shared/info/1284759083
+注：当前为Fork版本，根据我的个人喜好做了一些修改。
+> 插件地址：https://ankiweb.net/shared/info/831172822 原插件地址: https://ankiweb.net/shared/info/1284759083
 
 
 本fork所做的修改：
