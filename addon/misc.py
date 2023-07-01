@@ -27,7 +27,6 @@ class SimpleWord(ABC):
         return self.term
 
 
-
 class AbstractDictionary(ABC):
 
     @staticmethod

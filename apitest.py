@@ -48,16 +48,16 @@ def youdao_get_words() -> [SimpleWord]:
 
 
 def youdao_test():
+    term = "provably"      # term to query
     words = youdao_get_words()
-    # word = words[len(words)-1]   # here just query last word
     word = None
     for w in words:
-        if w.term == 'provably':
+        if w.term == term:
             word = w
 
     if word is None:
-        print(f"Error: word not found!")
-        return
+        print(f"[WARN] word not found! Manually assemble a SimpleWord")
+        word = SimpleWord(term)
 
     print(f"================ Query word {word} ================")
     print(word.toString())

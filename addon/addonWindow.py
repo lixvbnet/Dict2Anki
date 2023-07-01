@@ -103,8 +103,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         if self.assetDownloadThread.isRunning():
             self.assetDownloadThread.requestInterruption()
-            self.workerThread.quit()
-            self.workerThread.wait()
+            self.assetDownloadThread.quit()
+            self.assetDownloadThread.wait()
 
         event.accept()
 
@@ -586,26 +586,10 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                 self.added += 1
         mw.reset()
 
-        logger.info(f"Image download tasks: {imagesDownloadTasks}")
-        logger.info(f"Audio download tasks: {audiosDownloadTasks}")
-
+        # download assets
         if imagesDownloadTasks or audiosDownloadTasks:
             self.btnSync.setEnabled(False)
-            self.progressBar.setValue(0)
-            self.progressBar.setMaximum(len(imagesDownloadTasks) + len(audiosDownloadTasks))
-            if self.assetDownloadThread is not None:
-                self.assetDownloadThread.requestInterruption()
-                self.assetDownloadThread.quit()
-                self.assetDownloadThread.wait()
-
-            self.assetDownloadThread = QThread(self)
-            self.assetDownloadThread.start()
-            self.assetDownloadWorker = AssetDownloadWorker(mw.col.media.dir(), imagesDownloadTasks, audiosDownloadTasks)
-            self.assetDownloadWorker.moveToThread(self.assetDownloadThread)
-            self.assetDownloadWorker.tick.connect(lambda: self.progressBar.setValue(self.progressBar.value() + 1))
-            self.assetDownloadWorker.start.connect(self.assetDownloadWorker.run)
-            self.assetDownloadWorker.done.connect(self.on_assetsDownloadDone)
-            self.assetDownloadWorker.start.emit()
+        self.downloadAssets(imagesDownloadTasks, audiosDownloadTasks, self.on_assetsDownloadDone)
 
         self.newWordListWidget.clear()
 
@@ -637,6 +621,26 @@ class Windows(QDialog, mainUI.Ui_Dialog):
     def printSyncReport(self):
         logger.info(f'Added: {self.added}, Deleted: {self.deleted}')
 
+    def downloadAssets(self, imagesDownloadTasks, audiosDownloadTasks, done_func):
+        logger.info(f"Image download tasks({len(imagesDownloadTasks)}): {imagesDownloadTasks}")
+        logger.info(f"Audio download tasks({len(audiosDownloadTasks)}): {audiosDownloadTasks}")
+        if imagesDownloadTasks or audiosDownloadTasks:
+            self.progressBar.setValue(0)
+            self.progressBar.setMaximum(len(imagesDownloadTasks) + len(audiosDownloadTasks))
+            if self.assetDownloadThread is not None:
+                self.assetDownloadThread.requestInterruption()
+                self.assetDownloadThread.quit()
+                self.assetDownloadThread.wait()
+
+            self.assetDownloadThread = QThread(self)
+            self.assetDownloadThread.start()
+            self.assetDownloadWorker = AssetDownloadWorker(mw.col.media.dir(), imagesDownloadTasks, audiosDownloadTasks)
+            self.assetDownloadWorker.moveToThread(self.assetDownloadThread)
+            self.assetDownloadWorker.tick.connect(lambda: self.progressBar.setValue(self.progressBar.value() + 1))
+            self.assetDownloadWorker.start.connect(self.assetDownloadWorker.run)
+            self.assetDownloadWorker.done.connect(done_func)
+            self.assetDownloadWorker.start.emit()
+
     @pyqtSlot()
     def on_assetsDownloadDone(self):
         self.assetDownloadThread.quit()
@@ -645,36 +649,97 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.printSyncReport()
         self.logHandler.flush()
 
+    tmp_currentConfig = None
+    """for DownloadMissingAssets only"""
+
     @pyqtSlot()
     def on_btnDownloadMissingAssets_clicked(self):
-        # tooltip("btnDownloadMissingAssets Clicked!")
-        logger.info(f"btnDownloadMissingAssets Clicked!")
-
+        """Download missing assets for all notes of type Dict2Anki in ALL decks"""
+        self.tmp_currentConfig = self.getAndSaveCurrentConfig()
         # model = mw.col.models.by_name(MODEL_NAME)
-        # fields_map = mw.col.models.field_map(model)
-        # logger.info(f"fields_map: {fields_map}")
-
         noteIds = mw.col.findNotes(f"note:{MODEL_NAME}")
         logger.info(f"Found ({len(noteIds)}) notes of type '{MODEL_NAME}'")
 
-        noteId = noteIds[0]
-        note = mw.col.getNote(noteId)
-        # logger.info(f"note: {note.fields}")
-        # logger.info(f"keys: {note.keys()}")
-        # logger.info(f"values: {note.values()}")
-        logger.info(f"Note is actually a dict!  Get a field of the note: {note['definition']}")
+        # find words that have missing assets
+        wordList: [(SimpleWord, int)] = []      # [(SimpleWord, row)]
+        for noteId in noteIds:
+            note = mw.col.getNote(noteId)
+            term = note['term']
+            media_dir = mw.col.media.dir()
+            image_filepath = os.path.join(media_dir, default_image_filename(term))
+            audio_filepath = os.path.join(media_dir, default_audio_filename(term))
+            if (note['image'] and not os.path.exists(image_filepath)) \
+                    or (note['pronunciation'] and not os.path.exists(audio_filepath)):
+                # logger.warning(f"image or audio file is missing for [{term}]")
+                word, row = SimpleWord(term), len(wordList)
+                wordList.append((word, row))
+        terms = [w.term for w, r in wordList]
+        if not terms:
+            logger.info(f"[All clear] Nothing to do.")
+            self.logHandler.flush()
+            tooltip(f"Nothing to do.")
+            return
 
-        # for i, f in enumerate(note.fields):
-        #     logger.info(f"[field {i}]: {f}")
-
+        logger.info(f"{len(terms)} words have missing assets: {terms}")
         self.logHandler.flush()
+        if not askUser(f"{len(terms)} words have missing assets. Download now?"):
+            logger.info(f"Aborted")
+            self.logHandler.flush()
+            return
 
-        # model = mw.col.models.by_name(MODEL_NAME)
-        # notes = mw.col.db.list(f"select sfld from notes where mid = ?", model['id'])
-        # logger.info(f"notes({len(notes)}): {notes}")
-        #
-        # note = notes[0]
-        # logger.info(f"{type(note)}: ")
+        # query words
+        self.querySuccessDict = {}
+        self.queryFailedDict = {}
+
+        # self.progressBar.setMaximum(len(wordList))
+        self.queryWorker = QueryWorker(wordList, apis[self.tmp_currentConfig['selectedApi']])
+        self.queryWorker.moveToThread(self.workerThread)
+        self.queryWorker.thisRowDone.connect(self.on_thisRowDone)
+        self.queryWorker.thisRowFailed.connect(self.on_thisRowFailed)
+        # self.queryWorker.tick.connect(lambda: self.progressBar.setValue(self.progressBar.value() + 1))
+        self.queryWorker.allQueryDone.connect(self.__on_allQueryDone_DownloadMissingAssets)
+        self.queryWorker.start.connect(self.queryWorker.run)
+        self.queryWorker.start.emit()
+
+
+    @pyqtSlot()
+    def __on_allQueryDone_DownloadMissingAssets(self):
+        """for btnDownloadMissingAssets"""
+        logger.info(f"[Query complete] Success: {len(self.querySuccessDict)}, Failed: {len(self.queryFailedDict)}")
+        if self.queryFailedDict:
+            logger.warning(f"{len(self.queryFailedDict)} words query failed.")
+            if not askUser(f"{len(self.queryFailedDict)} words query failed. Continue anyway?"):
+                logger.info(f"Aborted")
+                return
+        # download missing assets
+        logger.info(f"------------------------------------------")
+        logger.info(f"Iterate over query results and download missing assets")
+        self.logHandler.flush()
+        preferred_pron = self.get_preferred_pron(self.tmp_currentConfig)
+        if preferred_pron == 0:
+            logger.info(f"不下载发音")
+        else:
+            logger.info(f'Preferred Pronunciation: {PRON_TYPES[preferred_pron]}')
+
+        imagesDownloadTasks = []
+        audiosDownloadTasks = []
+        for row, word in self.querySuccessDict.items():
+            term = word['term']
+            logger.debug(f"word ({term}): {word}")
+            # Add asset download task (image and audio)
+            image_task, audio_task, pron_type, is_fallback = self.get_asset_download_task(word, preferred_pron)
+            if image_task:
+                imagesDownloadTasks.append(image_task)
+            if audio_task:
+                audiosDownloadTasks.append(audio_task)
+        self.downloadAssets(imagesDownloadTasks, audiosDownloadTasks, self.__on_assetsDownloadDone_DownloadMissingAssets)
+
+    @pyqtSlot()
+    def __on_assetsDownloadDone_DownloadMissingAssets(self):
+        """for btnDownloadMissingAssets"""
+        self.assetDownloadThread.quit()
+        logger.info(f"Download complete!")
+        self.logHandler.flush()
 
     @pyqtSlot()
     def on_btnExportAudio_clicked(self):
