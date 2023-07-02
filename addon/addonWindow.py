@@ -659,6 +659,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         # model = mw.col.models.by_name(MODEL_NAME)
         noteIds = mw.col.findNotes(f"note:{MODEL_NAME}")
         logger.info(f"Found ({len(noteIds)}) notes of type '{MODEL_NAME}'")
+        self.logHandler.flush()
 
         # find words that have missing assets
         wordList: [(SimpleWord, int)] = []      # [(SimpleWord, row)]
@@ -781,7 +782,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
     @pyqtSlot()
     def on_btnCheckTemplates_clicked(self):
-        logger.info(f"Checking Card Templates for model f{MODEL_NAME}...")
+        logger.info(f"Checking Card Templates for model {MODEL_NAME}...")
         model = mw.col.models.byName(MODEL_NAME)
         if not model:
             showInfo(f"Model (Note Type) '{MODEL_NAME}' does not exist! Please Sync first!")

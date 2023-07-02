@@ -95,7 +95,7 @@ class Youdao(AbstractDictionary):
         """
         wordList = []
         try:
-            logger.info(f'获取单词本(f{groupName}-{groupId})第:{pageNo}页')
+            logger.info(f'获取单词本({groupName}-{groupId})第:{pageNo}页')
             r = self.session.get(
                 'http://dict.youdao.com/wordbook/webapi/words',
                 timeout=self.timeout,

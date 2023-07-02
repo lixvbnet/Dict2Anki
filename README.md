@@ -9,6 +9,11 @@ This is a fork of Dict2Anki.
 本fork所做的修改：
 
 * 性能优化，修复已知问题
+* 改用4.x卡片模版
 * 添加其他功能
+    - Download Missing Assets
+    - Export Audio (macOS only)
+    - Add/Delete Backwards Template
+    - Check Card Templates
 
 ⚠️ 部分功能仍处于开发阶段。

@@ -94,7 +94,7 @@ class Eudict(AbstractDictionary):
             '_': int(time.time()) * 1000,
         }
         try:
-            logger.info(f'获取单词本(f{groupName}-{groupId})第:{pageNo + 1}页')
+            logger.info(f'获取单词本({groupName}-{groupId})第:{pageNo + 1}页')
             r = self.session.post(
                 url='https://my.eudic.net/StudyList/WordsDataSource',
                 timeout=self.timeout,

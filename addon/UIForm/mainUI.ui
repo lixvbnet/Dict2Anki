@@ -395,7 +395,7 @@
           <item row="0" column="0">
            <widget class="QPushButton" name="btnBackwardTemplate">
             <property name="text">
-             <string>Add/Delete Backward Template</string>
+             <string>Add/Delete Backwards Template</string>
             </property>
            </widget>
           </item>

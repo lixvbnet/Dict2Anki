@@ -286,7 +286,7 @@ class Ui_Dialog(object):
         self.pronunciationCheckBox.setText(_translate("Dialog", "音频"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.settingTab), _translate("Dialog", "设置"))
         self.dangerZoneGroupBox.setTitle(_translate("Dialog", "Danger Zone"))
-        self.btnBackwardTemplate.setText(_translate("Dialog", "Add/Delete Backward Template"))
+        self.btnBackwardTemplate.setText(_translate("Dialog", "Add/Delete Backwards Template"))
         self.btnCheckTemplates.setText(_translate("Dialog", "Check Card Templates"))
         self.utilitiesGroupBox.setTitle(_translate("Dialog", "Utilities"))
         self.btnDownloadMissingAssets.setToolTip(_translate("Dialog", "Check words in selected deck and download missing assets (images, audio files, etc.)"))
