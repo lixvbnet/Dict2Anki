@@ -46,23 +46,22 @@ def getOrCreateDeck(deckName, model):
     return deck
 
 
-def getOrCreateModel(modelName, force=False):
-    """Create Note Model (Note Type)"""
+def getOrCreateModel(modelName, recreate=False) -> (object, bool, bool):
+    """Create Note Model (Note Type). return: (model, newCreated, fieldsUpdated)"""
     model = mw.col.models.byName(modelName)
     if model:
-        if checkModelFields(model):
-            return model
-        if force:   # Dangerous action!!!  It would delete model, AND all its cards/notes!
-            logger.warning(f"Force deleting model {modelName}")
+        if not recreate:
+            updated = mergeModelFields(model)
+            return model, False, updated
+        else:       # Dangerous action!!!  It would delete model, AND all its cards/notes!
+            logger.warning(f"Force deleting and recreating model {modelName}")
             mw.col.models.rem(model)
-        else:
-            raise RuntimeError(f"Model '{modelName}' already exists but has different fields!")
 
     logger.info(f'Creating model {modelName}')
     newModel = mw.col.models.new(modelName)
     for field in MODEL_FIELDS:
         mw.col.models.addField(newModel, mw.col.models.newField(field))
-    return newModel
+    return newModel, True, True
 
 
 def getOrCreateCardTemplate(modelObject, cardTemplateName, qfmt, afmt, css, add=True):
@@ -101,17 +100,47 @@ def deleteBackwardsCardTemplate(modelObject, backwardsTemplateObject):
     mw.col.models.save(modelObject)
 
 
-def checkModelFields(modelObject) -> bool:
-    """Check if model fields are as expected"""
+def checkModelFields(modelObject) -> (bool, set, set):
+    """Check if model fields are as expected. :return: (ok, unknown_fields, missing_fields)"""
     current_fields = [f['name'] for f in modelObject['flds']]
     expected_fields = MODEL_FIELDS
-    if set(current_fields) == set(expected_fields):
-        return True
+
+    set_current = set(current_fields)
+    set_expected = set(expected_fields)
+    if set_current == set_expected:
+        return True, set(), set()
     else:
-        logger.warning(f"Model fields are not as expected")
-        logger.warning(f"current_fields: {current_fields}")
-        logger.warning(f"expected_fields: {expected_fields}")
+        unknown_fields = set_current - set_expected
+        missing_fields = set_expected - set_current
+        return False, unknown_fields, missing_fields
+
+
+def mergeModelFields(modelObject) -> bool:
+    """Merge model fields. Only need to do updates when there are missing fields. return: updated"""
+    ok, unknown_fields, missing_fields = checkModelFields(modelObject)
+    if ok or (not missing_fields):
         return False
+    logger.warning(f"unknown fields: {unknown_fields}")
+    logger.warning(f"missing fields: {missing_fields}")
+    logger.info(f"Merge model fields...")
+    fields = modelObject['flds']
+    # field_map = {f["name"]: (f["ord"], f) for f in fields}
+    field_map = mw.col.models.field_map(modelObject)
+
+    fields.clear()
+    logger.info(f"step 1. add MODEL_FIELDS: {MODEL_FIELDS}")
+    for f_name in MODEL_FIELDS:
+        if f_name in field_map:
+            index, field = field_map[f_name]
+        else:
+            field = mw.col.models.newField(f_name)
+        fields.append(field)
+    logger.info(f"step 2. add unknown_fields: {unknown_fields}")
+    for f_name in unknown_fields:
+        index, field = field_map[f_name]
+        fields.append(field)
+    mw.col.models.save(modelObject)
+    return True
 
 
 def checkModelCardTemplates(modelObject) -> bool:

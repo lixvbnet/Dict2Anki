@@ -2,7 +2,7 @@ VERSION = 'v6.3.2'
 RELEASE_URL = 'https://github.com/lixvbnet/Dict2Anki'
 VERSION_CHECK_API = 'https://api.github.com/repos/lixvbnet/Dict2Anki/releases/latest'
 WINDOW_TITLE = f'Dict2Anki {VERSION}'
-MODEL_NAME = f'Dict2Anki'
+MODEL_NAME = f'Dict2Anki-dev'
 
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'
 HEADERS = {
@@ -23,12 +23,15 @@ LOG_FLUSH_INTERVAL = 3      # seconds
 # continue to use Dict2Anki 4.x model
 ASSET_FILENAME_PREFIX = "MG"
 MODEL_FIELDS = [
-    'term', 'definition', 'uk', 'us',
+    'term', 'definition',
+    'definition_en',
+    'uk', 'us',
     'phrase0', 'phrase1', 'phrase2', 'phrase_explain0', 'phrase_explain1', 'phrase_explain2',
     'sentence0', 'sentence1', 'sentence2', 'sentence_explain0', 'sentence_explain1', 'sentence_explain2',
     'pplaceHolder0', 'pplaceHolder1', 'pplaceHolder2',
     'splaceHolder0', 'splaceHolder1', 'splaceHolder2',
     'image', 'pronunciation',
+    'group', 'modifiedTime', 'exam_type',
 ]
 
 # Normal card template
@@ -44,6 +47,7 @@ NORMAL_CARD_TEMPLATE_QFMT = """\
                 <span class="phonetic">US[{{us}}]</span>
             </div>
             <div class="definition">Tap To View</div>
+            <div class="definition_en"></div>
         </td>
         <td style="width: 33%;">
             {{image}}
@@ -73,6 +77,7 @@ NORMAL_CARD_TEMPLATE_AFMT = """\
                 <span class="phonetic">US[{{us}}]</span>
             </div>
             <div class="definition">{{definition}}</div>
+            <div class="definition_en"></div>
         </td>
         <td style="width: 33%;">
             {{image}}

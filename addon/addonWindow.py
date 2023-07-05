@@ -533,9 +533,10 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         # create Note Type/Model
         logger.info(f"Create Note Type/Model")
         self.logHandler.flush()
+        newCreated, fieldsUpdated = True, True
         try:
-            model = getOrCreateModel(MODEL_NAME)
-        except RuntimeError as err:
+            model, newCreated, fieldsUpdated = getOrCreateModel(MODEL_NAME)
+        except Exception as err:
             logger.warning(err)
             if not askUser(f"{err}\nDeleting it would delete ALL its cards and notes!!! Continue?", defaultno=True):
                 logger.info("Aborted")
@@ -546,12 +547,17 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                 self.logHandler.flush()
                 return
             # force delete the existing model
-            model = getOrCreateModel(MODEL_NAME, force=True)
+            model = getOrCreateModel(MODEL_NAME, recreate=True)
 
-        # create 'Normal' card template (card type)
-        getOrCreateNormalCardTemplate(model)
-        # create 'Backwards' card template (card type)
-        # getOrCreateBackwardsCardTemplate(model)
+        if newCreated:
+            # create 'Normal' card template (card type)
+            getOrCreateNormalCardTemplate(model)
+            # create 'Backwards' card template (card type)
+            # getOrCreateBackwardsCardTemplate(model)
+        else:                   # existing model
+            if fieldsUpdated:   # existing model, fields have been updated/merged
+                resetModelCardTemplates(model)
+
 
         # create deck
         deck = getOrCreateDeck(self.deckComboBox.currentText(), model=model)
@@ -789,10 +795,17 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             return
 
         logger.info(f"model: {json.dumps(model)}")
-        if not checkModelFields(model):
-            showInfo(f"Model fields have been changed! Please Sync again!")
-            return
+        logger.info(f"Checking fields...")
+        self.logHandler.flush()
+        ok, unknown_fields, missing_fields = checkModelFields(model)
+        if not ok and missing_fields:
+            if not askUser(f"Model fields are not as expected. Merge now?", defaultno=True):
+                logger.info(f"Aborted")
+                self.logHandler.flush()
+                return
+            mergeModelFields(model)
 
+        logger.info(f"Checking card templates...")
         if checkModelCardTemplates(model) and checkModelCardCSS(model):
             logger.info(f"No changes detected.")
             self.logHandler.flush()
