@@ -217,10 +217,10 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str, existin
     if not word:
         logger.warning(f'查询结果{word} 异常，忽略')
         return
-    model['did'] = deck['id']
 
     isNewNote = (existing_note is None)
     if isNewNote:
+        model['did'] = deck['id']
         note = anki.notes.Note(mw.col, model)   # create new note
     else:
         note = existing_note                    # existing note
@@ -327,7 +327,8 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str, existin
 
     if isNewNote:
         mw.col.addNote(note)
+        logger.info(f"添加笔记{term}")
     else:
         mw.col.update_note(note)
+        logger.info(f"更新笔记{term}")
     mw.col.reset()
-    logger.info(f"添加笔记{term}")

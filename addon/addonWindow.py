@@ -558,7 +558,6 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             if fieldsUpdated:   # existing model, fields have been updated/merged
                 resetModelCardTemplates(model)
 
-
         # create deck
         deck = getOrCreateDeck(self.deckComboBox.currentText(), model=model)
 
@@ -657,9 +656,12 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
     tmp_currentConfig = None
     """for DownloadMissingAssets only"""
+    tmp_noteDict: dict = {}           # term -> Note
+    """for DownloadMissingAssets only"""
 
     @pyqtSlot()
     def on_btnDownloadMissingAssets_clicked(self):
+        self.tmp_noteDict = {}
         """Download missing assets for all notes of type Dict2Anki in ALL decks"""
         self.tmp_currentConfig = self.getAndSaveCurrentConfig()
         # model = mw.col.models.by_name(MODEL_NAME)
@@ -667,32 +669,52 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         logger.info(f"Found ({len(noteIds)}) notes of type '{MODEL_NAME}'")
         self.logHandler.flush()
 
-        # find words that have missing assets
+        if not askUser(f"This operation will fill missing field values and download images/audios for notes of type '{MODEL_NAME}' ({len(noteIds)}). Continue?", defaultno=True):
+            logger.info(f"Aborted")
+            self.logHandler.flush()
+            return
+
+        # load all notes, and generate word list, as well as note dict
         wordList: [(SimpleWord, int)] = []      # [(SimpleWord, row)]
         for noteId in noteIds:
             note = mw.col.getNote(noteId)
             term = note['term']
-            media_dir = mw.col.media.dir()
-            image_filepath = os.path.join(media_dir, default_image_filename(term))
-            audio_filepath = os.path.join(media_dir, default_audio_filename(term))
-            if (note['image'] and not os.path.exists(image_filepath)) \
-                    or (note['pronunciation'] and not os.path.exists(audio_filepath)):
-                # logger.warning(f"image or audio file is missing for [{term}]")
-                word, row = SimpleWord(term), len(wordList)
-                wordList.append((word, row))
-        terms = [w.term for w, r in wordList]
-        if not terms:
-            logger.info(f"[All clear] Nothing to do.")
+            self.tmp_noteDict[term] = note
+            word, row = SimpleWord(term), len(wordList)
+            wordList.append((word, row))
+
+        if not wordList:
+            logger.info(f"No words.")
             self.logHandler.flush()
-            tooltip(f"Nothing to do.")
+            tooltip(f"No words.")
             return
 
-        logger.info(f"{len(terms)} words have missing assets: {terms}")
-        self.logHandler.flush()
-        if not askUser(f"{len(terms)} words have missing assets. Download now?"):
-            logger.info(f"Aborted")
-            self.logHandler.flush()
-            return
+        # # find words that have missing assets
+        # wordList: [(SimpleWord, int)] = []      # [(SimpleWord, row)]
+        # for noteId in noteIds:
+        #     note = mw.col.getNote(noteId)
+        #     term = note['term']
+        #     media_dir = mw.col.media.dir()
+        #     image_filepath = os.path.join(media_dir, default_image_filename(term))
+        #     audio_filepath = os.path.join(media_dir, default_audio_filename(term))
+        #     if (note['image'] and not os.path.exists(image_filepath)) \
+        #             or (note['pronunciation'] and not os.path.exists(audio_filepath)):
+        #         # logger.warning(f"image or audio file is missing for [{term}]")
+        #         word, row = SimpleWord(term), len(wordList)
+        #         wordList.append((word, row))
+        # terms = [w.term for w, r in wordList]
+        # if not terms:
+        #     logger.info(f"[All clear] Nothing to do.")
+        #     self.logHandler.flush()
+        #     tooltip(f"Nothing to do.")
+        #     return
+
+        # logger.info(f"{len(terms)} words have missing assets: {terms}")
+        # self.logHandler.flush()
+        # if not askUser(f"{len(terms)} words have missing assets. Download now?"):
+        #     logger.info(f"Aborted")
+        #     self.logHandler.flush()
+        #     return
 
         # query words
         self.querySuccessDict = {}
@@ -718,9 +740,9 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             if not askUser(f"{len(self.queryFailedDict)} words query failed. Continue anyway?"):
                 logger.info(f"Aborted")
                 return
-        # download missing assets
+        # update notes (fill missing field values), and download missing assets
         logger.info(f"------------------------------------------")
-        logger.info(f"Iterate over query results and download missing assets")
+        logger.info(f"Iterate over query results: update notes (fill missing field values), and download missing assets")
         self.logHandler.flush()
         preferred_pron = self.get_preferred_pron(self.tmp_currentConfig)
         if preferred_pron == 0:
@@ -739,6 +761,12 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                 imagesDownloadTasks.append(image_task)
             if audio_task:
                 audiosDownloadTasks.append(audio_task)
+
+            # update note (fill missing field values)
+            existing_note = self.tmp_noteDict[term]
+            addNoteToDeck(None, None, self.tmp_currentConfig, word, PRON_TYPES[pron_type], existing_note, False)
+        mw.reset()
+        # download assets
         self.downloadAssets(imagesDownloadTasks, audiosDownloadTasks, self.__on_assetsDownloadDone_DownloadMissingAssets)
 
     @pyqtSlot()
