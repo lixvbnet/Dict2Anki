@@ -12,6 +12,7 @@ This is a fork of Dict2Anki.
 * 改用4.x卡片模版
 * 添加其他功能
     - Download Missing Assets
+    - Fill Missing Values
     - Export Audio (macOS only)
     - Add/Delete Backwards Template
     - Check Card Templates
