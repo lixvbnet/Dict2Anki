@@ -18,11 +18,11 @@
   ],
 
   "briefDefinition": true,
-  "enDefinition": true,
   "noPron": false,
   "BrEPron": false,
   "AmEPron": true,
 
+  "definition_en": true,
   "image": true,
   "pronunciation": true,
   "phrase": true,

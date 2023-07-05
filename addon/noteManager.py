@@ -207,6 +207,28 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str):
     term = word['term']
     note['term'] = term
 
+    # ================================== Required fields ==================================
+    # 1. Required fields are always included in Anki cards and cannot be toggled off
+    # 2. Always add to note if it has a value
+
+    # group (bookName)
+    if word['bookName']:
+        note['group'] = word['bookName']
+
+    # modifiedTime
+    if word['modifiedTime']:    # int
+        note['modifiedTime'] = str(word['modifiedTime'])
+
+    # exam_type
+    if word['exam_type']:       # [str]
+        note['exam_type'] = str(word['exam_type'])
+
+    # phonetic
+    if word['BrEPhonetic']:
+        note['uk'] = word['BrEPhonetic']
+    if word['AmEPhonetic']:
+        note['us'] = word['AmEPhonetic']
+
     # definition
     definitions = []
     if config['briefDefinition'] and word['definition_brief']:   # prefer brief definition
@@ -215,24 +237,20 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str):
     if (not definitions) and word['definition']:
         definitions.extend(word['definition'])          # [str]
 
-    if config['enDefinition'] and word['definition_en']:
-        definitions.extend(word['definition_en'])       # [str]
-
     if definitions:
         note['definition'] = '<br>\n'.join(definitions)
     else:
         logger.warning(f"NO DEFINITION FOR WORD {word['term']}!!!")
 
-    # phonetic
-    if word['BrEPhonetic']:
-        note['uk'] = word['BrEPhonetic']
-    if word['AmEPhonetic']:
-        note['us'] = word['AmEPhonetic']
-
-    # Optional fields:
+    # ================================== Optional fields ==================================
     # 1. Ignore "query settings"
     # 2. Always add to note if it has a value
     # 3. Toggle visibility by dynamically updating card template
+
+    # definition_en
+    if config['definition_en'] and word['definition_en']:
+        note['definition_en'] = '<br>\n'.join(word['definition_en'])
+
     # image
     if word['image']:
         imageFilename = default_image_filename(term)
@@ -243,11 +261,13 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str):
         pronFilename = default_audio_filename(term)
         note['pronunciation'] = f"[sound:{pronFilename}]"
 
+    # phrase
     if word['phrase']:
         for i, phrase_tuple in enumerate(word['phrase'][:3]):       # at most 3 phrases
             note[f'phrase{i}'], note[f'phrase_explain{i}'] = phrase_tuple
             note[f'pplaceHolder{i}'] = "Tap To View"
 
+    # sentence
     if word['sentence']:
         for i, sentence_tuple in enumerate(word['sentence'][:3]):   # at most 3 sentences
             note[f'sentence{i}'], note[f'sentence_explain{i}'] = sentence_tuple

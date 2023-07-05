@@ -77,7 +77,7 @@ NORMAL_CARD_TEMPLATE_AFMT = """\
                 <span class="phonetic">US[{{us}}]</span>
             </div>
             <div class="definition">{{definition}}</div>
-            <div class="definition_en"></div>
+            <div class="definition_en">{{definition_en}}</div>
         </td>
         <td style="width: 33%;">
             {{image}}
@@ -147,6 +147,7 @@ BACKWARDS_CARD_TEMPLATE_QFMT = """\
                 <span class="phonetic">US[Tap To View]</span>
             </div>
             <div class="definition">{{definition}}</div>
+            <div class="definition_en">{{definition_en}}</div>
         </td>
         <td style="width: 33%;">
             {{image}}

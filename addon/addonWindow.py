@@ -147,12 +147,12 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         # query settings
         self.briefDefinitionCheckBox.setChecked(config['briefDefinition'])
-        self.enDefinitionCheckBox.setChecked(config['enDefinition'])
         self.noPronRadioButton.setChecked(config['noPron'])
         self.BrEPronRadioButton.setChecked(config['BrEPron'])
         self.AmEPronRadioButton.setChecked(config['AmEPron'])
 
         # card settings
+        self.definitionEnCheckBox.setChecked(config['definition_en'])
         self.imageCheckBox.setChecked(config['image'])
         self.pronunciationCheckBox.setChecked(config['pronunciation'])
         self.phraseCheckBox.setChecked(config['phrase'])
@@ -184,12 +184,12 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
             # query settings
             briefDefinition=self.briefDefinitionCheckBox.isChecked(),
-            enDefinition=self.enDefinitionCheckBox.isChecked(),
             noPron=self.noPronRadioButton.isChecked(),
             BrEPron=self.BrEPronRadioButton.isChecked(),
             AmEPron=self.AmEPronRadioButton.isChecked(),
 
             # note settings
+            definition_en=self.definitionEnCheckBox.isChecked(),
             image=self.imageCheckBox.isChecked(),
             pronunciation=self.pronunciationCheckBox.isChecked(),
             phrase=self.phraseCheckBox.isChecked(),
