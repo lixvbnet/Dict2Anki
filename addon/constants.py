@@ -78,6 +78,7 @@ NORMAL_CARD_TEMPLATE_AFMT = """\
             </div>
             <div class="definition">{{definition}}</div>
             <div class="definition_en">{{definition_en}}</div>
+            <div class="exam_type">{{exam_type}}</div>
         </td>
         <td style="width: 33%;">
             {{image}}
@@ -117,6 +118,10 @@ CARD_TEMPLATE_CSS = """\
 }
 .term {
   margin-bottom: -5px;
+}
+.exam_type {
+  margin: 1em 0 0em 0;
+  color: gray;
 }
 .divider {
   margin: 1em 0 1em 0;

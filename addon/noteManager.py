@@ -217,7 +217,7 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str):
 
     # exam_type
     if word['exam_type']:       # [str]
-        note['exam_type'] = str(word['exam_type'])
+        note['exam_type'] = " / ".join(word['exam_type'])
 
     # modifiedTime
     if word['modifiedTime']:    # int
