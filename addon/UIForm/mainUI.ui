@@ -394,7 +394,7 @@
          <property name="title">
           <string>Danger Zone</string>
          </property>
-         <layout class="QFormLayout" name="formLayout_2">
+         <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="0">
            <widget class="QPushButton" name="btnBackwardTemplate">
             <property name="text">
@@ -417,11 +417,11 @@
          <property name="title">
           <string>Utilities</string>
          </property>
-         <layout class="QFormLayout" name="formLayout">
+         <layout class="QGridLayout" name="gridLayout_7">
           <item row="0" column="0">
            <widget class="QPushButton" name="btnDownloadMissingAssets">
             <property name="toolTip">
-             <string>Check words in selected deck and download missing assets (images, audio files, etc.)</string>
+             <string>Check existing notes and download missing assets (images, audio files, etc.)</string>
             </property>
             <property name="text">
              <string>Download Missing Assets</string>
@@ -429,6 +429,16 @@
            </widget>
           </item>
           <item row="0" column="1">
+           <widget class="QPushButton" name="btnFillMissingValues">
+            <property name="toolTip">
+             <string>Check existing notes and fill missing field values</string>
+            </property>
+            <property name="text">
+             <string>Fill Missing Values</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
            <widget class="QPushButton" name="btnExportAudio">
             <property name="toolTip">
              <string>Export all words in selected deck into a single audio file. (macOS only)</string>
