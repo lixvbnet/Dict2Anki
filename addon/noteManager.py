@@ -215,13 +215,13 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str):
     if word['bookName']:
         note['group'] = word['bookName']
 
-    # modifiedTime
-    if word['modifiedTime']:    # int
-        note['modifiedTime'] = str(word['modifiedTime'])
-
     # exam_type
     if word['exam_type']:       # [str]
         note['exam_type'] = str(word['exam_type'])
+
+    # modifiedTime
+    if word['modifiedTime']:    # int
+        note['modifiedTime'] = str(word['modifiedTime'])
 
     # phonetic
     if word['BrEPhonetic']:

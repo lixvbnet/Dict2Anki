@@ -1,4 +1,4 @@
-VERSION = 'v6.3.2'
+VERSION = 'v6.3.5'
 RELEASE_URL = 'https://github.com/lixvbnet/Dict2Anki'
 VERSION_CHECK_API = 'https://api.github.com/repos/lixvbnet/Dict2Anki/releases/latest'
 WINDOW_TITLE = f'Dict2Anki {VERSION}'
@@ -31,7 +31,7 @@ MODEL_FIELDS = [
     'pplaceHolder0', 'pplaceHolder1', 'pplaceHolder2',
     'splaceHolder0', 'splaceHolder1', 'splaceHolder2',
     'image', 'pronunciation',
-    'group', 'modifiedTime', 'exam_type',
+    'group', 'exam_type', 'modifiedTime',
 ]
 
 # Normal card template
