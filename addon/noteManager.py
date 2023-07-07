@@ -286,7 +286,7 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str, existin
     # 3. Toggle visibility by dynamically updating card template
 
     # definition_en
-    if config['definition_en'] and word['definition_en']:
+    if word['definition_en']:
         key, value = 'definition_en', '<br>\n'.join(word['definition_en'])
         setNoteFieldValue(note, key, value, isNewNote, overwrite)
         # note['definition_en'] = '<br>\n'.join(word['definition_en'])

@@ -252,7 +252,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         fg = FieldGroup()
         for field in CARD_SETTINGS:
             if not config[field]:
-                logger.info(f"{field} is turned off. Will remove it from templates.")
+                logger.info(f"FieldGroup: '{field}' is toggled off. Will remove it from templates.")
                 fg.toggleOff(field)
         return fg
 
@@ -583,11 +583,19 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         if newCreated:
             # create 'Normal' card template (card type)
+            logger.info(f"Create card templates for the new created model.")
+            self.logHandler.flush()
             getOrCreateNormalCardTemplate(model, fg)
             # create 'Backwards' card template (card type)
             # getOrCreateBackwardsCardTemplate(model)
-        elif fieldsUpdated or cardSettingsChanged:   # existing model, but fields have been updated/merged, or cardSettingsChanged
-                resetModelCardTemplates(model, fg)
+        else:           # existing model. (Let's make it simple: Reset card templates to default upon every sync.)
+            logger.info(f"Found existing model. Reset card templates to default (FieldGroup settings will be respected).")
+            self.logHandler.flush()
+            resetModelCardTemplates(model, fg)
+        # elif fieldsUpdated:     # existing model, but fields have been updated/merged
+        #     resetModelCardTemplates(model, fg)
+        # else:                   # existing model, and fields have not been updated/merged
+        #     pass
 
         # create deck
         deck = getOrCreateDeck(self.deckComboBox.currentText(), model=model)
