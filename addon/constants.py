@@ -1,8 +1,8 @@
-VERSION = 'v6.3.5'
+VERSION = 'v6.3.6'
 RELEASE_URL = 'https://github.com/lixvbnet/Dict2Anki'
 VERSION_CHECK_API = 'https://api.github.com/repos/lixvbnet/Dict2Anki/releases/latest'
 WINDOW_TITLE = f'Dict2Anki {VERSION}'
-MODEL_NAME = f'Dict2Anki'
+MODEL_NAME = f'Dict2Anki-dev'
 
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'
 HEADERS = {
@@ -11,14 +11,6 @@ HEADERS = {
 
 LOG_BUFFER_CAPACITY = 20    # number of log items
 LOG_FLUSH_INTERVAL = 3      # seconds
-
-# BASIC_OPTION = ['definition', 'sentence', 'phrase', 'image', 'BrEPhonetic', 'AmEPhonetic']  # 顺序和名称不可修改
-# EXTRA_OPTION = ['BrEPron', 'AmEPron', 'noPron']  # 顺序和名称不可修改
-
-# MODEL_FIELDS = [
-#     'term', 'definition', 'sentenceFront', 'sentenceBack', 'phraseFront', 'phraseBack',
-#     'image', 'BrEPhonetic', 'AmEPhonetic', 'BrEPron', 'AmEPron'
-# ]  # 名称不可修改
 
 # continue to use Dict2Anki 4.x model
 ASSET_FILENAME_PREFIX = "MG"
@@ -33,71 +25,154 @@ MODEL_FIELDS = [
     'image', 'pronunciation',
     'group', 'exam_type', 'modifiedTime',
 ]
+CARD_SETTINGS = ['definition_en', 'image', 'pronunciation', 'phrase', 'sentence']
 
-# Normal card template
-NORMAL_CARD_TEMPLATE_NAME = "Normal"
-NORMAL_CARD_TEMPLATE_QFMT = """\
+
+class FieldGroup:
+    def __init__(self):
+        self.definition_en = "{{definition_en}}"
+        self.image = "{{image}}"
+        self.pronunciation = "{{pronunciation}}"
+        self.phrase = [
+            ("{{phrase0}}", "{{phrase_explain0}}", "{{pplaceHolder0}}"),
+            ("{{phrase1}}", "{{phrase_explain1}}", "{{pplaceHolder1}}"),
+            ("{{phrase2}}", "{{phrase_explain2}}", "{{pplaceHolder2}}"),
+        ]
+        self.sentence = [
+            ("{{sentence0}}", "{{sentence_explain0}}", "{{splaceHolder0}}"),
+            ("{{sentence1}}", "{{sentence_explain1}}", "{{splaceHolder1}}"),
+            ("{{sentence2}}", "{{sentence_explain2}}", "{{splaceHolder2}}"),
+        ]
+
+    def toggleOff(self, field):
+        if field not in CARD_SETTINGS:
+            raise RuntimeError(f"Unexpected field: {field}. Must be in {CARD_SETTINGS}!")
+        if field == 'phrase' or field == 'sentence':
+            setattr(self, field, [
+                ("", "", ""),
+                ("", "", ""),
+                ("", "", "")
+            ])
+        else:
+            setattr(self, field, "")
+
+    def toString(self) -> str:
+        return f"definition_en={self.definition_en}, image={self.image}, pronunciation={self.pronunciation}, phrase={self.phrase}, sentence={self.sentence}"
+
+    def __str__(self) -> str:
+        return self.toString()
+
+    def __repr__(self) -> str:
+        return self.toString()
+
+
+def normal_card_template_qfmt(fg: FieldGroup):
+    return f"""\
 <table>
     <tr>
         <td>
-            <h1 class="term">{{term}}</h1>
-            <span>{{pronunciation}}</span>
+            <h1 class="term">{{{{term}}}}</h1>
+            <span>{fg.pronunciation}</span>
             <div class="pronounce">
-                <span class="phonetic">UK[{{uk}}]</span>
-                <span class="phonetic">US[{{us}}]</span>
+                <span class="phonetic">UK[{{{{uk}}}}]</span>
+                <span class="phonetic">US[{{{{us}}}}]</span>
             </div>
             <div class="definition">Tap To View</div>
             <div class="definition_en"></div>
         </td>
         <td style="width: 33%;">
-            {{image}}
+            {fg.image}
         </td>
     </tr>
 </table>
 <div class="divider"></div>
 <table>
-    <tr><td class="phrase">{{phrase0}}</td><td>{{pplaceHolder0}}</td></tr>
-    <tr><td class="phrase">{{phrase1}}</td><td>{{pplaceHolder1}}</td></tr>
-    <tr><td class="phrase">{{phrase2}}</td><td>{{pplaceHolder2}}</td></tr>
+    <tr><td class="phrase">{fg.phrase[0][0]}</td><td>{fg.phrase[0][2]}</td></tr>
+    <tr><td class="phrase">{fg.phrase[1][0]}</td><td>{fg.phrase[1][2]}</td></tr>
+    <tr><td class="phrase">{fg.phrase[2][0]}</td><td>{fg.phrase[2][2]}</td></tr>
 </table>
 <table>
-    <tr><td class="sentence">{{sentence0}}</td><td>{{splaceHolder0}}</td></tr>
-    <tr><td class="sentence">{{sentence1}}</td><td>{{splaceHolder1}}</td></tr>
-    <tr><td class="sentence">{{sentence2}}</td><td>{{splaceHolder2}}</td></tr>
-</table>
-"""
-NORMAL_CARD_TEMPLATE_AFMT = """\
-<table>
-    <tr>
-        <td>
-        <h1 class="term">{{term}}</h1>
-            <span>{{pronunciation}}</span>
-            <div class="pronounce">
-                <span class="phonetic">UK[{{uk}}]</span>
-                <span class="phonetic">US[{{us}}]</span>
-            </div>
-            <div class="definition">{{definition}}</div>
-            <div class="definition_en">{{definition_en}}</div>
-            <div class="exam_type">{{exam_type}}</div>
-        </td>
-        <td style="width: 33%;">
-            {{image}}
-        </td>
-    </tr>
-</table>
-<div class="divider"></div>
-<table>
-    <tr><td class="phrase">{{phrase0}}</td><td>{{phrase_explain0}}</td></tr>
-    <tr><td class="phrase">{{phrase1}}</td><td>{{phrase_explain1}}</td></tr>
-    <tr><td class="phrase">{{phrase2}}</td><td>{{phrase_explain2}}</td></tr>
-</table>
-<table>
-    <tr><td class="sentence">{{sentence0}}</td><td>{{sentence_explain0}}</td></tr>
-    <tr><td class="sentence">{{sentence1}}</td><td>{{sentence_explain1}}</td></tr>
-    <tr><td class="sentence">{{sentence2}}</td><td>{{sentence_explain2}}</td></tr>
+    <tr><td class="sentence">{fg.sentence[0][0]}</td><td>{fg.sentence[0][2]}</td></tr>
+    <tr><td class="sentence">{fg.sentence[1][0]}</td><td>{fg.sentence[1][2]}</td></tr>
+    <tr><td class="sentence">{fg.sentence[2][0]}</td><td>{fg.sentence[2][2]}</td></tr>
 </table>
 """
 
+
+def normal_card_template_afmt(fg: FieldGroup):
+    return f"""\
+<table>
+    <tr>
+        <td>
+        <h1 class="term">{{{{term}}}}</h1>
+            <span>{fg.pronunciation}</span>
+            <div class="pronounce">
+                <span class="phonetic">UK[{{{{uk}}}}]</span>
+                <span class="phonetic">US[{{{{us}}}}]</span>
+            </div>
+            <div class="definition">{{{{definition}}}}</div>
+            <div class="definition_en">{fg.definition_en}</div>
+            <div class="exam_type">{{{{exam_type}}}}</div>
+        </td>
+        <td style="width: 33%;">
+            {fg.image}
+        </td>
+    </tr>
+</table>
+<div class="divider"></div>
+<table>
+    <tr><td class="phrase">{fg.phrase[0][0]}</td><td>{fg.phrase[0][1]}</td></tr>
+    <tr><td class="phrase">{fg.phrase[1][0]}</td><td>{fg.phrase[1][1]}</td></tr>
+    <tr><td class="phrase">{fg.phrase[2][0]}</td><td>{fg.phrase[2][1]}</td></tr>
+</table>
+<table>
+    <tr><td class="sentence">{fg.sentence[0][0]}</td><td>{fg.sentence[0][1]}</td></tr>
+    <tr><td class="sentence">{fg.sentence[1][0]}</td><td>{fg.sentence[1][1]}</td></tr>
+    <tr><td class="sentence">{fg.sentence[2][0]}</td><td>{fg.sentence[2][1]}</td></tr>
+</table>
+"""
+
+
+def backwards_card_template_qfmt(fg: FieldGroup):
+    return f"""\
+<table>
+    <tr>
+        <td>
+        <h1 class="term"></h1>
+            <div class="pronounce">
+                <span class="phonetic">UK[Tap To View]</span>
+                <span class="phonetic">US[Tap To View]</span>
+            </div>
+            <div class="definition">{{{{definition}}}}</div>
+            <div class="definition_en">{fg.definition_en}</div>
+        </td>
+        <td style="width: 33%;">
+            {fg.image}
+        </td>
+    </tr>
+</table>
+<div class="divider"></div>
+<table>
+    <tr><td class="phrase">{fg.phrase[0][2]}</td><td>{fg.phrase[0][1]}</td></tr>
+    <tr><td class="phrase">{fg.phrase[1][2]}</td><td>{fg.phrase[1][1]}</td></tr>
+    <tr><td class="phrase">{fg.phrase[2][2]}</td><td>{fg.phrase[2][1]}</td></tr>
+</table>
+<table>
+    <tr><td class="sentence">{fg.sentence[0][2]}</td><td>{fg.sentence[0][1]}</td></tr>
+    <tr><td class="sentence">{fg.sentence[1][2]}</td><td>{fg.sentence[1][1]}</td></tr>
+    <tr><td class="sentence">{fg.sentence[2][2]}</td><td>{fg.sentence[2][1]}</td></tr>
+</table>
+"""
+
+
+def backwards_card_template_afmt(fg: FieldGroup):
+    return normal_card_template_afmt(fg)
+
+
+# Normal card template
+NORMAL_CARD_TEMPLATE_NAME = "Normal"
+# Backwards card template (using same AFMT and CSS with Normal card template)
+BACKWARDS_CARD_TEMPLATE_NAME = "Backwards"
 CARD_TEMPLATE_CSS = """\
 .card {
   font-family: arial;
@@ -139,39 +214,6 @@ tr {
   vertical-align: top;
 }
 """
-
-# Backwards card template (using same AFMT and CSS with Normal card template)
-BACKWARDS_CARD_TEMPLATE_NAME = "Backwards"
-BACKWARDS_CARD_TEMPLATE_QFMT = """\
-<table>
-    <tr>
-        <td>
-        <h1 class="term"></h1>
-            <div class="pronounce">
-                <span class="phonetic">UK[Tap To View]</span>
-                <span class="phonetic">US[Tap To View]</span>
-            </div>
-            <div class="definition">{{definition}}</div>
-            <div class="definition_en">{{definition_en}}</div>
-        </td>
-        <td style="width: 33%;">
-            {{image}}
-        </td>
-    </tr>
-</table>
-<div class="divider"></div>
-<table>
-    <tr><td class="phrase">{{pplaceHolder0}}</td><td>{{phrase_explain0}}</td></tr>
-    <tr><td class="phrase">{{pplaceHolder1}}</td><td>{{phrase_explain1}}</td></tr>
-    <tr><td class="phrase">{{pplaceHolder2}}</td><td>{{phrase_explain2}}</td></tr>
-</table>
-<table>
-    <tr><td class="sentence">{{splaceHolder0}}</td><td>{{sentence_explain0}}</td></tr>
-    <tr><td class="sentence">{{splaceHolder1}}</td><td>{{sentence_explain1}}</td></tr>
-    <tr><td class="sentence">{{splaceHolder2}}</td><td>{{sentence_explain2}}</td></tr>
-</table>
-"""
-BACKWARDS_CARD_TEMPLATE_AFMT = NORMAL_CARD_TEMPLATE_AFMT
 
 
 PRON_TYPES = ['noPron', 'BrEPron', 'AmEPron']

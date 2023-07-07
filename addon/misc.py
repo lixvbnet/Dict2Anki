@@ -15,14 +15,14 @@ class SimpleWord(ABC):
         self.bookId = bookId
         self.bookName = bookName
 
-    def toString(self):
+    def toString(self) -> str:
         return f'{self.term} {self.trans} modifiedTime={self.modifiedTime}, bookId={self.bookId}, bookName={self.bookName}'
 
     def __str__(self) -> str:
         # return f'{self.term} {self.trans} modifiedTime={self.modifiedTime}, bookId={self.bookId}, bookName={self.bookName}'
         return self.term
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         # return f'SimpleWord({self.__str__()})'
         return self.term
 

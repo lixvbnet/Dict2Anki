@@ -170,6 +170,12 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
     def getAndSaveCurrentConfig(self) -> dict:
         """获取当前设置"""
+        config, _, _ = self.getAndSaveCurrentConfig_returnMetaInfo()
+        return config
+
+    def getAndSaveCurrentConfig_returnMetaInfo(self) -> (dict, bool, bool):
+        """获取当前设置，并返回Meta Info"""
+        """:return: (config, configChanged, cardSettingsChanged)"""
         currentConfig = dict(
             # basic settings
             deck=self.deckComboBox.currentText(),
@@ -195,16 +201,14 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             phrase=self.phraseCheckBox.isChecked(),
             sentence=self.sentenceCheckBox.isChecked(),
         )
-        logger.info(f'当前设置:{currentConfig}')
-        self._saveConfig(currentConfig)
+        configChanged, cardSettingsChanged = self._saveConfig(currentConfig)
         self.currentConfig = currentConfig
-        return currentConfig
+        return currentConfig, configChanged, cardSettingsChanged
 
-    @staticmethod
-    def _saveConfig(config):
+    def _saveConfig(self, config) -> (bool, bool):
+        """:return: (configChanged, cardSettingsChanged)"""
         # get the config currently stored in Anki
         oldConfig = deepcopy(mw.addonManager.getConfig(__name__))
-
         _config = deepcopy(config)
         selectedDict = _config['selectedDict']
 
@@ -215,7 +219,25 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             password=str(_config.pop('password')),
             cookie=str(_config.pop('cookie'))
         )
-        maskedConfig = deepcopy(_config)
+
+        configChanged = (_config != oldConfig)
+        if not configChanged:
+            logger.info(f'Config has no changes.')
+            return False, False
+
+        cardSettingsChanged = False
+        for setting in CARD_SETTINGS:
+            if _config[setting] != oldConfig[setting]:
+                cardSettingsChanged = True
+
+        logger.info(f"configChanged: {configChanged}, cardSettingsChanged: {cardSettingsChanged}")
+        logger.info(f'Saving config: {self._mask_config(_config)}')
+        mw.addonManager.writeConfig(__name__, _config)
+        return configChanged, cardSettingsChanged
+
+    def _mask_config(self, config) -> object:
+        """Mostly for logging purposes"""
+        maskedConfig = deepcopy(config)
         maskedCredential = [
             dict(
                 username=c['username'],
@@ -223,8 +245,16 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                 cookie=Mask(c['cookie'])) for c in maskedConfig['credential']
         ]
         maskedConfig['credential'] = maskedCredential
-        logger.info(f'保存配置项:{maskedConfig}')
-        mw.addonManager.writeConfig(__name__, _config)
+        return maskedConfig
+
+    def getFieldGroup(self, config) -> FieldGroup:
+        """Check current card settings and toggle off corresponding fields"""
+        fg = FieldGroup()
+        for field in CARD_SETTINGS:
+            if not config[field]:
+                logger.info(f"{field} is turned off. Will remove it from templates.")
+                fg.toggleOff(field)
+        return fg
 
     def checkUpdate(self):
         @pyqtSlot(str, str)
@@ -528,7 +558,9 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         logger.info(f"Get and save current config")
         self.logHandler.flush()
-        currentConfig = self.getAndSaveCurrentConfig()
+        # currentConfig = self.getAndSaveCurrentConfig()
+        currentConfig, configChanged, cardSettingsChanged = self.getAndSaveCurrentConfig_returnMetaInfo()
+        fg = self.getFieldGroup(currentConfig)
 
         # create Note Type/Model
         logger.info(f"Create Note Type/Model")
@@ -551,12 +583,11 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         if newCreated:
             # create 'Normal' card template (card type)
-            getOrCreateNormalCardTemplate(model)
+            getOrCreateNormalCardTemplate(model, fg)
             # create 'Backwards' card template (card type)
             # getOrCreateBackwardsCardTemplate(model)
-        else:                   # existing model
-            if fieldsUpdated:   # existing model, fields have been updated/merged
-                resetModelCardTemplates(model)
+        elif fieldsUpdated or cardSettingsChanged:   # existing model, but fields have been updated/merged, or cardSettingsChanged
+                resetModelCardTemplates(model, fg)
 
         # create deck
         deck = getOrCreateDeck(self.deckComboBox.currentText(), model=model)
@@ -853,7 +884,9 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         else:
             if askUser("Add Backwards template now?", defaultno=True):
                 try:
-                    getOrCreateBackwardsCardTemplate(modelObject)
+                    currentConfig = self.getAndSaveCurrentConfig()
+                    fg = self.getFieldGroup(currentConfig)
+                    getOrCreateBackwardsCardTemplate(modelObject, fg)
                     logger.info("Added Backward template")
                     tooltip("Added")
                 except Exception as e:
@@ -881,7 +914,9 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             mergeModelFields(model)
 
         logger.info(f"Checking card templates...")
-        if checkModelCardTemplates(model) and checkModelCardCSS(model):
+        currentConfig = self.getAndSaveCurrentConfig()
+        fg = self.getFieldGroup(currentConfig)
+        if checkModelCardTemplates(model, fg) and checkModelCardCSS(model):
             logger.info(f"No changes detected.")
             self.logHandler.flush()
             tooltip(f"No changes detected.")
@@ -893,7 +928,39 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                 self.logHandler.flush()
                 return
             logger.info(f"Resetting card templates for model {MODEL_NAME}...")
-            resetModelCardTemplates(model)
+            resetModelCardTemplates(model, fg)
             logger.info(f"Done!")
             self.logHandler.flush()
             tooltip(f"Reset complete.")
+
+    # @pyqtSlot()
+    # def on_definitionEnCheckBox_clicked(self):
+    #     tooltip(f"definitionEnCheckBox Clicked!")
+    #     # checkBoxObj = self.definitionEnCheckBox
+    #     # if not askUser(f"This operation will not change the Note Type, but only update the Card Templates. Toggle this field now?"):
+    #     #     checkBoxObj.setChecked(not checkBoxObj.isChecked())     # revert the check operation
+    #     #     logger.info(f"Aborted")
+    #     #     self.logHandler.flush()
+    #     #     return
+    #     #
+    #     # logger.info(f"Do something...")
+    #     # self.logHandler.flush()
+    #
+    # @pyqtSlot()
+    # def on_imageCheckBox_clicked(self):
+    #     tooltip(f"imageCheckBox Clicked!")
+    #
+    # @pyqtSlot()
+    # def on_pronunciationCheckBox_clicked(self):
+    #     tooltip(f"pronunciationCheckBox Clicked!")
+    #
+    # @pyqtSlot()
+    # def on_phraseCheckBox_clicked(self):
+    #     tooltip(f"phraseCheckBox Clicked!")
+    #
+    # @pyqtSlot()
+    # def on_sentenceCheckBox_clicked(self):
+    #     tooltip(f"sentenceCheckBox Clicked!")
+    #     # checkBoxObj = self.sentenceCheckBox
+    #     # # checkBoxObj.setChecked(not checkBoxObj.isChecked())     # revert the check operation
+    #     # currentConfig = self.getAndSaveCurrentConfig()

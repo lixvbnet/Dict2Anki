@@ -320,9 +320,29 @@
        <item row="2" column="0" colspan="2">
         <widget class="QGroupBox" name="cardConfigGroupBox">
          <property name="title">
-          <string>卡片设置（TODO）</string>
+          <string>卡片设置</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="phraseCheckBox">
+            <property name="text">
+             <string>短语</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QCheckBox" name="pronunciationCheckBox">
+            <property name="text">
+             <string>发音</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QCheckBox" name="definitionEnCheckBox">
             <property name="toolTip">
@@ -336,7 +356,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="0" column="1">
            <widget class="QCheckBox" name="imageCheckBox">
             <property name="text">
              <string>图片</string>
@@ -346,30 +366,10 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
+          <item row="1" column="1">
            <widget class="QCheckBox" name="sentenceCheckBox">
             <property name="text">
              <string>例句</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="phraseCheckBox">
-            <property name="text">
-             <string>短语</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="pronunciationCheckBox">
-            <property name="text">
-             <string>音频</string>
             </property>
             <property name="checked">
              <bool>true</bool>
