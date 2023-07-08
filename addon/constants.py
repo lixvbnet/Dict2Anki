@@ -25,7 +25,7 @@ MODEL_FIELDS = [
     'image', 'pronunciation',
     'group', 'exam_type', 'modifiedTime',
 ]
-CARD_SETTINGS = ['definition_en', 'image', 'pronunciation', 'phrase', 'sentence']
+CARD_SETTINGS = ['definition_en', 'image', 'pronunciation', 'phrase', 'sentence', 'exam_type']
 
 
 class FieldGroup:
@@ -43,6 +43,7 @@ class FieldGroup:
             ("{{sentence1}}", "{{sentence_explain1}}", "{{splaceHolder1}}"),
             ("{{sentence2}}", "{{sentence_explain2}}", "{{splaceHolder2}}"),
         ]
+        self.exam_type = "{{exam_type}}"
 
     def toggleOff(self, field):
         if field not in CARD_SETTINGS:
@@ -112,7 +113,7 @@ def normal_card_template_afmt(fg: FieldGroup):
             </div>
             <div class="definition">{{{{definition}}}}</div>
             <div class="definition_en">{fg.definition_en}</div>
-            <div class="exam_type">{{{{exam_type}}}}</div>
+            <div class="exam_type">{fg.exam_type}</div>
         </td>
         <td style="width: 33%;">
             {fg.image}

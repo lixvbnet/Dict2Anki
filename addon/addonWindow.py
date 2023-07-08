@@ -157,6 +157,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.pronunciationCheckBox.setChecked(config['pronunciation'])
         self.phraseCheckBox.setChecked(config['phrase'])
         self.sentenceCheckBox.setChecked(config['sentence'])
+        self.examTypeCheckBox.setChecked(config['exam_type'])
 
     def initCore(self):
         self.usernameLineEdit.hide()
@@ -200,6 +201,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             pronunciation=self.pronunciationCheckBox.isChecked(),
             phrase=self.phraseCheckBox.isChecked(),
             sentence=self.sentenceCheckBox.isChecked(),
+            exam_type=self.examTypeCheckBox.isChecked(),
         )
         configChanged, cardSettingsChanged = self._saveConfig(currentConfig)
         self.currentConfig = currentConfig

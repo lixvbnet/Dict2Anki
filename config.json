@@ -26,5 +26,6 @@
   "image": true,
   "pronunciation": true,
   "phrase": true,
-  "sentence": true
+  "sentence": true,
+  "exam_type": true
 }
