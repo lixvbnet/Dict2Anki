@@ -169,7 +169,6 @@ class AssetDownloadWorker(QObject):
             try:
                 if currentThread.isInterruptionRequested():
                     return False
-                r = self.session.get(url, stream=True)
                 self.logger.info(f'Downloading {fileName}...')
                 # file already exists
                 if os.path.exists(filepath):
@@ -179,6 +178,7 @@ class AssetDownloadWorker(QObject):
                     else:
                         self.logger.warning(f"Overwriting file {fileName}")
 
+                r = self.session.get(url, stream=True)
                 with open(filepath, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=1024):
                         if chunk:
