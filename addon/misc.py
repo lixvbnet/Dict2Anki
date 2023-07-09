@@ -50,6 +50,11 @@ class AbstractDictionary(ABC):
     def getWordsByPage(self, pageNo: int, groupName: str, groupId: str) -> [SimpleWord]:
         pass
 
+    @classmethod
+    @abstractmethod
+    def close(cls):
+        pass
+
 
 class AbstractQueryAPI(ABC):
     @classmethod
@@ -60,6 +65,11 @@ class AbstractQueryAPI(ABC):
         :param word: 单词
         :return: 查询结果 dict(term, definition, phrase, image, sentence, BrEPhonetic, AmEPhonetic, BrEPron, AmEPron)
         """
+        pass
+
+    @classmethod
+    @abstractmethod
+    def close(cls):
         pass
 
 

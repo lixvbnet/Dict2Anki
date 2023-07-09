@@ -91,7 +91,17 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.gridLayout_4.addWidget(self.devBtn, 4, 3, 1, 1)
 
     def closeEvent(self, event):
-        # 插件关闭时退出所有线程
+        """插件关闭时调用"""
+        # cleanup
+        for dictionary in dictionaries:
+            dictionary.close()
+        for api in apis:
+            api.close()
+
+        if self.assetDownloadWorker:
+            AssetDownloadWorker.close()
+
+        # 退出所有线程
         if self.workerThread.isRunning():
             self.workerThread.requestInterruption()
             self.workerThread.quit()

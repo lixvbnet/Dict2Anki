@@ -198,3 +198,7 @@ class AssetDownloadWorker(QObject):
             for fileName, url in self.audios:
                 executor.submit(__download_with_retry, fileName, url)
         self.done.emit()
+
+    @classmethod
+    def close(cls):
+        cls.session.close()

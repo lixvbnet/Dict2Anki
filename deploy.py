@@ -75,6 +75,7 @@ def publish(zip_dir, zip_filename, title, tags, desc):
         'v21file': file,
         'v20file': '',
     })
+    s.close()
     if rsp.url == f'https://ankiweb.net/shared/info/{addon_id}':
         return True
     else:

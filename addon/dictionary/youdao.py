@@ -107,3 +107,7 @@ class Youdao(AbstractDictionary):
         finally:
             logger.info(wordList)
             return wordList
+
+    @classmethod
+    def close(cls):
+        cls.session.close()

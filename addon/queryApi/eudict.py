@@ -203,3 +203,7 @@ class API(AbstractQueryAPI):
         finally:
             logger.debug(queryResult)
             return queryResult
+
+    @classmethod
+    def close(cls):
+        cls.session.close()
