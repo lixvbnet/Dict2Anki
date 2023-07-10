@@ -267,18 +267,16 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str, existin
 
     # definition
     definitions = []
-    if config['briefDefinition'] and word['definition_brief']:   # prefer brief definition
-        definitions.append(word['definition_brief'])    # str
-
-    if (not definitions) and word['definition']:
-        definitions.extend(word['definition'])          # [str]
-
-    if definitions:
-        key, value = 'definition', '<br>\n'.join(definitions)
-        setNoteFieldValue(note, key, value, isNewNote, overwrite)
-        # note['definition'] = '<br>\n'.join(definitions)
-    else:
+    if not word['definition_brief'] and not word['definition']:         # both empty
         logger.warning(f"NO DEFINITION FOR WORD {word['term']}!!!")
+    elif word['definition_brief'] and word['definition']:               # both non-empty
+        definitions = [word['definition_brief']] if config['briefDefinition'] else word['definition']
+    else:                                                               # one is empty and the other is non-empty
+        definitions = [word['definition_brief']] if word['definition_brief'] else word['definition']
+
+    key, value = 'definition', '<br>\n'.join(definitions)
+    setNoteFieldValue(note, key, value, isNewNote, overwrite)
+    # note['definition'] = '<br>\n'.join(definitions)
 
     # ================================== Optional fields ==================================
     # 1. Ignore "query settings"
