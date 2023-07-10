@@ -9,6 +9,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QListWidgetItem, QVBoxLayout, QPushButton
 from PyQt5.QtCore import pyqtSlot, QThread, Qt
 
+from . import utils
 from .queryApi import apis
 from .UIForm import wordGroup, mainUI, icons_rc
 from .workers import LoginStateCheckWorker, VersionCheckWorker, RemoteWordFetchingWorker, QueryWorker, AssetDownloadWorker
@@ -735,10 +736,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             note = mw.col.getNote(noteId)
             term = note['term']
             media_dir = mw.col.media.dir()
-            image_filepath = os.path.join(media_dir, default_image_filename(term))
-            audio_filepath = os.path.join(media_dir, default_audio_filename(term))
-            if (note['image'] and not os.path.exists(image_filepath)) \
-                    or (note['pronunciation'] and not os.path.exists(audio_filepath)):
+            # logger.info(f"Checking term {term}")
+            if utils.is_image_file_missing(note['image'], media_dir) or utils.is_audio_file_missing(note['pronunciation'], media_dir):
                 # logger.warning(f"image or audio file is missing for [{term}]")
                 word, row = SimpleWord(term), len(wordList)
                 wordList.append((word, row))
