@@ -82,7 +82,6 @@ def normal_card_template_qfmt(fg: FieldGroup):
             <div class="definition_en"></div>
         </td>
         <td style="width: 33%;">
-            {fg.image}
         </td>
     </tr>
 </table>
