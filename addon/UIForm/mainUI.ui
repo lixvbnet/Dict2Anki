@@ -27,7 +27,7 @@
        <string>同步</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="4" column="3">
+       <item row="4" column="4">
         <widget class="QPushButton" name="btnSync">
          <property name="enabled">
           <bool>false</bool>
@@ -37,7 +37,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="4">
+       <item row="3" column="0" colspan="5">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout">
@@ -89,7 +89,7 @@
          </item>
         </layout>
        </item>
-       <item row="0" column="0" colspan="4">
+       <item row="0" column="0" colspan="5">
         <layout class="QHBoxLayout" name="deckLayout">
          <item>
           <widget class="QLabel" name="deckLabel">
@@ -119,7 +119,7 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0" colspan="4">
+       <item row="2" column="0" colspan="5">
         <layout class="QHBoxLayout" name="apiLayout">
          <item>
           <widget class="QLabel" name="apiLabel">
@@ -146,7 +146,7 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0" colspan="4">
+       <item row="1" column="0" colspan="5">
         <layout class="QHBoxLayout" name="dictionaryLayout">
          <item>
           <widget class="QLabel" name="dictionaryLabel">
@@ -173,20 +173,30 @@
          </item>
         </layout>
        </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="pullRemoteWordsBtn">
+         <property name="text">
+          <string>Pull words</string>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="1">
+        <widget class="QToolButton" name="btnImportFromFiles">
+         <property name="toolTip">
+          <string>Import words from txt files. (Use Tabs to separate the fields)"</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3">
         <widget class="QPushButton" name="queryBtn">
          <property name="enabled">
           <bool>false</bool>
          </property>
          <property name="text">
           <string>Query</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QPushButton" name="pullRemoteWordsBtn">
-         <property name="text">
-          <string>Pull words</string>
          </property>
         </widget>
        </item>

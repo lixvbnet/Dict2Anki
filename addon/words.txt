@@ -1,0 +1,10 @@
+apple   			苹果
+banana			香蕉
+
+catch the bus	赶汽车
+
+dog
+egg
+fox
+
+get    to		 到达；开始...

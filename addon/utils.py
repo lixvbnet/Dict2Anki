@@ -34,25 +34,45 @@ def is_media_file_missing(fieldValue: str, media_dir: str, f_get) -> bool:
     return not os.path.exists(filepath)
 
 
+def read_words_from_file(filename: str) -> [[str]]:
+    lines = []
+    with open(filename, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            lines.append(line)
+    word_list = []
+    for line in lines:
+        fields = [re.sub(r'\s+', ' ', f.strip()) for f in re.split(r'\t+', line)]
+        word_list.append(fields)
+    return word_list
+
+
 if __name__ == '__main__':
-    images = [
-        '<div><img src="MG-chloride.jpg"></div>',
-        '<img src="OPD_10percent.jpg">',
-        '<img>',
-        '',
-        None,
-    ]
-    for image in images:
-        print(get_image(image))
+    words_file = 'words.txt'
+    wordlist = read_words_from_file(words_file)
+    print(wordlist)
 
-    print("---------------------------------")
 
-    audios = [
-        '[sound:MG-chloride.mp3]',
-        '[sound:OPD_10percent.mp3]',
-        '[sound:]',
-        '',
-        None
-    ]
-    for audio in audios:
-        print(get_audio(audio))
+    # images = [
+    #     '<div><img src="MG-chloride.jpg"></div>',
+    #     '<img src="OPD_10percent.jpg">',
+    #     '<img>',
+    #     '',
+    #     None,
+    # ]
+    # for image in images:
+    #     print(get_image(image))
+    #
+    # print("---------------------------------")
+    #
+    # audios = [
+    #     '[sound:MG-chloride.mp3]',
+    #     '[sound:OPD_10percent.mp3]',
+    #     '[sound:]',
+    #     '',
+    #     None
+    # ]
+    # for audio in audios:
+    #     print(get_audio(audio))

@@ -4,9 +4,10 @@ import logging
 import json
 from copy import deepcopy
 from tempfile import gettempdir
+from pathlib import Path
 
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QListWidgetItem, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QFileDialog, QListWidgetItem, QVBoxLayout, QPushButton
 from PyQt5.QtCore import pyqtSlot, QThread, Qt
 
 from . import utils
@@ -288,6 +289,25 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.currentDictionaryLabel.setText(f'当前选择词典: {self.dictionaryComboBox.currentText()}')
         config = mw.addonManager.getConfig(__name__)
         self.cookieLineEdit.setText(config['credential'][index]['cookie'])
+
+    @pyqtSlot()
+    def on_btnImportFromFiles_clicked(self):
+        """Button: Import words from txt files"""
+        # TODO: if new word box is not empty, warn user before proceeding
+        # choose txt files
+        homedir = str(Path.home())
+        filenames, _ = QFileDialog.getOpenFileNames(
+            self,
+            "Select Files",
+            homedir,
+            "Text Files (*.txt)"
+        )
+        logger.info(f"filenames: {filenames}")
+        self.logHandler.flush()
+
+        for filename in filenames:
+            logger.info(f"Reading words from {filename}...")
+
 
     @pyqtSlot()
     def on_pullRemoteWordsBtn_clicked(self):
@@ -951,35 +971,3 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             logger.info(f"Done!")
             self.logHandler.flush()
             tooltip(f"Reset complete.")
-
-    # @pyqtSlot()
-    # def on_definitionEnCheckBox_clicked(self):
-    #     tooltip(f"definitionEnCheckBox Clicked!")
-    #     # checkBoxObj = self.definitionEnCheckBox
-    #     # if not askUser(f"This operation will not change the Note Type, but only update the Card Templates. Toggle this field now?"):
-    #     #     checkBoxObj.setChecked(not checkBoxObj.isChecked())     # revert the check operation
-    #     #     logger.info(f"Aborted")
-    #     #     self.logHandler.flush()
-    #     #     return
-    #     #
-    #     # logger.info(f"Do something...")
-    #     # self.logHandler.flush()
-    #
-    # @pyqtSlot()
-    # def on_imageCheckBox_clicked(self):
-    #     tooltip(f"imageCheckBox Clicked!")
-    #
-    # @pyqtSlot()
-    # def on_pronunciationCheckBox_clicked(self):
-    #     tooltip(f"pronunciationCheckBox Clicked!")
-    #
-    # @pyqtSlot()
-    # def on_phraseCheckBox_clicked(self):
-    #     tooltip(f"phraseCheckBox Clicked!")
-    #
-    # @pyqtSlot()
-    # def on_sentenceCheckBox_clicked(self):
-    #     tooltip(f"sentenceCheckBox Clicked!")
-    #     # checkBoxObj = self.sentenceCheckBox
-    #     # # checkBoxObj.setChecked(not checkBoxObj.isChecked())     # revert the check operation
-    #     # currentConfig = self.getAndSaveCurrentConfig()
