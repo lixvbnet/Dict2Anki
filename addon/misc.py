@@ -7,6 +7,26 @@ logger = logging.getLogger('dict2Anki.misc')
 
 
 class SimpleWord(ABC):
+    @classmethod
+    def from_values(cls, values: [str]):
+        n = len(values)
+        if n == 0:
+            return None
+        term = values[0]
+        trans = ""
+        modifiedTime = 0
+        bookId = 0
+        bookName = ""
+        if n > 1:
+            trans = values[1]
+        if n > 2:
+            modifiedTime = int(values[2])
+        if n > 3:
+            bookId = int(values[3])
+        if n > 4:
+            bookName = values[4]
+        return SimpleWord(term=term, trans=trans, modifiedTime=modifiedTime, bookId=bookId, bookName=bookName)
+
     """A SimpleWord includes the term and a brief translation, as well as other metadata."""
     def __init__(self, term: str, trans="", modifiedTime=0, bookId=0, bookName=""):
         self.term = term
@@ -19,7 +39,7 @@ class SimpleWord(ABC):
         return f'{self.term} {self.trans} modifiedTime={self.modifiedTime}, bookId={self.bookId}, bookName={self.bookName}'
 
     def __str__(self) -> str:
-        # return f'{self.term} {self.trans} modifiedTime={self.modifiedTime}, bookId={self.bookId}, bookName={self.bookName}'
+        # return self.toString()
         return self.term
 
     def __repr__(self) -> str:

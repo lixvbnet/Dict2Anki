@@ -293,7 +293,20 @@ class Windows(QDialog, mainUI.Ui_Dialog):
     @pyqtSlot()
     def on_btnImportFromFiles_clicked(self):
         """Button: Import words from txt files"""
-        # TODO: if new word box is not empty, warn user before proceeding
+        if not self.deckComboBox.currentText():
+            showInfo('\n请选择或输入要同步的牌组')
+            return
+
+        # if word boxes are not empty, warn user before proceeding
+        if self.newWordListWidget.count() > 0 or self.needDeleteWordListWidget.count() > 0:
+            if not askUser(f"The words boxes are not empty! Clear the words and continue?", defaultno=True):
+                logger.info(f"Aborted")
+                self.logHandler.flush()
+                return
+        # clear the word boxes
+        self.newWordListWidget.clear()
+        self.needDeleteWordListWidget.clear()
+
         # choose txt files
         homedir = str(Path.home())
         filenames, _ = QFileDialog.getOpenFileNames(
@@ -302,12 +315,33 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             homedir,
             "Text Files (*.txt)"
         )
+        if not filenames:
+            logger.info("No files selected.")
+            self.logHandler.flush()
+            return
+
         logger.info(f"filenames: {filenames}")
         self.logHandler.flush()
 
+        words: [SimpleWord] = []
         for filename in filenames:
             logger.info(f"Reading words from {filename}...")
+            words_in_file = [SimpleWord.from_values(values_in_line) for values_in_line in utils.read_words_from_file(filename)]
+            logger.info(f"[OK] Found {len(words_in_file)} words.")
+            words.extend(words_in_file)
+        logger.info("------------------------------")
+        logger.info(f"Total: Found {len(words)} words in {len(filenames)} files")
+        self.logHandler.flush()
+        if not askUser(f"Found {len(words)} words in {len(filenames)} files. Import now?"):
+            logger.info(f"Aborted")
+            self.logHandler.flush()
+            return
 
+        logger.info(f"Start importing")
+        self.localWords = getWordsByDeck(self.deckComboBox.currentText())
+        self.remoteWordsDict = {}
+        self.insertWordToListWidget(words)
+        self.on_allPullWork_done()
 
     @pyqtSlot()
     def on_pullRemoteWordsBtn_clicked(self):
@@ -419,6 +453,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         """根据选中到分组获取分组下到全部单词，并添加到 newWordListWidget"""
         group_map = dict(self.selectedDict.groups)
         self.localWords = getWordsByDeck(self.deckComboBox.currentText())
+        self.remoteWordsDict = {}
 
         # 启动单词获取线程
         self.pullWorker = RemoteWordFetchingWorker(self.selectedDict, [(group_name, group_map[group_name],) for group_name in selected_groups])
