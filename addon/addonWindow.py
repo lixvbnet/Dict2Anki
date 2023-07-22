@@ -327,12 +327,12 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         for filename in filenames:
             logger.info(f"Reading words from {filename}...")
             words_in_file = [SimpleWord.from_values(values_in_line) for values_in_line in utils.read_words_from_file(filename)]
-            logger.info(f"[OK] Found {len(words_in_file)} words.")
+            logger.info(f"[OK] Found {len(words_in_file)} words (may including duplicates).")
             words.extend(words_in_file)
         logger.info("------------------------------")
-        logger.info(f"Total: Found {len(words)} words in {len(filenames)} files")
+        logger.info(f"Total: Found {len(words)} words (may including duplicates) in {len(filenames)} files.")
         self.logHandler.flush()
-        if not askUser(f"Found {len(words)} words in {len(filenames)} files. Import now?"):
+        if not askUser(f"Found {len(words)} words (may including duplicates) in {len(filenames)} files. Import now?"):
             logger.info(f"Aborted")
             self.logHandler.flush()
             return

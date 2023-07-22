@@ -10,7 +10,8 @@ This is a fork of Dict2Anki.
 * 性能优化，修复已知问题
 * 尽量避免删除模版或卡片。如果字段不同，自动合并；同步页默认不选中需要删除的单词。
 * 添加字段：definition_en, group, exam_type, modifiedTime.（目前仅限有道词典）
-* 改用4.x卡片模版；支持卡片设置（显示或隐藏：英文释义/图片/发音/短语/例句/考试类型）
+* 改用4.x卡片模版；支持定制卡片模版（显示或隐藏：英文释义/图片/发音/短语/例句/考试类型）
+* 支持从txt文件导入单词
 * 添加其他功能
     - Download Missing Assets
     - Fill Missing Values
