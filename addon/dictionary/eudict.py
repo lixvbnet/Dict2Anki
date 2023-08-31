@@ -33,7 +33,7 @@ class Eudict(AbstractDictionary):
         :param cookie:
         :return: Boolean cookie是否有效
         """
-        rsp = requests.get('https://my.eudic.net/studylist', cookies=cookie, headers=self.headers)
+        rsp = requests.get('https://my.eudic.net/studylist', cookies=cookie, headers=HEADERS)
         if 'dict.eudic.net/account/login' not in rsp.url:
             self.indexSoup = BeautifulSoup(rsp.text, features="html.parser")
             logger.info('Cookie有效')

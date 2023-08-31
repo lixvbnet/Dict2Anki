@@ -54,6 +54,46 @@ class Parser:
         return []
 
     @property
+    def phrase(self) -> list:
+        els = self._soap.select('div #ExpSPECChild #phrase')
+        ret = []
+        for el in els:
+            try:
+                phrase = el.find('i').get_text(strip=True)
+                exp = el.find(class_='exp').get_text(strip=True)
+                ret.append((phrase, exp))
+            except AttributeError:
+                pass
+        return ret
+
+    @property
+    def sentence(self) -> list:
+        els = self._soap.select('div #ExpLJChild .lj_item')
+        ret = []
+        for el in els:
+            try:
+                line = el.select('p')
+                sentence = "".join([ str(c) for c in line[0].contents])
+                sentence_translation = line[1].get_text(strip=True)
+                ret.append((sentence, sentence_translation))
+            except KeyError as e:
+                pass
+        return ret
+
+    @property
+    def image(self) -> str:
+        els = self._soap.select('div .word-thumbnail-container img')
+        ret = None
+        if els:
+            try:
+                img = els[0]
+                if 'title' not in img.attrs:
+                    ret = self.__fix_url_without_http(img['src'])
+            except KeyError:
+                pass
+        return ret
+
+    @property
     def pronunciations(self) -> dict:
         url = 'https://api.frdic.com/api/v2/speech/speakweb?'
         pron = {
@@ -120,44 +160,9 @@ class Parser:
         return self.pronunciations['AmEUrl']
 
     @property
-    def sentence(self) -> list:
-        els = self._soap.select('div #ExpLJChild .lj_item')
-        ret = []
-        for el in els:
-            try:
-                line = el.select('p')
-                sentence = "".join([ str(c) for c in line[0].contents])
-                sentence_translation = line[1].get_text(strip=True)
-                ret.append((sentence, sentence_translation))
-            except KeyError as e:
-                pass
-        return ret
-
-    @property
-    def image(self) -> str:
-        els = self._soap.select('div .word-thumbnail-container img')
-        ret = None
-        if els:
-            try:
-                img = els[0]
-                if 'title' not in img.attrs:
-                    ret = self.__fix_url_without_http(img['src'])
-            except KeyError:
-                pass
-        return ret
-
-    @property
-    def phrase(self) -> list:
-        els = self._soap.select('div #ExpSPECChild #phrase')
-        ret = []
-        for el in els:
-            try:
-                phrase = el.find('i').get_text(strip=True)
-                exp = el.find(class_='exp').get_text(strip=True)
-                ret.append((phrase, exp))
-            except AttributeError:
-                pass
-        return ret
+    def exam_type(self) -> list:
+        # TODO
+        return []
 
     @property
     def result(self):
@@ -171,12 +176,13 @@ class Parser:
             'definition': self.definition,
             'definition_en': self.definition_en,
             'phrase': self.phrase,
-            'image': self.image,
             'sentence': self.sentence,
+            'image': self.image,
             'BrEPhonetic': self.BrEPhonetic,
             'AmEPhonetic': self.AmEPhonetic,
             'BrEPron': self.BrEPron,
-            'AmEPron': self.AmEPron
+            'AmEPron': self.AmEPron,
+            'exam_type': self.exam_type,
         }
 
 
