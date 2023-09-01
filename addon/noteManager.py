@@ -297,7 +297,7 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str, existin
         # note['image'] = f'<div><img src="{imageFilename}" /></div>'
 
     # pronunciation
-    if whichPron and word[whichPron]:
+    if whichPron and whichPron != 'noPron' and word[whichPron]:
         pronFilename = default_audio_filename(term)
         key, value = 'pronunciation', f"[sound:{pronFilename}]"
         setNoteFieldValue(note, key, value, isNewNote, overwrite)
