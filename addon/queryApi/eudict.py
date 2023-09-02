@@ -137,6 +137,12 @@ class Parser:
         except (TypeError, KeyError, IndexError):
             pass
 
+        # if no audio, then set a default one (using Youdao API)
+        if not (pron['AmEUrl'] or pron['BrEUrl']):
+            fallback_audio_url = 'http://dict.youdao.com/dictvoice?audio='
+            pron['AmEUrl'] = f"{fallback_audio_url}{self.word.term}&type=2"
+            pron['BrEUrl'] = f"{fallback_audio_url}{self.word.term}&type=1"
+
         return pron
 
     @property
