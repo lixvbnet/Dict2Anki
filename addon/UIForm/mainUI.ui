@@ -183,7 +183,7 @@
        <item row="4" column="1">
         <widget class="QToolButton" name="btnImportFromFiles">
          <property name="toolTip">
-          <string>Import words from txt files. (Use Tabs to separate the fields)"</string>
+          <string>Import words from txt files. (Use Tabs to separate the fields)</string>
          </property>
          <property name="text">
           <string>...</string>
@@ -210,7 +210,7 @@
        <item row="1" column="0" colspan="2">
         <widget class="QGroupBox" name="defaultConfigGroupBox">
          <property name="title">
-          <string>查询设置</string>
+          <string>同步设置</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="1" column="2">
@@ -253,6 +253,16 @@
             </property>
             <property name="checked">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="syncTemplatesCheckbox">
+            <property name="text">
+             <string>同步模版</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

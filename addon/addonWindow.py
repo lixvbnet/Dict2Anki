@@ -157,8 +157,9 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.passwordLineEdit.setText(selectedDictCredential['password'])
         self.cookieLineEdit.setText(selectedDictCredential['cookie'])
 
-        # query settings
+        # sync settings
         self.briefDefinitionCheckBox.setChecked(config['briefDefinition'])
+        self.syncTemplatesCheckbox.setChecked(config['syncTemplates'])
         self.noPronRadioButton.setChecked(config['noPron'])
         self.BrEPronRadioButton.setChecked(config['BrEPron'])
         self.AmEPronRadioButton.setChecked(config['AmEPron'])
@@ -201,8 +202,9 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             password=Mask(self.passwordLineEdit.text()),
             cookie=Mask(self.cookieLineEdit.text()),
 
-            # query settings
+            # sync settings
             briefDefinition=self.briefDefinitionCheckBox.isChecked(),
+            syncTemplates=self.syncTemplatesCheckbox.isChecked(),
             noPron=self.noPronRadioButton.isChecked(),
             BrEPron=self.BrEPronRadioButton.isChecked(),
             AmEPron=self.AmEPronRadioButton.isChecked(),
@@ -656,10 +658,19 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             getOrCreateNormalCardTemplate(model, fg)
             # create 'Backwards' card template (card type)
             # getOrCreateBackwardsCardTemplate(model)
-        else:           # existing model. (Let's make it simple: Reset card templates to default upon every sync.)
-            logger.info(f"Found existing model. Reset card templates to default (FieldGroup settings will be respected).")
-            self.logHandler.flush()
-            resetModelCardTemplates(model, fg)
+        else:
+            logger.info(f"Found existing model.")
+            if currentConfig['syncTemplates']:
+                logger.info(f"Reset card templates to default (FieldGroup settings will be respected).")
+                self.logHandler.flush()
+                resetModelCardTemplates(model, fg)
+            else:
+                logger.info(f"Skip Templates Sync as it has been turned off.")
+
+        # else:           # existing model. (Let's make it simple: Reset card templates to default upon every sync.)
+        #     logger.info(f"Found existing model. Reset card templates to default (FieldGroup settings will be respected).")
+        #     self.logHandler.flush()
+        #     resetModelCardTemplates(model, fg)
         # elif fieldsUpdated:     # existing model, but fields have been updated/merged
         #     resetModelCardTemplates(model, fg)
         # else:                   # existing model, and fields have not been updated/merged

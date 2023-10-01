@@ -1,4 +1,4 @@
-VERSION = 'v6.3.6f'
+VERSION = 'v6.3.6g'
 RELEASE_URL = 'https://github.com/lixvbnet/Dict2Anki'
 VERSION_CHECK_API = 'https://api.github.com/repos/lixvbnet/Dict2Anki/releases/latest'
 WINDOW_TITLE = f'Dict2Anki {VERSION}'

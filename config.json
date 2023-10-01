@@ -18,6 +18,7 @@
   ],
 
   "briefDefinition": true,
+  "syncTemplates": true,
   "noPron": false,
   "BrEPron": false,
   "AmEPron": true,
