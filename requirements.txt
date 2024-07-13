@@ -8,7 +8,7 @@ pytest-mock
 pytest-qt
 
 # Using PyQT5 versions
-protobuf==3.20.3
+protobuf
 mypy
-aqt==2.1.49
-anki==2.1.49
+aqt==2.1.66
+anki==2.1.66

@@ -25,7 +25,7 @@ This is a fork of Dict2Anki.
 
 ## Qt5 vs Qt6
 
-* **仅支持Anki 2.1.x Qt5版本。推荐使用 Anki 2.1.65 (Qt5)。**
+* **仅支持Anki 2.1.x Qt5版本。推荐使用 Anki 2.1.66 (Qt5)。**
 * 经测试，最新版Anki 23.10在我的旧版MBP上无法运行。为了保持最大兼容性，**暂不考虑更新插件**。
 
 可以点击Anki首页下方 [Alternate download site](https://apps.ankiweb.net/downloads/archive) 选择相应版本下载。
