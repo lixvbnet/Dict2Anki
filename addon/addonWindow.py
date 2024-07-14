@@ -404,7 +404,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
                 selectedGroups = self.selectedGroups[self.currentConfig['selectedDict']]
             else:
                 selectedGroups = [group.wordGroupListWidget.item(index).text() for index in range(group.wordGroupListWidget.count()) if
-                              group.wordGroupListWidget.item(index).checkState() == Qt.Checked]
+                              group.wordGroupListWidget.item(index).checkState() == Qt.CheckState.Checked]
             # 保存分组记录
             self.selectedGroups[self.currentConfig['selectedDict']] = selectedGroups
             self.progressBar.setValue(0)
@@ -435,18 +435,18 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         group.setupUi(container)
         for groupName in [str(group_name) for group_name, _ in self.selectedDict.groups]:
             item = QListWidgetItem()
-            item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+            item.setFlags(Qt.ItemSelectionMode.ItemIsSelectable | Qt.ItemSelectionMode.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
             item.setText(groupName)
-            item.setCheckState(Qt.Unchecked)
+            item.setCheckState(Qt.CheckState.Unchecked)
             group.wordGroupListWidget.addItem(item)
         # 恢复上次选择的单词本分组
         selectedDict = self.currentConfig['selectedDict']
         if not self.selectedGroups[selectedDict]:
             self.selectedGroups[selectedDict] = list()
         for groupName in self.selectedGroups[selectedDict]:
-            items = group.wordGroupListWidget.findItems(groupName, Qt.MatchExactly)
+            items = group.wordGroupListWidget.findItems(groupName, Qt.MatchFlag.MatchExactly)
             for item in items:
-                item.setCheckState(Qt.Checked)
+                item.setCheckState(Qt.CheckState.Checked)
         group.buttonBox.accepted.connect(onAccepted)
         group.buttonBox.rejected.connect(onRejected)
         container.exec()
@@ -496,8 +496,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
 
         for term in needToDeleteTerms:
             item = QListWidgetItem(term)
-            # item.setCheckState(Qt.Checked)
-            item.setCheckState(Qt.Unchecked)    # Defaults to Unchecked (Avoid unintentional data loss)
+            # item.setCheckState(Qt.CheckState.Checked)
+            item.setCheckState(Qt.CheckState.Unchecked)    # Defaults to Unchecked (Avoid unintentional data loss)
             item.setIcon(delIcon)
             self.needDeleteWordListWidget.addItem(item)
 
@@ -575,7 +575,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
             wordItem = self.newWordListWidget.item(row)
             if row in self.querySuccessDict:
                 wordItem.setIcon(self.doneIcon)
-                wordItem.setData(Qt.UserRole, self.querySuccessDict[row])
+                wordItem.setData(Qt.ItemDataRole.UserRole, self.querySuccessDict[row])
             elif row in self.queryFailedDict:
                 wordItem.setIcon(self.failedIcon)
                 failed.append(wordItem.text())
@@ -621,7 +621,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         logger.info(f"Sync button clicked")
         logger.info(f"Check query results")
         self.logHandler.flush()
-        failedGenerator = (self.newWordListWidget.item(row).data(Qt.UserRole) is None for row in range(self.newWordListWidget.count()))
+        failedGenerator = (self.newWordListWidget.item(row).data(Qt.ItemDataRole.UserRole) is None for row in range(self.newWordListWidget.count()))
         if any(failedGenerator):
             if not askUser('存在未查询或失败的单词，确定要加入单词本吗？\n 你可以选择失败的单词点击 "查询按钮" 来重试。'):
                 return
@@ -693,7 +693,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         self.added = 0
         for row in range(newWordCount):
             wordItem = self.newWordListWidget.item(row)
-            wordItemData = wordItem.data(Qt.UserRole)
+            wordItemData = wordItem.data(Qt.ItemDataRole.UserRole)
             if wordItemData:
                 term = wordItemData['term']
                 logger.debug(f"wordItemData ({term}): {wordItemData}")
@@ -719,7 +719,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         needToDeleteWordItems = [
             self.needDeleteWordListWidget.item(row)
             for row in range(self.needDeleteWordListWidget.count())
-            if self.needDeleteWordListWidget.item(row).checkState() == Qt.Checked
+            if self.needDeleteWordListWidget.item(row).checkState() == Qt.CheckState.Checked
         ]
         needToDeleteWords = [i.text() for i in needToDeleteWordItems]
 

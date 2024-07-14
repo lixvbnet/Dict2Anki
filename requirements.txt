@@ -1,13 +1,17 @@
 urllib3
 requests
 beautifulsoup4
-PyQt5
-PyQt5-stubs
 pytest
 pytest-mock
 pytest-qt
 
+# Using PyQT6 versions
+#PyQt6
+
 # Using PyQT5 versions
+#PyQt5
+#PyQt5-stubs
+
 protobuf
 mypy
 aqt==2.1.66

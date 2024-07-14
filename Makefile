@@ -26,8 +26,7 @@ clean:
 	rm -rf build/
 
 fix_qt_versions:
-	@echo "Fixing QT versions..."
-	./FixQTVersions.sh
+	./FixQtVersions.sh
 
 build: clean fix_qt_versions
 	@echo "Building..."

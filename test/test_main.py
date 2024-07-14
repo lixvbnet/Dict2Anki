@@ -120,7 +120,7 @@ def test_newWordWidget(window, words):
     window.insertWordToListWidget(words)
     assert [window.newWordListWidget.item(row).text() for row in range(window.newWordListWidget.count())] == words
     assert all(
-        window.newWordListWidget.item(row).data(Qt.UserRole) is None for row in range(window.newWordListWidget.count()))
+        window.newWordListWidget.item(row).data(Qt.ItemDataRole.UserRole) is None for row in range(window.newWordListWidget.count()))
 
 
 @pytest.mark.skip
@@ -149,7 +149,7 @@ def test_fetch_word_and_compare(monkeypatch, mocker, window, qtbot, local_words,
     words_in_list_widget = [i.text() for i in item_in_list_widget]
     words_in_del_widget = [i.text() for i in item_in_del_widget]
 
-    assert all([item.data(Qt.UserRole) is None for item in item_in_list_widget])
+    assert all([item.data(Qt.ItemDataRole.UserRole) is None for item in item_in_list_widget])
     if test_index == 0:
         assert item_in_list_widget == []
         assert item_in_del_widget == []
