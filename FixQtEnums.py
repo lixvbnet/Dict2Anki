@@ -58,7 +58,12 @@ You can invoke this script in the following ways:
 # pyqt6_folderpath = 'C:/Python39/Lib/site-packages/PyQt6'
 # EDIT: @Myridium suggested another way to fill this 'pyqt6_folderpath'
 # variable:
-import PyQt6
+try:
+    import PyQt6
+except Exception:
+    print("[ERROR] Unable to import PyQt6. [SKIP]")
+    exit(0)
+
 pyqt6_folderpath = PyQt6.__path__[0]
 
 # Figure out where the toplevel directory is located. We assume that this converter tool is located
