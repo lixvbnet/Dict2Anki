@@ -435,7 +435,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         group.setupUi(container)
         for groupName in [str(group_name) for group_name, _ in self.selectedDict.groups]:
             item = QListWidgetItem()
-            item.setFlags(Qt.ItemSelectionMode.ItemIsSelectable | Qt.ItemSelectionMode.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+            item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
             item.setText(groupName)
             item.setCheckState(Qt.CheckState.Unchecked)
             group.wordGroupListWidget.addItem(item)
