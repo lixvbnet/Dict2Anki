@@ -41,3 +41,8 @@ A: 常规背词模版是"显示英文，盖住中文"，反向背词模版则是
 Q: 每次"Pull words"都提示第一次登录或cookie失效？
 
 A: 依次点击Anki菜单 Tools - Add-ons， 选中Dict2Anki Fork，点击右下角的 Config 按钮，点击 "Restore Defaults" - OK.
+
+
+## Preview
+
+![dict2anki](_image/dict2anki.jpg)
