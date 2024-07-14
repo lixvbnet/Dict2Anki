@@ -1,7 +1,7 @@
 # for macOS (sorry Windows..)
 addons21 = ~/Library/Application\ Support/Anki2/addons21
 
-.PHONY: install uninstall install_test_addon uninstall_test_addon clean build publish
+.PHONY: install uninstall install_test_addon uninstall_test_addon clean fix_qt_versions build publish
 
 
 install:
@@ -25,6 +25,10 @@ uninstall_test_addon:
 clean:
 	rm -rf build/
 
-build: clean
+fix_qt_versions:
+	@echo "Fixing QT versions..."
+	./FixQTVersions.sh
+
+build: clean fix_qt_versions
 	@echo "Building..."
 	python3 deploy.py build -d build/

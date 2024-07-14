@@ -18,7 +18,7 @@ except Exception as ex:
     if os.environ.get('DEVDICT2ANKI'):
         import sys
         from .addon.addonWindow import Windows
-        from PyQt5.QtWidgets import QApplication
+        from aqt.qt import QApplication
         app = QApplication(sys.argv)
         window = Windows()
         window.show()

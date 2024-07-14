@@ -14,8 +14,10 @@ TARGET_FILENAME = f'{WINDOW_TITLE}.zip'
 def create_zip(target_dir=TARGET_DIR, target_filename=TARGET_FILENAME):
     file_paths = []
     exclude_dirs = ['build', 'test', 'test_addon', 'testapi', '__pycache__', '.git', '.idea', '.pytest_cache', 'screenshots', 'venv']
-    exclude_files = ['README.md', 'Makefile', 'apitest.py', 'constants_tests.py', 'words.txt', 'test.py', 'testqt.py', '.gitignore', '.travis.yml', 'deploy.py', 'requirements.txt', '.DS_Store', 'meta.json']
-    exclude_ext = ['.png', '.ui', '.qrc', '.log', '.zip', '.tpl']
+    exclude_files = ['README.md', 'Makefile', 'apitest.py', 'constants_tests.py', 'words.txt', 'NOTE.txt',
+                     'test.py', 'testqt.py', 'apitest_eudict.py', 'apitest_youdao.py',
+                     '.gitignore', '.travis.yml', 'deploy.py', 'requirements.txt', '.DS_Store', 'meta.json']
+    exclude_ext = ['.png', '.ui', '.qrc', '.log', '.zip', '.tpl', '.sh']
     for dirname, sub_dirs, files in os.walk("."):
         for d in exclude_dirs:
             if d in sub_dirs:

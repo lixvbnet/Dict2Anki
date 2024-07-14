@@ -2,7 +2,7 @@ import logging
 from logging.handlers import BufferingHandler
 import threading
 
-from PyQt5.QtCore import pyqtSignal, QObject
+from aqt.qt import pyqtSignal, QObject
 
 
 def call_at_interval(interval, func, *args):

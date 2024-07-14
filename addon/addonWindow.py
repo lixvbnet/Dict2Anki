@@ -6,9 +6,9 @@ from copy import deepcopy
 from tempfile import gettempdir
 from pathlib import Path
 
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QFileDialog, QListWidgetItem, QVBoxLayout, QPushButton
-from PyQt5.QtCore import pyqtSlot, QThread, Qt
+from aqt.qt import QIcon
+from aqt.qt import QPlainTextEdit, QDialog, QFileDialog, QListWidgetItem, QVBoxLayout, QPushButton
+from aqt.qt import pyqtSlot, QThread, Qt
 
 from . import utils
 from .queryApi import apis

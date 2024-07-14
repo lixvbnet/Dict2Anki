@@ -1,10 +1,10 @@
 import json
 import logging
-from PyQt5.QtCore import QUrl, pyqtSignal
 from .constants import USER_AGENT
 from .UIForm import loginDialog
-from PyQt5.QtWidgets import QDialog
-from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile
+from aqt.qt import QUrl, pyqtSignal
+from aqt.qt import QDialog
+from aqt.qt import QWebEngineView, QWebEngineProfile
 
 logger = logging.getLogger('dict2Anki')
 
