@@ -37,3 +37,7 @@ A: 在"设置"页取消勾选"图片"，下次同步（或者使用"工具"页�
 Q: Backwards Template是什么？
 
 A: 常规背词模版是"显示英文，盖住中文"，反向背词模版则是反过来，即"显示中文，盖住英文"。反向背词可以有效提升"主动词汇"量。
+
+Q: 每次"Pull words"都提示第一次登录或cookie失效？
+
+A: 依次点击Anki菜单 Tools - Add-ons， 选中Dict2Anki Fork，点击右下角的 Config 按钮，点击 "Restore Defaults" - OK.

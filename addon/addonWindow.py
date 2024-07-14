@@ -473,7 +473,7 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         for word in words:
             self.remoteWordsDict[word.term] = word
             wordItem = QListWidgetItem(word.term, self.newWordListWidget)
-            wordItem.setData(Qt.UserRole, None)
+            wordItem.setData(Qt.ItemDataRole.UserRole, None)
         self.newWordListWidget.clearSelection()
 
     @pyqtSlot()
