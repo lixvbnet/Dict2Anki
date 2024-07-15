@@ -1,13 +1,28 @@
 import os
 import requests
 
+def disable_ssl_check():
+    original_req = requests.Session.request
+    def request(*args, **kwargs):
+        kwargs['verify'] = False
+        return original_req(*args, **kwargs)
+    requests.Session.request = request
+
+check_debug = True
 DEBUG = False
-try:
-    rc = os.system(r'grep -E -q "^export\s+DICT2ANKI_SSL_VERIFY=0" ~/.bashrc.local.sh')
-    if rc == 0:
-        DEBUG = True
-except Exception:
-    pass
+def disable_ssl_check_if_debug():
+    global check_debug, DEBUG
+    if not check_debug: return
+    try:
+        rc = os.system(r'source ~/.bashrc && test "$DICT2ANKI_SSL_VERIFY" = "0"')
+        if rc == 0:
+            DEBUG = True
+            showInfo("[Dict2Anki] DEBUG=True, SSL Check is DISABLED!")
+            disable_ssl_check()
+        check_debug = False     # check and prompt once
+    except Exception:
+        pass
+
 
 try:
     from aqt import mw
@@ -17,20 +32,8 @@ try:
     from aqt.qt import *
     from .addon.addonWindow import Windows
 
-    def disable_ssl_check():
-        original_req = requests.Session.request
-
-        def request(*args, **kwargs):
-            kwargs['verify'] = False
-            return original_req(*args, **kwargs)
-        requests.Session.request = request
-
-    if DEBUG:
-        showInfo("[Dict2Anki] DEBUG=True, SSL Check is DISABLED!")
-        disable_ssl_check()
-
-
     def show_window():
+        disable_ssl_check_if_debug()
         w = Windows()
         w.exec()
 
@@ -47,5 +50,5 @@ except Exception as ex:
         from aqt.qt import QApplication
         app = QApplication(sys.argv)
         window = Windows()
-        window.show()
+        window.exec()
         sys.exit(app.exec())
