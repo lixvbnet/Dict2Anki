@@ -483,8 +483,8 @@ class Windows(QDialog, mainUI.Ui_Dialog):
         localTermList = set(getWordsByDeck(self.deckComboBox.currentText()))
         remoteTermList = set([self.newWordListWidget.item(row).text() for row in range(self.newWordListWidget.count())])
 
-        newTerms = remoteTermList - localTermList  # 新单词
-        needToDeleteTerms = localTermList - remoteTermList  # 需要删除的单词
+        newTerms = utils.set_sub_ignore_case(remoteTermList, localTermList)           # 新单词
+        needToDeleteTerms = utils.set_sub_ignore_case(localTermList, remoteTermList)  # 需要删除的单词
         logger.info(f'本地({len(localTermList)}): {localTermList}')
         logger.info(f'远程({len(remoteTermList)}): {remoteTermList}')
         logger.info(f'待查({len(newTerms)}): {newTerms}')

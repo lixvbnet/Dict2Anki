@@ -5,6 +5,11 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 
+def set_sub_ignore_case(a, b: set) -> set:
+    b_lower = {v.lower() for v in b}
+    return {v for v in a if v.lower() not in b_lower}
+
+
 def get_image(fieldValue: str) -> str:
     if not fieldValue: return ""
     soup = BeautifulSoup(fieldValue, features="html.parser")
@@ -79,3 +84,18 @@ if __name__ == '__main__':
     # ]
     # for audio in audios:
     #     print(get_audio(audio))
+
+    # s1 = {'aa', 'bb', 'Cc'}
+    # s2 = {'AA', 'Bb', 'dd', 'eE'}
+    #
+    # print("s1=", s1)
+    # print("s2=", s2)
+    # print("----------------")
+    # print("s1-s2", s1-s2)
+    # print("s2-s1", s2-s1)
+    # print("----------------")
+    #
+    # s = set_sub_ignore_case(s1, s2)
+    # print("s1-s2 ignore case:", s)
+    # s = set_sub_ignore_case(s2, s1)
+    # print("s2-s1 ignore case:", s)

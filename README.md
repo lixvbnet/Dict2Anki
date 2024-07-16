@@ -42,6 +42,10 @@ Q: 每次"Pull words"都提示第一次登录或cookie失效？
 
 A: 依次点击Anki菜单 Tools - Add-ons， 选中Dict2Anki Fork，点击右下角的 Config 按钮，点击 "Restore Defaults" - OK.
 
+Q: 个别单词没有图片/发音？
+
+A：因为你同时收藏了多个"相同"的单词。例如同步单词"apple"时，下载的图片/发音会以"apple.jpg/mp3"保存到文件，但如果你还同时收藏了"Apple"，同步时将无法创建"Apple.jpg/mp3"文件，因为[虽然Anki区分大小写，但操作系统的文件名并不区分](https://forums.ankiweb.net/t/upper-case-and-lower-case-for-filename-bug-report/485)。
+
 
 ## Preview
 
