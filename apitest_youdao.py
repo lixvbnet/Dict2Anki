@@ -49,11 +49,11 @@ def youdao_get_words() -> [SimpleWord]:
 
 def youdao_test():
     term = "provably"      # term to query
-    words = youdao_get_words()
     word = None
-    for w in words:
-        if w.term == term:
-            word = w
+    # words = youdao_get_words()
+    # for w in words:
+    #     if w.term == term:
+    #         word = w
 
     if word is None:
         print(f"[WARN] word not found! Manually assemble a SimpleWord")

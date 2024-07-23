@@ -168,7 +168,9 @@ class API(AbstractQueryAPI):
         queryResult = None
         try:
             rsp = cls.session.get(cls.url, params=urlencode(dict(cls.params, **{'q': word.term})), timeout=cls.timeout)
-            logger.debug(f'code:{rsp.status_code}- term:{word.term} text:{rsp.text}')
+            logger.debug(f'code:{rsp.status_code} term:{word.term} text:{rsp.text}')
+            if rsp.status_code != 200:
+                logger.error(f'code:{rsp.status_code} term:{word.term} text:{rsp.text}')
             queryResult = cls.parser(rsp.json(), word).result
         except Exception as e:
             logger.exception(e)
