@@ -1,6 +1,9 @@
 import os
 import requests
 
+HOME = os.path.expanduser("~")
+BASHRC_FILE = HOME + "/.bashrc"
+
 def disable_ssl_check():
     original_req = requests.Session.request
     def request(*args, **kwargs):
@@ -13,8 +16,9 @@ DEBUG = False
 def disable_ssl_check_if_debug():
     global check_debug, DEBUG
     if not check_debug: return
+    if not os.path.exists(BASHRC_FILE): return
     try:
-        rc = os.system(r'source ~/.bashrc && test "$DICT2ANKI_SSL_VERIFY" = "0"')
+        rc = os.system(f'source {BASHRC_FILE} && test "$DICT2ANKI_SSL_VERIFY" = "0"')
         if rc == 0:
             DEBUG = True
             showInfo("[Dict2Anki] DEBUG=True, SSL Check is DISABLED!")
