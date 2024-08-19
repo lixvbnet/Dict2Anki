@@ -318,14 +318,20 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str, existin
     # sentence
     if word['sentence']:
         for i, sentence_tuple in enumerate(word['sentence'][:3]):   # at most 3 sentences
+            s_overwrite = overwrite
+            # Sentence may have changed over time.
+            # To avoid sentence-speech mismatch, overwrite sentence info if sentence_speech is missing.
+            if not note[f'sentence_speech{i}']:
+                s_overwrite = True
+
             key, value = f'sentence{i}', sentence_tuple[0]
-            setNoteFieldValue(note, key, value, isNewNote, overwrite)
+            setNoteFieldValue(note, key, value, isNewNote, s_overwrite)
             key, value = f'sentence_explain{i}', sentence_tuple[1]
-            setNoteFieldValue(note, key, value, isNewNote, overwrite)
+            setNoteFieldValue(note, key, value, isNewNote, s_overwrite)
             key, value = f'splaceHolder{i}', "Tap To View"
-            setNoteFieldValue(note, key, value, isNewNote, overwrite)
+            setNoteFieldValue(note, key, value, isNewNote, s_overwrite)
             key, value = f'sentence_speech{i}', sentence_tuple[2]
-            setNoteFieldValue(note, key, value, isNewNote, overwrite)
+            setNoteFieldValue(note, key, value, isNewNote, s_overwrite)
             # note[f'sentence{i}'], note[f'sentence_explain{i}'] = sentence_tuple
             # note[f'splaceHolder{i}'] = "Tap To View"
 

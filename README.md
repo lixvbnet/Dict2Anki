@@ -10,7 +10,7 @@ This is a fork of Dict2Anki.
 
 * 性能优化，修复已知问题
 * 尽量避免删除模版或卡片。如果字段不同，自动合并；同步页默认不选中需要删除的单词。
-* 添加字段：definition_en, group, exam_type, modifiedTime.（目前仅限有道词典）
+* 添加字段：definition_en, group, exam_type, modifiedTime, sentence_speech[0-2].（目前仅限有道词典）
 * 改用4.x卡片模版；支持定制卡片模版（显示或隐藏：英文释义/图片/发音/短语/例句/考试类型）
 * 支持从txt文件导入单词
 * 添加其他功能
@@ -51,3 +51,8 @@ A2: 另外，少数情况下，有道/欧路词典API服务异常，单词查询
 ## Preview
 
 ![dict2anki](_image/dict2anki.jpg)
+
+## Notes
+
+- 不要集中在一个时间点同步大量单词，否则你的帐号（或IP）可能会被有道/欧路限制一段时间。
+- 如果新版本添加了新的字段，更新插件后建议至少执行一次工具页的 Fill Missing Values。
