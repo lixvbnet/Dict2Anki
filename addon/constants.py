@@ -1,4 +1,4 @@
-VERSION = 'v6.3.6i'
+VERSION = 'v6.3.6k'
 RELEASE_URL = 'https://github.com/lixvbnet/Dict2Anki'
 VERSION_CHECK_API = 'https://api.github.com/repos/lixvbnet/Dict2Anki/releases/latest'
 WINDOW_TITLE = f'Dict2Anki {VERSION}'
@@ -19,7 +19,7 @@ MODEL_FIELDS = [
     'definition_en',
     'uk', 'us',
     'phrase0', 'phrase1', 'phrase2', 'phrase_explain0', 'phrase_explain1', 'phrase_explain2',
-    'sentence0', 'sentence1', 'sentence2', 'sentence_explain0', 'sentence_explain1', 'sentence_explain2',
+    'sentence0', 'sentence1', 'sentence2', 'sentence_explain0', 'sentence_explain1', 'sentence_explain2', 'sentence_speech0', 'sentence_speech1', 'sentence_speech2',
     'pplaceHolder0', 'pplaceHolder1', 'pplaceHolder2',
     'splaceHolder0', 'splaceHolder1', 'splaceHolder2',
     'image', 'pronunciation',
@@ -39,9 +39,9 @@ class FieldGroup:
             ("{{phrase2}}", "{{phrase_explain2}}", "{{pplaceHolder2}}"),
         ]
         self.sentence = [
-            ("{{sentence0}}", "{{sentence_explain0}}", "{{splaceHolder0}}"),
-            ("{{sentence1}}", "{{sentence_explain1}}", "{{splaceHolder1}}"),
-            ("{{sentence2}}", "{{sentence_explain2}}", "{{splaceHolder2}}"),
+            ("{{sentence0}}", "{{sentence_explain0}}", "{{splaceHolder0}}", "{{sentence_speech0}}"),
+            ("{{sentence1}}", "{{sentence_explain1}}", "{{splaceHolder1}}", "{{sentence_speech1}}"),
+            ("{{sentence2}}", "{{sentence_explain2}}", "{{splaceHolder2}}", "{{sentence_speech2}}"),
         ]
         self.exam_type = "{{exam_type}}"
 
@@ -92,9 +92,27 @@ def normal_card_template_qfmt(fg: FieldGroup):
     <tr><td class="phrase">{fg.phrase[2][0]}</td><td>{fg.phrase[2][2]}</td></tr>
 </table>
 <table>
-    <tr><td class="sentence">{fg.sentence[0][0]}</td><td>{fg.sentence[0][2]}</td></tr>
-    <tr><td class="sentence">{fg.sentence[1][0]}</td><td>{fg.sentence[1][2]}</td></tr>
-    <tr><td class="sentence">{fg.sentence[2][0]}</td><td>{fg.sentence[2][2]}</td></tr>
+    <tr>
+        <td class="sentence">
+            {fg.sentence[0][0]}
+            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[0][3]}"></audio>▶︎</a>
+        </td>
+        <td>{fg.sentence[0][2]}</td>
+    </tr>
+    <tr>
+        <td class="sentence">
+            {fg.sentence[1][0]}
+            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[1][3]}"></audio>▶︎</a>
+        </td>
+        <td>{fg.sentence[1][2]}</td>
+    </tr>
+    <tr>
+        <td class="sentence">
+            {fg.sentence[2][0]}
+            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[2][3]}"></audio>▶︎</a>
+        </td>
+        <td>{fg.sentence[2][2]}</td>
+    </tr>
 </table>
 """
 
@@ -126,9 +144,27 @@ def normal_card_template_afmt(fg: FieldGroup):
     <tr><td class="phrase">{fg.phrase[2][0]}</td><td>{fg.phrase[2][1]}</td></tr>
 </table>
 <table>
-    <tr><td class="sentence">{fg.sentence[0][0]}</td><td>{fg.sentence[0][1]}</td></tr>
-    <tr><td class="sentence">{fg.sentence[1][0]}</td><td>{fg.sentence[1][1]}</td></tr>
-    <tr><td class="sentence">{fg.sentence[2][0]}</td><td>{fg.sentence[2][1]}</td></tr>
+    <tr>
+        <td class="sentence">
+            {fg.sentence[0][0]}
+            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[0][3]}"></audio>▶︎</a>
+        </td>
+        <td>{fg.sentence[0][1]}</td>
+    </tr>
+    <tr>
+        <td class="sentence">
+            {fg.sentence[1][0]}
+            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[1][3]}"></audio>▶︎</a>
+        </td>
+        <td>{fg.sentence[1][1]}</td>
+    </tr>
+    <tr>
+        <td class="sentence">
+            {fg.sentence[2][0]}
+            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[2][3]}"></audio>▶︎</a>
+        </td>
+        <td>{fg.sentence[2][1]}</td>
+    </tr>
 </table>
 """
 

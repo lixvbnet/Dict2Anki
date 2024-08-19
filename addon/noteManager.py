@@ -324,6 +324,8 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str, existin
             setNoteFieldValue(note, key, value, isNewNote, overwrite)
             key, value = f'splaceHolder{i}', "Tap To View"
             setNoteFieldValue(note, key, value, isNewNote, overwrite)
+            key, value = f'sentence_speech{i}', sentence_tuple[2]
+            setNoteFieldValue(note, key, value, isNewNote, overwrite)
             # note[f'sentence{i}'], note[f'sentence_explain{i}'] = sentence_tuple
             # note[f'splaceHolder{i}'] = "Tap To View"
 

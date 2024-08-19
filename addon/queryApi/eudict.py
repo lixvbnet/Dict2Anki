@@ -75,7 +75,8 @@ class Parser:
                 line = el.select('p')
                 sentence = "".join([ str(c) for c in line[0].contents])
                 sentence_translation = line[1].get_text(strip=True)
-                ret.append((sentence, sentence_translation))
+                sentence_speech = ""    # TODO for Eudit API
+                ret.append((sentence, sentence_translation, sentence_speech))
             except KeyError as e:
                 pass
         return ret
