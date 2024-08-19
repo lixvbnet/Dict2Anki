@@ -48,11 +48,13 @@ A1: 因为你同时收藏了多个"相同"的单词。例如同步单词"apple"�
 
 A2: 另外，少数情况下，有道/欧路词典API服务异常，单词查询结果全为空值，换个时间同步即可。（恢复正常后推荐至少执行一次 Fill Missing Values 和 Download Missing Assets 避免字段值或媒体文件缺失）
 
-## Preview
 
-![dict2anki](_image/dict2anki.jpg)
-
-## Notes
+## Caveats
 
 - 不要集中在一个时间点同步大量单词，否则你的帐号（或IP）可能会被有道/欧路限制一段时间。
 - 如果新版本添加了新的字段，更新插件后建议至少执行一次工具页的 Fill Missing Values。
+
+
+## Preview
+
+![dict2anki](_image/dict2anki.jpg)
