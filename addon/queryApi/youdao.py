@@ -55,7 +55,7 @@ class Parser:
     @property
     def sentence(self) -> list:
         try:
-            return [(s['sentence'], s['sentence-translation'], SENTENCE_SPEECH_URL_PREFIX + s['sentence-speech']) for s in self._result['blng_sents_part']['sentence-pair']][:3]
+            return [(s['sentence-eng'], s['sentence-translation'], SENTENCE_SPEECH_URL_PREFIX + s['sentence-speech']) for s in self._result['blng_sents_part']['sentence-pair']][:3]
         except KeyError:
             return []
 
