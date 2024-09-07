@@ -321,7 +321,8 @@ def addNoteToDeck(deck, model, config: dict, word: dict, whichPron: str, existin
             s_overwrite = overwrite
             # Sentence may have changed over time.
             # To avoid sentence-speech mismatch, overwrite sentence info if sentence_speech is missing.
-            if not note[f'sentence_speech{i}']:
+            # Also overwrite sentence info if term is not highlighted.
+            if not note[f'sentence_speech{i}'] or f"<b>{term}</b>" not in note[f'sentence{i}']:
                 s_overwrite = True
 
             key, value = f'sentence{i}', sentence_tuple[0]
