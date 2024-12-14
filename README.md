@@ -58,3 +58,8 @@ A2: 另外，少数情况下，有道/欧路词典API服务异常，单词查询
 ## Preview
 
 ![dict2anki](_image/dict2anki.jpg)
+
+
+## Support The Development
+
+If you find it helpful, consider [buy me a cup of tea](./SUPPORT.md). Thank you for your support.
