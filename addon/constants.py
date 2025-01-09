@@ -39,20 +39,26 @@ class FieldGroup:
             ("{{phrase2}}", "{{phrase_explain2}}", "{{pplaceHolder2}}"),
         ]
         self.sentence = [
-            ("{{sentence0}}", "{{sentence_explain0}}", "{{splaceHolder0}}", "{{sentence_speech0}}"),
-            ("{{sentence1}}", "{{sentence_explain1}}", "{{splaceHolder1}}", "{{sentence_speech1}}"),
-            ("{{sentence2}}", "{{sentence_explain2}}", "{{splaceHolder2}}", "{{sentence_speech2}}"),
+            ("{{sentence0}}", "{{sentence_explain0}}", "{{splaceHolder0}}", '<a onclick="this.firstChild.play()"><audio src="{{sentence_speech0}}"></audio>▶︎</a>'),
+            ("{{sentence1}}", "{{sentence_explain1}}", "{{splaceHolder1}}", '<a onclick="this.firstChild.play()"><audio src="{{sentence_speech1}}"></audio>▶︎</a>'),
+            ("{{sentence2}}", "{{sentence_explain2}}", "{{splaceHolder2}}", '<a onclick="this.firstChild.play()"><audio src="{{sentence_speech2}}"></audio>▶︎</a>'),
         ]
         self.exam_type = "{{exam_type}}"
 
     def toggleOff(self, field):
         if field not in CARD_SETTINGS:
             raise RuntimeError(f"Unexpected field: {field}. Must be in {CARD_SETTINGS}!")
-        if field == 'phrase' or field == 'sentence':
+        if field == 'phrase':
             setattr(self, field, [
                 ("", "", ""),
                 ("", "", ""),
                 ("", "", "")
+            ])
+        elif field == 'sentence':
+            setattr(self, field, [
+                ("", "", "", ""),
+                ("", "", "", ""),
+                ("", "", "", "")
             ])
         else:
             setattr(self, field, "")
@@ -95,21 +101,21 @@ def normal_card_template_qfmt(fg: FieldGroup):
     <tr>
         <td class="sentence">
             {fg.sentence[0][0]}
-            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[0][3]}"></audio>▶︎</a>
+            {fg.sentence[0][3]}
         </td>
         <td>{fg.sentence[0][2]}</td>
     </tr>
     <tr>
         <td class="sentence">
             {fg.sentence[1][0]}
-            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[1][3]}"></audio>▶︎</a>
+            {fg.sentence[1][3]}
         </td>
         <td>{fg.sentence[1][2]}</td>
     </tr>
     <tr>
         <td class="sentence">
             {fg.sentence[2][0]}
-            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[2][3]}"></audio>▶︎</a>
+            {fg.sentence[2][3]}
         </td>
         <td>{fg.sentence[2][2]}</td>
     </tr>
@@ -147,21 +153,21 @@ def normal_card_template_afmt(fg: FieldGroup):
     <tr>
         <td class="sentence">
             {fg.sentence[0][0]}
-            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[0][3]}"></audio>▶︎</a>
+            {fg.sentence[0][3]}
         </td>
         <td>{fg.sentence[0][1]}</td>
     </tr>
     <tr>
         <td class="sentence">
             {fg.sentence[1][0]}
-            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[1][3]}"></audio>▶︎</a>
+            {fg.sentence[1][3]}
         </td>
         <td>{fg.sentence[1][1]}</td>
     </tr>
     <tr>
         <td class="sentence">
             {fg.sentence[2][0]}
-            <a onclick="this.firstChild.play()"><audio src="{fg.sentence[2][3]}"></audio>▶︎</a>
+            {fg.sentence[2][3]}
         </td>
         <td>{fg.sentence[2][1]}</td>
     </tr>
